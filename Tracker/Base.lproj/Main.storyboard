@@ -1,24 +1,96 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22154" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22130"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Трекеры-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="npM-ea-cZS">
+                                <rect key="frame" x="6" y="58" width="42" height="42"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="button_add_tracker"/>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Трекеры" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="03f-ms-iAd">
+                                <rect key="frame" x="16" y="101" width="145" height="41"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="34"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <datePicker contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" translatesAutoresizingMaskIntoConstraints="NO" id="N8G-hS-MmS">
+                                <rect key="frame" x="277" y="64" width="100" height="34"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="77" id="uig-cK-0Yo"/>
+                                    <constraint firstAttribute="height" constant="34" id="y6N-rq-2GG"/>
+                                </constraints>
+                                <locale key="locale" localeIdentifier="ru"/>
+                            </datePicker>
+                            <searchBar contentMode="redraw" misplaced="YES" searchBarStyle="minimal" placeholder="Поиск" translatesAutoresizingMaskIntoConstraints="NO" id="vgH-ZE-bRY">
+                                <rect key="frame" x="16" y="142" width="355" height="56"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <scopeButtonTitles>
+                                    <string>Title</string>
+                                    <string>Title</string>
+                                </scopeButtonTitles>
+                                <connections>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="OXZ-rc-GZI"/>
+                                </connections>
+                            </searchBar>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="vgH-ZE-bRY" firstAttribute="leading" secondItem="03f-ms-iAd" secondAttribute="leading" constant="-7" id="0G2-l0-ZRH"/>
+                            <constraint firstItem="03f-ms-iAd" firstAttribute="top" secondItem="npM-ea-cZS" secondAttribute="bottom" constant="1" id="50E-l3-Yqv"/>
+                            <constraint firstItem="N8G-hS-MmS" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="5" id="JTo-KC-Yzg"/>
+                            <constraint firstItem="vgH-ZE-bRY" firstAttribute="trailing" secondItem="N8G-hS-MmS" secondAttribute="trailing" constant="8" id="JWl-oR-raH"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="N8G-hS-MmS" secondAttribute="trailing" constant="16" id="VLT-zC-jIO"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="top" secondItem="npM-ea-cZS" secondAttribute="top" constant="1" id="eJQ-M0-jFu"/>
+                            <constraint firstItem="npM-ea-cZS" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="6" id="hxG-C4-NvJ"/>
+                            <constraint firstItem="03f-ms-iAd" firstAttribute="leading" secondItem="npM-ea-cZS" secondAttribute="leading" constant="10" id="iBF-rj-ah8"/>
+                            <constraint firstItem="vgH-ZE-bRY" firstAttribute="top" secondItem="03f-ms-iAd" secondAttribute="bottom" constant="7" id="lD8-4g-adg"/>
+                        </constraints>
                     </view>
+                    <tabBarItem key="tabBarItem" title="Трекеры" image="tab_tracker_logo _active" id="Ynk-Co-8a6"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="-550.38167938931292" y="-680.28169014084506"/>
+        </scene>
+        <!--Статистика-->
+        <scene sceneID="sB3-FO-KuC">
+            <objects>
+                <viewController id="gTO-TP-wrz" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Zl3-FW-hts">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="tHj-2k-cTf"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Статистика" image="tab_stat_logo_active" id="aGO-Mi-yHQ"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cM4-27-5Gg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-550" y="5"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="button_add_tracker" width="42" height="42"/>
+        <image name="tab_stat_logo_active" width="28" height="28"/>
+        <image name="tab_tracker_logo _active" width="28" height="28"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>

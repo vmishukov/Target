@@ -12,7 +12,7 @@ final class TabBarViewController: UITabBarController, UITabBarControllerDelegate
         super.viewDidLoad()
         configure()
         
-        let trackerViewController = TrackerViewController()
+        let trackerViewController = TrackersViewController()
         trackerViewController.tabBarItem = UITabBarItem(title: "Трекер",
                                                         image: UIImage(named: "tab_tracker_logo_active"),
                                                         selectedImage: nil)

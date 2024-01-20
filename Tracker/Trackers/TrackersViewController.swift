@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class TrackerViewController: UIViewController {
+final class TrackersViewController: UIViewController {
     
     private lazy var addTrackerButton : UIButton = {
         let button = UIButton.systemButton(
@@ -74,6 +74,7 @@ final class TrackerViewController: UIViewController {
         return trackerErrLabel
     }()
     
+    
     @objc func datePickerValueChanged(_ sender: UIDatePicker) {
         let selectedDate = sender.date
         let dateFormatter = DateFormatter()
@@ -82,8 +83,12 @@ final class TrackerViewController: UIViewController {
         print("Выбранная дата: \(formattedDate)")
     }
     
+    var categories: [TrackerCategory]?
+    var completeTrackers: [TrackerRecord]?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         
         addTrackerButtonLayout()
         labelTrackerLayout()
@@ -91,7 +96,6 @@ final class TrackerViewController: UIViewController {
         searchBarLayout()
         errImageLayout()
         errLabelLayout()
-        
     }
     
     private func addTrackerButtonLayout() {

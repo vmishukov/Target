@@ -13,7 +13,7 @@ final class TrackersViewController: UIViewController {
         let button = UIButton.systemButton(
             with: UIImage(named: "button_add_tracker")!,
             target: self,
-            action: nil
+            action: #selector(self.didTapAddTrackerButton)
         )
         button.tintColor = UIColor(hex: "1A1B22")
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -73,9 +73,24 @@ final class TrackersViewController: UIViewController {
         view.addSubview(trackerErrLabel)
         return trackerErrLabel
     }()
+    private let ShowAddTrackersSegueIdentifier = "ShowAddTrackers"
     
+    var categories: [TrackerCategory]?
+    var completeTrackers: [TrackerRecord]?
     
-    @objc func datePickerValueChanged(_ sender: UIDatePicker) {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+   
+        addTrackerButtonLayout()
+        labelTrackerLayout()
+        datePickerLayout()
+        searchBarLayout()
+        errImageLayout()
+        errLabelLayout()
+    }
+    
+
+    @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
         let selectedDate = sender.date
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yy"
@@ -83,19 +98,10 @@ final class TrackersViewController: UIViewController {
         print("Выбранная дата: \(formattedDate)")
     }
     
-    var categories: [TrackerCategory]?
-    var completeTrackers: [TrackerRecord]?
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        
-        addTrackerButtonLayout()
-        labelTrackerLayout()
-        datePickerLayout()
-        searchBarLayout()
-        errImageLayout()
-        errLabelLayout()
+    @objc private func didTapAddTrackerButton(_ sender: UIButton) {
+        let view = AddTrackersViewController()
+     
+        present(view, animated: true)
     }
     
     private func addTrackerButtonLayout() {

@@ -1,0 +1,92 @@
+//
+//  AddTrackersViewController.swift
+//  Tracker
+//
+//  Created by Vladislav Mishukov on 20.01.2024.
+//
+
+import Foundation
+import UIKit
+
+final class AddTrackersViewController: UIViewController {
+    
+    private lazy var addTrackerLabel : UILabel = {
+        let addTrackerLabel = UILabel()
+        addTrackerLabel.text = "Создание трекера"
+        addTrackerLabel.textColor = UIColor(hex: "1A1B22")
+        addTrackerLabel.font = .systemFont(ofSize: 16, weight: .medium)
+        view.addSubview(addTrackerLabel)
+        addTrackerLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.addTrackerLabel = addTrackerLabel
+        return addTrackerLabel
+    }()
+    
+    private lazy var addHabbitButton: UIButton = {
+        let addHabbitButton = UIButton(type: .system) as UIButton
+        addHabbitButton.backgroundColor = UIColor(hex: "1A1B22")
+        addHabbitButton.setTitle("Привычка", for: .normal)
+        addHabbitButton.setTitleColor(UIColor(hex: "FFFFFF"), for: .normal)
+        addHabbitButton.translatesAutoresizingMaskIntoConstraints = false
+        addHabbitButton.layer.cornerRadius = 16
+        addHabbitButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        addHabbitButton.addTarget(self, action: #selector(didTabAddHabbitButton), for: .touchUpInside)
+        view.addSubview(addHabbitButton)
+        self.addHabbitButton = addHabbitButton
+        return addHabbitButton
+    }()
+    
+    private lazy var addIrregularEventButton: UIButton = {
+        let addIrregularEventButton = UIButton(type: .system) as UIButton
+        addIrregularEventButton.backgroundColor = UIColor(hex: "1A1B22")
+        addIrregularEventButton.setTitle("Нерегулярные событие", for: .normal)
+        addIrregularEventButton.setTitleColor(UIColor(hex: "FFFFFF"), for: .normal)
+        addIrregularEventButton.translatesAutoresizingMaskIntoConstraints = false
+        addIrregularEventButton.layer.cornerRadius = 16
+        addIrregularEventButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+
+        view.addSubview(addIrregularEventButton)
+        self.addIrregularEventButton = addIrregularEventButton
+        return addIrregularEventButton
+    }()
+    
+    override func viewDidLoad() {
+        view.backgroundColor = UIColor(hex: "FFFFFF")
+        addTrackerLabelLayout()
+        addHabbitButtonLayout()
+        addIrregularEventButtonLayout()
+        super.viewDidLoad()
+    }
+    
+    @objc private func didTabAddHabbitButton(_ sender: UIButton) {
+        let view = NewHabbitViewController()
+     
+        present(view, animated: true)
+    }
+    
+    private func addTrackerLabelLayout() {
+        NSLayoutConstraint.activate([
+            addTrackerLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            addTrackerLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 13)
+        ])
+    }
+    
+    private func addHabbitButtonLayout() {
+        NSLayoutConstraint.activate([
+            addHabbitButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            addHabbitButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            addHabbitButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            addHabbitButton.heightAnchor.constraint(equalToConstant: 60)
+        
+        ])
+    }
+    
+    private func addIrregularEventButtonLayout() {
+        NSLayoutConstraint.activate([
+            addIrregularEventButton.leadingAnchor.constraint(equalTo: addHabbitButton.leadingAnchor),
+            addIrregularEventButton.trailingAnchor.constraint(equalTo: addHabbitButton.trailingAnchor),
+            addIrregularEventButton.topAnchor.constraint(equalTo: addHabbitButton.bottomAnchor,constant: +16),
+            addIrregularEventButton.heightAnchor.constraint(equalToConstant: 60)
+        ])
+    }
+    
+}

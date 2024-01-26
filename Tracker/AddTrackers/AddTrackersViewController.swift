@@ -66,13 +66,13 @@ final class AddTrackersViewController: UIViewController {
     private func addTrackerLabelLayout() {
         NSLayoutConstraint.activate([
             addTrackerLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            addTrackerLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 13)
+            addTrackerLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 38)
         ])
     }
     
     private func addHabbitButtonLayout() {
         NSLayoutConstraint.activate([
-            addHabbitButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            addHabbitButton.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
             addHabbitButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             addHabbitButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             addHabbitButton.heightAnchor.constraint(equalToConstant: 60)

@@ -11,17 +11,23 @@ final class TabBarViewController: UITabBarController, UITabBarControllerDelegate
     override func viewDidLoad(){
         super.viewDidLoad()
         configure()
-        
-        let trackerViewController = TrackersViewController()
-        trackerViewController.tabBarItem = UITabBarItem(title: "Трекер",
-                                                        image: UIImage(named: "tab_tracker_logo_active"),
-                                                        selectedImage: nil)
+        self.viewControllers = [createTrackersViewController(),createStaticsticViewController()]
+    }
+    
+    func createTrackersViewController() -> UINavigationController {
+        let trackersViewController = TrackersViewController()
+        trackersViewController.tabBarItem = UITabBarItem(title: "Трекер",
+                                                         image: UIImage(named: "tab_tracker_logo_active"),
+                                                         selectedImage: nil)
+        return UINavigationController(rootViewController: trackersViewController)
+    }
+    
+    func createStaticsticViewController() -> UINavigationController {
         let statisticViewController = StatisticViewController()
         statisticViewController.tabBarItem = UITabBarItem(title: "Статистика",
                                                           image: UIImage(named: "tab_stat_logo_active"),
                                                           selectedImage: nil)
-        
-        self.viewControllers = [trackerViewController,statisticViewController]
+        return UINavigationController(rootViewController: statisticViewController)
     }
     
     private func configure() {

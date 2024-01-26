@@ -21,6 +21,10 @@
 		915050DC2B58F080001E9DF1 /* TrackerRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915050DB2B58F080001E9DF1 /* TrackerRecord.swift */; };
 		915050E12B5BC805001E9DF1 /* AddTrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915050E02B5BC805001E9DF1 /* AddTrackersViewController.swift */; };
 		915050E42B5D27D8001E9DF1 /* NewHabbitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915050E32B5D27D8001E9DF1 /* NewHabbitViewController.swift */; };
+		915050E62B5E5246001E9DF1 /* UITextField+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915050E52B5E5246001E9DF1 /* UITextField+Extensions.swift */; };
+		915050E82B5F8BA8001E9DF1 /* TrackersCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915050E72B5F8BA8001E9DF1 /* TrackersCollectionViewCell.swift */; };
+		915050EA2B60D08B001E9DF1 /* TrackersCollectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915050E92B60D08B001E9DF1 /* TrackersCollectionHeader.swift */; };
+		915050EF2B628085001E9DF1 /* NewHabbitSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915050EE2B628085001E9DF1 /* NewHabbitSettingCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +44,10 @@
 		915050DB2B58F080001E9DF1 /* TrackerRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecord.swift; sourceTree = "<group>"; };
 		915050E02B5BC805001E9DF1 /* AddTrackersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTrackersViewController.swift; sourceTree = "<group>"; };
 		915050E32B5D27D8001E9DF1 /* NewHabbitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHabbitViewController.swift; sourceTree = "<group>"; };
+		915050E52B5E5246001E9DF1 /* UITextField+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Extensions.swift"; sourceTree = "<group>"; };
+		915050E72B5F8BA8001E9DF1 /* TrackersCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersCollectionViewCell.swift; sourceTree = "<group>"; };
+		915050E92B60D08B001E9DF1 /* TrackersCollectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersCollectionHeader.swift; sourceTree = "<group>"; };
+		915050EE2B628085001E9DF1 /* NewHabbitSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHabbitSettingCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +100,7 @@
 			children = (
 				915050892B53C372001E9DF1 /* UIColor+Extensions.swift */,
 				9150508D2B550639001E9DF1 /* UIView+Extensions.swift */,
+				915050E52B5E5246001E9DF1 /* UITextField+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -99,6 +108,7 @@
 		915050D52B58EEB3001E9DF1 /* Trackers */ = {
 			isa = PBXGroup;
 			children = (
+				915050ED2B626231001E9DF1 /* CollectionView */,
 				9150508B2B55035B001E9DF1 /* TrackersViewController.swift */,
 				915050D72B58EEF2001E9DF1 /* Tracker.swift */,
 				915050D92B58F02D001E9DF1 /* TrackerCategory.swift */,
@@ -119,8 +129,18 @@
 			isa = PBXGroup;
 			children = (
 				915050E32B5D27D8001E9DF1 /* NewHabbitViewController.swift */,
+				915050EE2B628085001E9DF1 /* NewHabbitSettingCell.swift */,
 			);
 			path = NewHabbit;
+			sourceTree = "<group>";
+		};
+		915050ED2B626231001E9DF1 /* CollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				915050E72B5F8BA8001E9DF1 /* TrackersCollectionViewCell.swift */,
+				915050E92B60D08B001E9DF1 /* TrackersCollectionHeader.swift */,
+			);
+			path = CollectionView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -193,10 +213,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				915050E62B5E5246001E9DF1 /* UITextField+Extensions.swift in Sources */,
 				915050DA2B58F02D001E9DF1 /* TrackerCategory.swift in Sources */,
 				9150508E2B550639001E9DF1 /* UIView+Extensions.swift in Sources */,
 				9150508A2B53C372001E9DF1 /* UIColor+Extensions.swift in Sources */,
 				915050772B52795F001E9DF1 /* StatisticViewController.swift in Sources */,
+				915050EA2B60D08B001E9DF1 /* TrackersCollectionHeader.swift in Sources */,
+				915050E82B5F8BA8001E9DF1 /* TrackersCollectionViewCell.swift in Sources */,
+				915050EF2B628085001E9DF1 /* NewHabbitSettingCell.swift in Sources */,
 				915050872B53B64D001E9DF1 /* TabBarViewController.swift in Sources */,
 				915050DC2B58F080001E9DF1 /* TrackerRecord.swift in Sources */,
 				915050D82B58EEF2001E9DF1 /* Tracker.swift in Sources */,

@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 final class AddTrackersViewController: UIViewController {
-    
+    //MARK: - UI ELEMENTS
     private lazy var addTrackerLabel : UILabel = {
         let addTrackerLabel = UILabel()
         addTrackerLabel.text = "Создание трекера"
@@ -40,15 +40,16 @@ final class AddTrackersViewController: UIViewController {
         addIrregularEventButton.backgroundColor = UIColor(hex: "1A1B22")
         addIrregularEventButton.setTitle("Нерегулярные событие", for: .normal)
         addIrregularEventButton.setTitleColor(UIColor(hex: "FFFFFF"), for: .normal)
+        addIrregularEventButton.addTarget(self, action: #selector(didTabAddIrregularEventButton), for: .touchUpInside)
         addIrregularEventButton.translatesAutoresizingMaskIntoConstraints = false
         addIrregularEventButton.layer.cornerRadius = 16
         addIrregularEventButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-
         view.addSubview(addIrregularEventButton)
         self.addIrregularEventButton = addIrregularEventButton
         return addIrregularEventButton
     }()
     
+    //MARK: - view func
     override func viewDidLoad() {
         view.backgroundColor = UIColor(hex: "FFFFFF")
         addTrackerLabelLayout()
@@ -57,12 +58,7 @@ final class AddTrackersViewController: UIViewController {
         super.viewDidLoad()
     }
     
-    @objc private func didTabAddHabbitButton(_ sender: UIButton) {
-        let view = NewHabbitViewController()
-     
-        present(view, animated: true)
-    }
-    
+    //MARK: - Layout
     private func addTrackerLabelLayout() {
         NSLayoutConstraint.activate([
             addTrackerLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -88,5 +84,16 @@ final class AddTrackersViewController: UIViewController {
             addIrregularEventButton.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
+    //MARK: - OBJC
+    @objc private func didTabAddHabbitButton(_ sender: UIButton) {
+        let view = NewHabbitViewController()
+     
+        present(view, animated: true)
+    }
     
+    @objc private func didTabAddIrregularEventButton(_ sender: UIButton) {
+        let view = NewIrregularEventViewController()
+     
+        present(view, animated: true)
+    }
 }

@@ -56,6 +56,7 @@ final class NewHabbitViewController: UIViewController {
         settingsTableView.separatorStyle = .singleLine
         settingsTableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         settingsTableView.layer.masksToBounds = true
+        settingsTableView.isScrollEnabled = false
         settingsTableView.layer.cornerRadius = 16
         settingsTableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMinYCorner, .layerMaxXMaxYCorner]
         settingsTableView.translatesAutoresizingMaskIntoConstraints = false
@@ -66,19 +67,66 @@ final class NewHabbitViewController: UIViewController {
         return settingsTableView
     }()
     
+    private lazy var newHabbittCancelButton: UIButton = {
+        let cancelButton = UIButton(type: .system)
+        cancelButton.setTitle("Отменить", for: .normal)
+        cancelButton.backgroundColor = .ypWhite
+        cancelButton.tintColor = .ypRed
+        cancelButton.layer.borderWidth = 1
+        cancelButton.layer.borderColor = UIColor.ypRed.cgColor
+        cancelButton.layer.cornerRadius = 16
+        cancelButton.layer.masksToBounds = true
+        cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        cancelButton.addTarget(self, action: #selector(cancelButtonClicked), for: .touchUpInside)
+        cancelButton.translatesAutoresizingMaskIntoConstraints = false
+        self.newHabbittCancelButton = cancelButton
+        view.addSubview(cancelButton)
+        return cancelButton
+    }()
+    
+    private lazy var newHabbitCreateButton: UIButton = {
+        let createButton = UIButton(type: .system)
+        createButton.setTitle("Создать", for: .normal)
+        createButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        createButton.backgroundColor = .ypGray
+        createButton.tintColor = .ypWhite
+        createButton.layer.cornerRadius = 16
+        createButton.layer.masksToBounds = true
+        createButton.addTarget(self, action: #selector(createButtonClicked), for: .touchUpInside)
+        createButton.translatesAutoresizingMaskIntoConstraints = false
+        self.newHabbitCreateButton = createButton
+        view.addSubview(createButton)
+        return createButton
+    }()
+    
+    private lazy var newHabbbitButtonStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.spacing = 8
+        stackView.distribution = .fillEqually
+        stackView.alignment = .fill
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+    
+        stackView.addArrangedSubview(newHabbittCancelButton)
+        stackView.addArrangedSubview(newHabbitCreateButton)
+        self.newHabbbitButtonStackView = stackView
+        view.addSubview(stackView)
+        return stackView
+    }()
     
     override func viewDidLoad() {
         view.backgroundColor = .white
         newHabbitTextFieldLayout()
         newHabbitTitleLayout()
         newHabbitSettingsTableViewLayout()
+        newHabbittButtonsLayout()
         super.viewDidLoad()
     }
     
     private func newHabbitTitleLayout() {
         NSLayoutConstraint.activate([
             newHabbitTitle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            newHabbitTitle.topAnchor.constraint(equalTo: view.topAnchor, constant: 13)
+            newHabbitTitle.topAnchor.constraint(equalTo: view.topAnchor, constant: 38)
         ])
     }
     
@@ -106,6 +154,28 @@ final class NewHabbitViewController: UIViewController {
             newHabbitSettingsTableView.topAnchor.constraint(equalTo: newHabbitTextField.bottomAnchor, constant: 24),
             newHabbitSettingsTableView.heightAnchor.constraint(equalToConstant: 150)
         ])
+    }
+    
+    private func newHabbittButtonsLayout() {
+        NSLayoutConstraint.activate([
+            newHabbbitButtonStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            
+            newHabbbitButtonStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            
+            newHabbbitButtonStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
+            newHabbitCreateButton.heightAnchor.constraint(equalToConstant: 60),
+            newHabbittCancelButton.heightAnchor.constraint(equalToConstant: 60)
+
+        ])
+    }
+    // MARK: - OBJC
+    @objc func cancelButtonClicked() {
+        self.view.window?.rootViewController?.dismiss(animated: true)
+    }
+    
+    @objc func createButtonClicked() {
+        
     }
 }
 
@@ -136,13 +206,32 @@ extension NewHabbitViewController: UITableViewDataSource {
             assertionFailure("Не удалось выполнить приведение к SettingsHabitOrEventCell")
             return UITableViewCell()
         }
-        cell.textLabel?.text = "ddd"
-
+        switch indexPath.row {
+        case 0 :
+            cell.textLabel?.text = "Категория"
+        case 1 :
+            cell.textLabel?.text = "Расписание"
+        default:
+            ""
+        }
         cell.backgroundColor = .ypBackground
         return cell
     }
 }
 // MARK: - UITableViewDelegate
 extension NewHabbitViewController: UITableViewDelegate {
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch indexPath.row {
+        case 0 :
+            // TODO
+            tableView.deselectRow(at: indexPath, animated: true)
+        case 1 :
+            let view = ScheduleViewController()
+            present(view,animated: true)
+            tableView.deselectRow(at: indexPath, animated: true)
+        default:
+            tableView.deselectRow(at: indexPath, animated: true)
+            
+        }
+    }
 }

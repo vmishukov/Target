@@ -9,15 +9,15 @@ import UIKit
 
 class TrackersCollectionHeader: UICollectionReusableView {
     
-    private lazy var headerCategoryLabel : UILabel = {
+    lazy var headerCategoryLabel : UILabel = {
         let categoryLabel = UILabel()
         categoryLabel.font = .systemFont(ofSize: 19, weight: .bold)
-        categoryLabel.text = "Домашний уют"
         categoryLabel.translatesAutoresizingMaskIntoConstraints = false
         addSubview(categoryLabel)
-        
         return categoryLabel
     }()
+    
+    static let identifier = "header"
     
     override init(frame: CGRect) {
         super.init(frame: frame)

@@ -8,7 +8,7 @@
 import UIKit
 
 final class TrackersCollectionViewCell: UICollectionViewCell {
-    
+    // MARK: - UI ELEMENTS
     lazy var emojiLabel : UILabel = {
         let emojiLabel = UILabel()
         emojiLabel.textAlignment = .center
@@ -74,10 +74,15 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         self.trackersDaysCountLabel = daysCountLabel
         return daysCountLabel
     }()
+    // MARK: - private
+    private var uuid: UUID? = nil
+    private var isCompleted: Bool = false
+    private var indexPath: IndexPath?
     
+    
+    // MARK: - INIT
     override init(frame: CGRect) {
         super.init(frame: frame)
-    
         rectViewLayout()
         emojiViewLayout()
         trackerCaptionLabelLayout()
@@ -87,6 +92,39 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         trackersDaysCountLabel.text = "1 день"
     }
     
+    // MARK: - public func
+    public func cellSetting(uuid: UUID,
+                            caption: String,
+                            color: UIColor,
+                            emoji: String,
+                            completeDays: Int,
+                            isEnabled: Bool,
+                            isCompleted: Bool,
+                            indexPath: IndexPath) {
+        self.uuid = uuid
+        self.trackerCaptionLabel.text = caption
+        self.rectView.backgroundColor = color
+        self.emojiLabel.text = emoji
+        
+        self.trackersDaysCountLabel.text = "\(completeDays)" + " " + "\(daysCaption(dayNumber: completeDays))"
+        self.trackerCompleteButton.isEnabled = isEnabled
+        self.trackerCompleteButton.backgroundColor = rectView.backgroundColor
+        let plusImage = UIImage(named: "button_add_tracker")
+        let doneImage = UIImage(named: "DoneButton")
+        let image = isCompleted ? doneImage : plusImage
+        self.trackerCompleteButton.setImage(image, for: .normal)
+        self.indexPath = indexPath
+    }
+    
+    private func daysCaption(dayNumber: Int) -> String {
+        if dayNumber > 0 || dayNumber % 10 == 2 || dayNumber % 10 == 3 || dayNumber % 10 == 4 {
+            return "дня"
+        } else {
+            return "дней"
+        }
+    }
+    
+    // MARK: - LAYOUT
     private func rectViewLayout() {
         NSLayoutConstraint.activate([
             rectView.widthAnchor.constraint(equalToConstant: 167),
@@ -132,7 +170,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     {
         super.layoutSubviews()
     }
-    
+    // MARK: - REQ INIT
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

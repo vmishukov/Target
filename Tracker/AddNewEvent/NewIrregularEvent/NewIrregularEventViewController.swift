@@ -211,6 +211,7 @@ extension NewIrregularEventViewController: UITableViewDataSource {
         switch indexPath.row {
         case 0 :
             cell.textLabel?.text = "Категория"
+            cell.detailTextLabel?.text = "Важное" //MOCK
         default:
             ""
         }

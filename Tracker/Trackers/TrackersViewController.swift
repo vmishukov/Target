@@ -8,7 +8,7 @@
 import UIKit
 
 final class TrackersViewController: UIViewController {
-    
+    // MARK: - UI ELEMENTS
     private lazy var addTrackerButton : UIButton = {
         let button = UIButton.systemButton(
             with: UIImage(named: "button_add_tracker")!,
@@ -35,6 +35,7 @@ final class TrackersViewController: UIViewController {
         let picker = UIDatePicker()
         picker.datePickerMode = .date
         picker.preferredDatePickerStyle = .compact
+        
         picker.locale = Locale(identifier: "ru_RU")
         picker.calendar.firstWeekday = 2
         picker.clipsToBounds = true
@@ -77,20 +78,24 @@ final class TrackersViewController: UIViewController {
         view.addSubview(trackerErrLabel)
         return trackerErrLabel
     }()
-    
-    let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-    private let emojis = [ "🍇", "🍈", "🍉", "🍊", "🍋", "🍌", "🍍", "🥭", "🍎", "🍏", "🍐", "🍒", "🍓", "🫐", "🥝", "🍅", "🫒", "🥥", "🥑", "🍆", "🥔", "🥕", "🌽", "🌶️", "🫑", "🥒", "🥬", "🥦", "🧄", "🧅", "🍄"]
-    
-    private var categories: [TrackerCategory]?
+    // MARK: - Private
+    private let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    private let emojis = [ "🙂", "😻", "🌺", "🐶", "❤️", "😱", "😇", "😡", "🥶", "🤔", "🙌", "🍔", "🥦", "🏓", "🥇", "🎸", "😪"]
+   
+    private let categories: [TrackerCategory] = TrackersMock.trackersMock
+    private var visibleCategories: [TrackerCategory] = []
     private var completeTrackers: [TrackerRecord]?
     
+    // MARK: - view
     override func viewDidLoad() {
         super.viewDidLoad()
-   
+        reloadCurrentTrackers()
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(TrackersCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        
         collectionView.register(TrackersCollectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
+        
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         
         navBarItem()
@@ -108,21 +113,6 @@ final class TrackersViewController: UIViewController {
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
     }
-
-    @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
-        let selectedDate = sender.date
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yy"
-        let formattedDate = dateFormatter.string(from: selectedDate)
-        print("Выбранная дата: \(formattedDate)")
-    }
-    
-    @objc private func didTapAddTrackerButton(_ sender: UIButton) {
-        let view = AddTrackersViewController()
-     
-        present(view, animated: true)
-    }
-    
     
     private func navBarItem() {
         guard let navigationBar = self.navigationController?.navigationBar else { return }
@@ -142,7 +132,7 @@ final class TrackersViewController: UIViewController {
         let rightButton = UIBarButtonItem(customView: trackerDatePicker)
         navigationItem.rightBarButtonItem = rightButton
     }
-    
+    // MARK: - Constraits
     private func searchBarLayout() {
         NSLayoutConstraint.activate([
             trackerSearchBar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
@@ -168,7 +158,48 @@ final class TrackersViewController: UIViewController {
             trackerErrLabel.topAnchor.constraint(equalTo: trackerErrImage.bottomAnchor, constant: 8)
         ])
     }
+    
+    private func reloadCurrentTrackers() {
+        let calendar = Calendar.current
+        let filterDay = calendar.component(.weekday, from: trackerDatePicker.date)
+        let filterText = (trackerSearchBar.text ?? "").lowercased()
+        
+        visibleCategories = categories.compactMap{ category in
+            let trackers = category.trackers.filter {tracker in
+                let dateCondition = tracker.schedule.contains { weekDay in
+                    weekDay.calendarDayNumber == filterDay
+                } == true
+                let textCondition = tracker.title.lowercased().contains(filterText) || filterText.isEmpty
+                return dateCondition && textCondition
+            }
+            if trackers.isEmpty {
+                return nil
+            }
+            return TrackerCategory(title: category.title, trackers: trackers)
+        }
+        
+        collectionView.reloadData()
+        
+    }
+    // MARK: - OBJC
+    @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
+        let selectedDate = sender.date
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yy"
+        let formattedDate = dateFormatter.string(from: selectedDate)
+        print("Выбранная дата: \(formattedDate)")
+        reloadCurrentTrackers()
+    }
+    
+    @objc private func didTapAddTrackerButton(_ sender: UIButton) {
+        let view = AddTrackersViewController()
+        
+        present(view, animated: true)
+    }
 }
+
+
+
 // MARK: - UICollectionViewDelegate
 extension TrackersViewController: UICollectionViewDelegate {
     
@@ -182,7 +213,11 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
         return CGSize(width: cellWidth,
                       height: 148)
     }
-     
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        visibleCategories.count
+    }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 8
     }
@@ -199,27 +234,31 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
 // MARK: - UICollectionViewDataSource
 extension TrackersViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return emojis.count
+        return visibleCategories[section].trackers.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? TrackersCollectionViewCell
-        cell?.emojiLabel.text = emojis[indexPath.row]
-        return cell!
+        
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? TrackersCollectionViewCell else {return UICollectionViewCell()}
+        
+        
+        let tracker = visibleCategories[indexPath.section].trackers[indexPath.row]
+        cell.cellSetting(uuid: tracker.id,
+                          caption: tracker.title,
+                          color: tracker.color,
+                          emoji: tracker.emoji,
+                          completeDays: 3, //to do
+                          isEnabled: true, //to do
+                          isCompleted: false, //to do
+                          indexPath: indexPath)
+        return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        var id: String
-        switch kind {
-        case UICollectionView.elementKindSectionHeader:
-            id = "header"
-        case UICollectionView.elementKindSectionFooter:
-            id = "footer"
-        default:
-            id = ""
-        }
-        let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: id, for: indexPath) as! TrackersCollectionHeader
         
+        let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: TrackersCollectionHeader.identifier, for: indexPath) as! TrackersCollectionHeader
+        view.headerCategoryLabel.font = .boldSystemFont(ofSize: 19)
+        view.headerCategoryLabel.text = visibleCategories[indexPath.section].title
         return view
     }
 }

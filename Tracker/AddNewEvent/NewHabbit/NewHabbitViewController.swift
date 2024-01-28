@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 final class NewHabbitViewController: UIViewController {
-    
+    // MARK: - UI ELEMENTS
     private lazy var newHabbitTitle : UILabel = {
         let titleLabel = UILabel()
         titleLabel.text = "Новая привычка"
@@ -113,7 +113,7 @@ final class NewHabbitViewController: UIViewController {
         view.addSubview(stackView)
         return stackView
     }()
-    
+    // MARK: - View
     override func viewDidLoad() {
         view.backgroundColor = .white
         newHabbitTextFieldLayout()
@@ -122,7 +122,7 @@ final class NewHabbitViewController: UIViewController {
         newHabbittButtonsLayout()
         super.viewDidLoad()
     }
-    
+    // MARK: - Layout
     private func newHabbitTitleLayout() {
         NSLayoutConstraint.activate([
             newHabbitTitle.centerXAnchor.constraint(equalTo: view.centerXAnchor),

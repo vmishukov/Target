@@ -8,6 +8,9 @@
 import UIKit
 
 final class TrackersCollectionViewCell: UICollectionViewCell {
+    // MARK: - delegate
+    weak var delegate : TrackersCollectionViewCellDelegate?
+    
     // MARK: - UI ELEMENTS
     lazy var emojiLabel : UILabel = {
         let emojiLabel = UILabel()
@@ -53,7 +56,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         let completeButton = UIButton.systemButton(with:
                                                     UIImage(named: "button_add_tracker")!,
                                                    target: self,
-                                                   action: nil)
+                                                   action: #selector(didTaptrackerCompleteButton))
         completeButton.backgroundColor = rectView.backgroundColor
         completeButton.tintColor = .ypWhite
         completeButton.imageEdgeInsets = UIEdgeInsets(top: 3, left: 3, bottom: 3, right: 3)
@@ -98,7 +101,6 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
                             color: UIColor,
                             emoji: String,
                             completeDays: Int,
-                            isEnabled: Bool,
                             isCompleted: Bool,
                             indexPath: IndexPath) {
         self.uuid = uuid
@@ -107,7 +109,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         self.emojiLabel.text = emoji
         
         self.trackersDaysCountLabel.text = "\(completeDays)" + " " + "\(daysCaption(dayNumber: completeDays))"
-        self.trackerCompleteButton.isEnabled = isEnabled
+        //self.trackerCompleteButton.isEnabled = isCompleted ? false : true
         self.trackerCompleteButton.backgroundColor = rectView.backgroundColor
         let plusImage = UIImage(named: "button_add_tracker")
         let doneImage = UIImage(named: "DoneButton")
@@ -116,12 +118,20 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         self.indexPath = indexPath
     }
     
+    // MARK: - private func
     private func daysCaption(dayNumber: Int) -> String {
         if dayNumber > 0 || dayNumber % 10 == 2 || dayNumber % 10 == 3 || dayNumber % 10 == 4 {
             return "дня"
         } else {
             return "дней"
         }
+    }
+    // MARK: - OBJC
+    @objc private func didTaptrackerCompleteButton() {
+        guard let id = self.uuid, let indexPath = self.indexPath else {
+            return
+        }
+        delegate?.addCompleteDay(id: id, indexPath: indexPath)
     }
     
     // MARK: - LAYOUT

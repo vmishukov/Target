@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		914A86E32B6662D000F2523B /* TrackersCollectionViewCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914A86E22B6662D000F2523B /* TrackersCollectionViewCellDelegate.swift */; };
+		914A86E52B66864900F2523B /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914A86E42B66864900F2523B /* Date+Extensions.swift */; };
+		914A86E72B668EFA00F2523B /* AddTrackersViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914A86E62B668EFA00F2523B /* AddTrackersViewControllerDelegate.swift */; };
+		914A86E92B6691FC00F2523B /* NewHabbitViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914A86E82B6691FC00F2523B /* NewHabbitViewControllerDelegate.swift */; };
 		915050732B52795F001E9DF1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915050722B52795F001E9DF1 /* AppDelegate.swift */; };
 		915050752B52795F001E9DF1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915050742B52795F001E9DF1 /* SceneDelegate.swift */; };
 		915050772B52795F001E9DF1 /* StatisticViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915050762B52795F001E9DF1 /* StatisticViewController.swift */; };
@@ -33,6 +37,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		914A86E22B6662D000F2523B /* TrackersCollectionViewCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersCollectionViewCellDelegate.swift; sourceTree = "<group>"; };
+		914A86E42B66864900F2523B /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
+		914A86E62B668EFA00F2523B /* AddTrackersViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTrackersViewControllerDelegate.swift; sourceTree = "<group>"; };
+		914A86E82B6691FC00F2523B /* NewHabbitViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHabbitViewControllerDelegate.swift; sourceTree = "<group>"; };
 		9150506F2B52795F001E9DF1 /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		915050722B52795F001E9DF1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		915050742B52795F001E9DF1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -112,6 +120,7 @@
 				915050892B53C372001E9DF1 /* UIColor+Extensions.swift */,
 				9150508D2B550639001E9DF1 /* UIView+Extensions.swift */,
 				915050E52B5E5246001E9DF1 /* UITextField+Extensions.swift */,
+				914A86E42B66864900F2523B /* Date+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -130,6 +139,7 @@
 			isa = PBXGroup;
 			children = (
 				915050E02B5BC805001E9DF1 /* AddTrackersViewController.swift */,
+				914A86E62B668EFA00F2523B /* AddTrackersViewControllerDelegate.swift */,
 			);
 			path = AddTrackers;
 			sourceTree = "<group>";
@@ -149,6 +159,7 @@
 			children = (
 				915050E72B5F8BA8001E9DF1 /* TrackersCollectionViewCell.swift */,
 				915050E92B60D08B001E9DF1 /* TrackersCollectionHeader.swift */,
+				914A86E22B6662D000F2523B /* TrackersCollectionViewCellDelegate.swift */,
 			);
 			path = CollectionView;
 			sourceTree = "<group>";
@@ -167,6 +178,7 @@
 			isa = PBXGroup;
 			children = (
 				915050E32B5D27D8001E9DF1 /* NewHabbitViewController.swift */,
+				914A86E82B6691FC00F2523B /* NewHabbitViewControllerDelegate.swift */,
 				915050F72B63AFDB001E9DF1 /* Schedule */,
 			);
 			path = NewHabbit;
@@ -272,17 +284,21 @@
 				915050DA2B58F02D001E9DF1 /* TrackerCategory.swift in Sources */,
 				9150508E2B550639001E9DF1 /* UIView+Extensions.swift in Sources */,
 				915050F62B63AEC1001E9DF1 /* ScheduleViewController.swift in Sources */,
+				914A86E72B668EFA00F2523B /* AddTrackersViewControllerDelegate.swift in Sources */,
 				9150508A2B53C372001E9DF1 /* UIColor+Extensions.swift in Sources */,
 				915050772B52795F001E9DF1 /* StatisticViewController.swift in Sources */,
+				914A86E32B6662D000F2523B /* TrackersCollectionViewCellDelegate.swift in Sources */,
 				915050FC2B63BC8F001E9DF1 /* Weekday.swift in Sources */,
 				915050F42B63A852001E9DF1 /* NewIrregularEventViewController.swift in Sources */,
 				915050EA2B60D08B001E9DF1 /* TrackersCollectionHeader.swift in Sources */,
+				914A86E52B66864900F2523B /* Date+Extensions.swift in Sources */,
 				915050E82B5F8BA8001E9DF1 /* TrackersCollectionViewCell.swift in Sources */,
 				915050EF2B628085001E9DF1 /* SettingCell.swift in Sources */,
 				915050872B53B64D001E9DF1 /* TabBarViewController.swift in Sources */,
 				915050DC2B58F080001E9DF1 /* TrackerRecord.swift in Sources */,
 				915050D82B58EEF2001E9DF1 /* Tracker.swift in Sources */,
 				915050FE2B661D88001E9DF1 /* TrackersMock.swift in Sources */,
+				914A86E92B6691FC00F2523B /* NewHabbitViewControllerDelegate.swift in Sources */,
 				915050E12B5BC805001E9DF1 /* AddTrackersViewController.swift in Sources */,
 				9150508C2B55035B001E9DF1 /* TrackersViewController.swift in Sources */,
 				915050732B52795F001E9DF1 /* AppDelegate.swift in Sources */,

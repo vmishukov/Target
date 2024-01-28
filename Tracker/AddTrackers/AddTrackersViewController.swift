@@ -9,6 +9,8 @@ import Foundation
 import UIKit
 
 final class AddTrackersViewController: UIViewController {
+    //MARK: - delegate
+    weak var delegate: AddTrackersViewControllerDelegate?
     //MARK: - UI ELEMENTS
     private lazy var addTrackerLabel : UILabel = {
         let addTrackerLabel = UILabel()
@@ -87,7 +89,7 @@ final class AddTrackersViewController: UIViewController {
     //MARK: - OBJC
     @objc private func didTabAddHabbitButton(_ sender: UIButton) {
         let view = NewHabbitViewController()
-     
+        
         present(view, animated: true)
     }
     

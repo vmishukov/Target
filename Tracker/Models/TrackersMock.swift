@@ -28,7 +28,9 @@ struct TrackersMock {
                                     title: "Выпить таблетки",
                                     color: .ypColorSelection3,
                                     emoji: "😻",
-                                    schedule: [.Wednesday, .Thursday, .Saturday])
+                                    schedule: [.Wednesday, .Saturday])
                         ])
     ]
+    
+    
 }

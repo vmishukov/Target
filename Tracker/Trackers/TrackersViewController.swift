@@ -82,30 +82,27 @@ final class TrackersViewController: UIViewController {
     private let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     private let emojis = [ "🙂", "😻", "🌺", "🐶", "❤️", "😱", "😇", "😡", "🥶", "🤔", "🙌", "🍔", "🥦", "🏓", "🥇", "🎸", "😪"]
    
-    private let categories: [TrackerCategory] = TrackersMock.trackersMock
+    private var categories: [TrackerCategory] = TrackersMock.trackersMock
     private var visibleCategories: [TrackerCategory] = []
-    private var completeTrackers: [TrackerRecord]?
+    private var completedTrackers: [TrackerRecord] = []
+    private let dateFormatter = DateFormatter()
     
     // MARK: - view
     override func viewDidLoad() {
         super.viewDidLoad()
+        dateFormatter.dateFormat = "dd.MM.yyyy"
         reloadCurrentTrackers()
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(TrackersCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         
         collectionView.register(TrackersCollectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
-        
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        
         navBarItem()
-    
         searchBarLayout()
         errImageLayout()
         errLabelLayout()
-        
         view.addSubview(collectionView)
-       
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: trackerSearchBar.bottomAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
@@ -114,6 +111,7 @@ final class TrackersViewController: UIViewController {
         ])
     }
     
+    // MARK: - private func
     private func navBarItem() {
         guard let navigationBar = self.navigationController?.navigationBar else { return }
         navigationBar.topItem?.title = "Трекеры"
@@ -132,6 +130,39 @@ final class TrackersViewController: UIViewController {
         let rightButton = UIBarButtonItem(customView: trackerDatePicker)
         navigationItem.rightBarButtonItem = rightButton
     }
+    private func reloadCurrentTrackers() {
+        let calendar = Calendar.current
+        let filterDay = calendar.component(.weekday, from: trackerDatePicker.date)
+        let filterText = (trackerSearchBar.text ?? "").lowercased()
+        
+        visibleCategories = categories.compactMap{ category in
+            let trackers = category.trackers.filter {tracker in
+                let dateCondition = tracker.schedule.contains { weekDay in
+                    weekDay.calendarDayNumber == filterDay
+                } == true
+                let textCondition = tracker.title.lowercased().contains(filterText) || filterText.isEmpty
+                return dateCondition && textCondition
+            }
+            if trackers.isEmpty {
+                return nil
+            }
+            return TrackerCategory(title: category.title, trackers: trackers)
+        }
+        stubSetting()
+        collectionView.reloadData()
+      
+    }
+    
+    private func stubSetting() {
+        if visibleCategories.count == 0 {
+            collectionView.isHidden = true
+               }
+        else {
+            collectionView.isHidden = false
+        }
+        print(visibleCategories.count)
+    }
+    
     // MARK: - Constraits
     private func searchBarLayout() {
         NSLayoutConstraint.activate([
@@ -159,28 +190,7 @@ final class TrackersViewController: UIViewController {
         ])
     }
     
-    private func reloadCurrentTrackers() {
-        let calendar = Calendar.current
-        let filterDay = calendar.component(.weekday, from: trackerDatePicker.date)
-        let filterText = (trackerSearchBar.text ?? "").lowercased()
-        
-        visibleCategories = categories.compactMap{ category in
-            let trackers = category.trackers.filter {tracker in
-                let dateCondition = tracker.schedule.contains { weekDay in
-                    weekDay.calendarDayNumber == filterDay
-                } == true
-                let textCondition = tracker.title.lowercased().contains(filterText) || filterText.isEmpty
-                return dateCondition && textCondition
-            }
-            if trackers.isEmpty {
-                return nil
-            }
-            return TrackerCategory(title: category.title, trackers: trackers)
-        }
-        
-        collectionView.reloadData()
-        
-    }
+
     // MARK: - OBJC
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
         let selectedDate = sender.date
@@ -241,16 +251,21 @@ extension TrackersViewController: UICollectionViewDataSource {
         
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? TrackersCollectionViewCell else {return UICollectionViewCell()}
         
-        
         let tracker = visibleCategories[indexPath.section].trackers[indexPath.row]
+        let completeDays = completedTrackers.filter { $0.id == tracker.id }.count
+        
+        guard dateFormatter.date(from: dateFormatter.string(from: trackerDatePicker.date)) != nil else {return UICollectionViewCell()}
+        let isCompleted = completedTrackers.contains { record in
+            record.id == tracker.id && record.date.onlyDate == trackerDatePicker.date.onlyDate }
+   
         cell.cellSetting(uuid: tracker.id,
                           caption: tracker.title,
                           color: tracker.color,
                           emoji: tracker.emoji,
-                          completeDays: 3, //to do
-                          isEnabled: true, //to do
-                          isCompleted: false, //to do
+                          completeDays: completeDays,
+                          isCompleted: isCompleted,
                           indexPath: indexPath)
+        cell.delegate = self
         return cell
     }
     
@@ -261,4 +276,32 @@ extension TrackersViewController: UICollectionViewDataSource {
         view.headerCategoryLabel.text = visibleCategories[indexPath.section].title
         return view
     }
+}
+// MARK: - TrackersCollectionViewCellDelegate
+extension TrackersViewController: TrackersCollectionViewCellDelegate {
+    func addCompleteDay(id: UUID, indexPath: IndexPath) {
+        
+        let trackerCompleteDAY = TrackerRecord(Id: id, date: trackerDatePicker.date)
+        
+        if completedTrackers.contains(where: {record in record.id == trackerCompleteDAY.id && record.date.onlyDate == trackerCompleteDAY.date.onlyDate
+        }) {
+            if let index = completedTrackers.firstIndex(where: {record in record.id == trackerCompleteDAY.id && record.date.onlyDate == trackerCompleteDAY.date.onlyDate
+            }) {
+                completedTrackers.remove(at: index)
+                self.collectionView.reloadItems(at: [indexPath])
+            }
+        }
+        else {
+            self.completedTrackers.append(trackerCompleteDAY)
+            self.collectionView.reloadItems(at: [indexPath])
+        }
+    }
+}
+// MARK: - TrackersCollectionViewCellDelegate
+extension TrackersViewController: AddTrackersViewControllerDelegate {
+    
+    func addNewTracker() {
+        
+    }
+    
 }

@@ -11,6 +11,8 @@
 		914A86E52B66864900F2523B /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914A86E42B66864900F2523B /* Date+Extensions.swift */; };
 		914A86E72B668EFA00F2523B /* AddTrackersViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914A86E62B668EFA00F2523B /* AddTrackersViewControllerDelegate.swift */; };
 		914A86E92B6691FC00F2523B /* NewHabbitViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914A86E82B6691FC00F2523B /* NewHabbitViewControllerDelegate.swift */; };
+		914A86EB2B692FF000F2523B /* ScheduleViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914A86EA2B692FF000F2523B /* ScheduleViewControllerDelegate.swift */; };
+		914A86ED2B6BD0D200F2523B /* ScheduleCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914A86EC2B6BD0D200F2523B /* ScheduleCellDelegate.swift */; };
 		915050732B52795F001E9DF1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915050722B52795F001E9DF1 /* AppDelegate.swift */; };
 		915050752B52795F001E9DF1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915050742B52795F001E9DF1 /* SceneDelegate.swift */; };
 		915050772B52795F001E9DF1 /* StatisticViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915050762B52795F001E9DF1 /* StatisticViewController.swift */; };
@@ -41,6 +43,8 @@
 		914A86E42B66864900F2523B /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
 		914A86E62B668EFA00F2523B /* AddTrackersViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTrackersViewControllerDelegate.swift; sourceTree = "<group>"; };
 		914A86E82B6691FC00F2523B /* NewHabbitViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHabbitViewControllerDelegate.swift; sourceTree = "<group>"; };
+		914A86EA2B692FF000F2523B /* ScheduleViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleViewControllerDelegate.swift; sourceTree = "<group>"; };
+		914A86EC2B6BD0D200F2523B /* ScheduleCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleCellDelegate.swift; sourceTree = "<group>"; };
 		9150506F2B52795F001E9DF1 /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		915050722B52795F001E9DF1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		915050742B52795F001E9DF1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -197,6 +201,8 @@
 			children = (
 				915050F52B63AEC1001E9DF1 /* ScheduleViewController.swift */,
 				915050F82B63B03C001E9DF1 /* ScheduleSettingCell.swift */,
+				914A86EA2B692FF000F2523B /* ScheduleViewControllerDelegate.swift */,
+				914A86EC2B6BD0D200F2523B /* ScheduleCellDelegate.swift */,
 			);
 			path = Schedule;
 			sourceTree = "<group>";
@@ -288,6 +294,7 @@
 				9150508A2B53C372001E9DF1 /* UIColor+Extensions.swift in Sources */,
 				915050772B52795F001E9DF1 /* StatisticViewController.swift in Sources */,
 				914A86E32B6662D000F2523B /* TrackersCollectionViewCellDelegate.swift in Sources */,
+				914A86EB2B692FF000F2523B /* ScheduleViewControllerDelegate.swift in Sources */,
 				915050FC2B63BC8F001E9DF1 /* Weekday.swift in Sources */,
 				915050F42B63A852001E9DF1 /* NewIrregularEventViewController.swift in Sources */,
 				915050EA2B60D08B001E9DF1 /* TrackersCollectionHeader.swift in Sources */,
@@ -300,6 +307,7 @@
 				915050FE2B661D88001E9DF1 /* TrackersMock.swift in Sources */,
 				914A86E92B6691FC00F2523B /* NewHabbitViewControllerDelegate.swift in Sources */,
 				915050E12B5BC805001E9DF1 /* AddTrackersViewController.swift in Sources */,
+				914A86ED2B6BD0D200F2523B /* ScheduleCellDelegate.swift in Sources */,
 				9150508C2B55035B001E9DF1 /* TrackersViewController.swift in Sources */,
 				915050732B52795F001E9DF1 /* AppDelegate.swift in Sources */,
 				915050752B52795F001E9DF1 /* SceneDelegate.swift in Sources */,

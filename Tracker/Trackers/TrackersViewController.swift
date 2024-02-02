@@ -82,7 +82,7 @@ final class TrackersViewController: UIViewController {
     private let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     private let emojis = [ "🙂", "😻", "🌺", "🐶", "❤️", "😱", "😇", "😡", "🥶", "🤔", "🙌", "🍔", "🥦", "🏓", "🥇", "🎸", "😪"]
    
-    private var categories: [TrackerCategory] = TrackersMock.trackersMock
+    private var categories: [TrackerCategory] = TrackersMock.trackersMock //MOCK FOR NOW
     private var visibleCategories: [TrackerCategory] = []
     private var completedTrackers: [TrackerRecord] = []
     private let dateFormatter = DateFormatter()
@@ -111,6 +111,11 @@ final class TrackersViewController: UIViewController {
         ])
     }
     
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+      
+    }
     // MARK: - private func
     private func navBarItem() {
         guard let navigationBar = self.navigationController?.navigationBar else { return }
@@ -203,7 +208,8 @@ final class TrackersViewController: UIViewController {
     
     @objc private func didTapAddTrackerButton(_ sender: UIButton) {
         let view = AddTrackersViewController()
-        
+        view.category = self.categories
+        view.trackerViewdelegate = self
         present(view, animated: true)
     }
 }
@@ -296,12 +302,25 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
             self.collectionView.reloadItems(at: [indexPath])
         }
     }
+
 }
 // MARK: - TrackersCollectionViewCellDelegate
 extension TrackersViewController: AddTrackersViewControllerDelegate {
-    
-    func addNewTracker() {
+    func addNewTracker(trackerCategory: [TrackerCategory]) {
+        //чистка удаленных категорий
         
+        /*
+        let setCategory = self.categories.filter{ category in
+            trackerCategory.contains{ filter in
+                filter.title == category.title
+            }
+        }
+        */
+        
+        self.categories = trackerCategory
+        reloadCurrentTrackers() 
     }
     
 }
+
+

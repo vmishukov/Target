@@ -20,7 +20,7 @@ struct TrackersMock {
                                     title: "Уборка",
                                     color: .ypBlue,
                                     emoji: "😱",
-                                    schedule: [.Saturday])
+                                    schedule: [.Monday,.Saturday])
                         ]),
         TrackerCategory(title: "Здоровье",
                         trackers: [
@@ -28,8 +28,17 @@ struct TrackersMock {
                                     title: "Выпить таблетки",
                                     color: .ypColorSelection3,
                                     emoji: "😻",
-                                    schedule: [.Wednesday, .Saturday])
+                                    schedule: [.Monday,.Wednesday, .Saturday])
+                        ]),
+        TrackerCategory(title: "Здоровье2",
+                        trackers: [
+                            Tracker(id: UUID(),
+                                    title: "Выпить таблетки",
+                                    color: .ypColorSelection3,
+                                    emoji: "😻",
+                                    schedule: [.Monday,.Wednesday, .Saturday])
                         ])
+
     ]
     
     

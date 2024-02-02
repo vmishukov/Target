@@ -10,7 +10,7 @@ import UIKit
 
 final class AddTrackersViewController: UIViewController {
     //MARK: - delegate
-    weak var delegate: AddTrackersViewControllerDelegate?
+    weak var trackerViewdelegate: AddTrackersViewControllerDelegate?
     //MARK: - UI ELEMENTS
     private lazy var addTrackerLabel : UILabel = {
         let addTrackerLabel = UILabel()
@@ -50,7 +50,8 @@ final class AddTrackersViewController: UIViewController {
         self.addIrregularEventButton = addIrregularEventButton
         return addIrregularEventButton
     }()
-    
+    //MARK: - public variable
+    var category: [TrackerCategory]?
     //MARK: - view func
     override func viewDidLoad() {
         view.backgroundColor = UIColor(hex: "FFFFFF")
@@ -89,7 +90,8 @@ final class AddTrackersViewController: UIViewController {
     //MARK: - OBJC
     @objc private func didTabAddHabbitButton(_ sender: UIButton) {
         let view = NewHabbitViewController()
-        
+        view.addTrackerDelegate = self
+        view.categories = self.category
         present(view, animated: true)
     }
     
@@ -97,5 +99,11 @@ final class AddTrackersViewController: UIViewController {
         let view = NewIrregularEventViewController()
      
         present(view, animated: true)
+    }
+}
+
+extension AddTrackersViewController: AddTrackersViewControllerDelegate {
+    func addNewTracker(trackerCategory: [TrackerCategory]) {
+        trackerViewdelegate?.addNewTracker(trackerCategory: trackerCategory)
     }
 }

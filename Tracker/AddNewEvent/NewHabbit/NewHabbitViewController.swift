@@ -9,6 +9,8 @@ import Foundation
 import UIKit
 
 final class NewHabbitViewController: UIViewController {
+    // MARK: - delagate
+    weak var addTrackerDelegate: AddTrackersViewControllerDelegate?
     // MARK: - UI ELEMENTS
     private lazy var newHabbitTitle : UILabel = {
         let titleLabel = UILabel()
@@ -166,19 +168,37 @@ final class NewHabbitViewController: UIViewController {
             
             newHabbitCreateButton.heightAnchor.constraint(equalToConstant: 60),
             newHabbittCancelButton.heightAnchor.constraint(equalToConstant: 60)
-
         ])
     }
+    // MARK: - public variable
+    var categories: [TrackerCategory]?
+    // MARK: - private
+    var schedule: [Weekday]?
     // MARK: - OBJC
     @objc func cancelButtonClicked() {
         self.view.window?.rootViewController?.dismiss(animated: true)
     }
     
     @objc func createButtonClicked() {
-        
+       // category?.remove(at: 1)
+        let indexPath = IndexPath(row: 0, section: 0)
+        let cell = newHabbitSettingsTableView.cellForRow(at: indexPath)
+        guard let categoryTitle = cell?.detailTextLabel?.text , var categories = self.categories, let caption = newHabbitTextField.text, let schedule = self.schedule  else { return }
+
+        let tracker = Tracker(id: UUID(), title: caption, color: .ypColorSelection10, emoji: "🥇", schedule: schedule)
+
+        if let index = categories.firstIndex(where: {cat in
+            cat.title == categoryTitle
+        }) {
+            var trackers = categories[index].trackers
+            trackers.append(tracker)
+            let updatedCategory = TrackerCategory(title: categoryTitle, trackers: trackers)
+            categories.remove(at: index)
+            categories.insert(updatedCategory, at: index)
+        }
+        self.addTrackerDelegate?.addNewTracker(trackerCategory: categories)
     }
 }
-
 // MARK: - UITextFieldDelegate
 extension NewHabbitViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -209,6 +229,7 @@ extension NewHabbitViewController: UITableViewDataSource {
         switch indexPath.row {
         case 0 :
             cell.textLabel?.text = "Категория"
+            cell.detailTextLabel?.text = "Домашний уют"
         case 1 :
             cell.textLabel?.text = "Расписание"
         default:
@@ -227,11 +248,37 @@ extension NewHabbitViewController: UITableViewDelegate {
             tableView.deselectRow(at: indexPath, animated: true)
         case 1 :
             let view = ScheduleViewController()
+            view.delegate = self
+            view.selectedDays = self.schedule
             present(view,animated: true)
             tableView.deselectRow(at: indexPath, animated: true)
         default:
             tableView.deselectRow(at: indexPath, animated: true)
             
         }
+    }
+}
+
+extension NewHabbitViewController: ScheduleViewControllerDelegate {
+    func getSelectedDays(schedule: [Weekday]) {
+        self.schedule = schedule
+        let indexPath = IndexPath(row: 1, section: 0)
+        let cell = newHabbitSettingsTableView.cellForRow(at: indexPath)
+        
+        if schedule.count == 0 {
+            cell?.detailTextLabel?.text = ""
+        } else {
+            var text: String = ""
+            for (idx, element) in schedule.enumerated() {
+                if idx == schedule.endIndex-1 {
+                    text += element.shortDayName
+                } else {
+                    text += element.shortDayName + ", "
+                }
+            }
+            
+            cell?.detailTextLabel?.text = text
+        }
+        newHabbitSettingsTableView.reloadData()
     }
 }

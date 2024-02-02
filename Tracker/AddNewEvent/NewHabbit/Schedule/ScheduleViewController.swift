@@ -8,7 +8,8 @@
 import UIKit
 
 final class ScheduleViewController : UIViewController {
-    
+    // MARK: - delegate
+    weak var delegate: ScheduleViewControllerDelegate?
     // MARK: - UI ELEMENTS
     private lazy var scheduleTitle: UILabel = {
         let scheduleTitle = UILabel()
@@ -50,6 +51,8 @@ final class ScheduleViewController : UIViewController {
         view.addSubview(scheduleTableView)
         return scheduleTableView
     }()
+    // MARK: - public
+    var selectedDays: [Weekday]?
     
     // MARK: - view
     override func viewDidLoad() {
@@ -86,7 +89,9 @@ final class ScheduleViewController : UIViewController {
     }
     // MARK: - OBJC
     @objc func didTapDoneButton() {
-        
+        guard let selectedDays = self.selectedDays else {print("hueta")
+            return}
+        delegate?.getSelectedDays(schedule: selectedDays)
     }
 }
 // MARK: - UITableViewDataSource
@@ -100,7 +105,15 @@ extension ScheduleViewController : UITableViewDataSource {
             assertionFailure("Не удалось создать ячейку дня недели ScheduleSettingCell")
             return UITableViewCell()
         }
+        
         cell.textLabel?.text = Weekday.allCases[indexPath.row].rawValue
+        cell.day = Weekday.allCases[indexPath.row]
+        cell.delegate = self
+        if let selectedDays = self.selectedDays {
+            if selectedDays.contains(Weekday.allCases[indexPath.row]){
+                cell.getSwithOn()
+            }
+        }
         
         if indexPath.row == 0 {
             cell.layer.cornerRadius = 16
@@ -119,4 +132,24 @@ extension ScheduleViewController : UITableViewDataSource {
 }
 // MARK: - UITableViewDelegate
 extension ScheduleViewController : UITableViewDelegate {
+    
+}
+// MARK: - UITableViewDelegate
+extension ScheduleViewController : ScheduleCellDelegate {
+    func getSelectedDay(day: Weekday) {
+        guard var selectedDays = self.selectedDays else {
+            self.selectedDays = [day]
+            return
+        }
+        selectedDays.append(day)
+        self.selectedDays = selectedDays
+    }
+    
+    func removeSelectedDay(day: Weekday) {
+        guard var selectedDays = self.selectedDays, let index = selectedDays.firstIndex(of: day) else {return}
+        
+        _ = selectedDays.remove(at: index)
+        self.selectedDays = selectedDays
+    }
+    
 }

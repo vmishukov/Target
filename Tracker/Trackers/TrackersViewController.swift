@@ -142,17 +142,37 @@ final class TrackersViewController: UIViewController {
         
         visibleCategories = categories.compactMap{ category in
             let trackers = category.trackers.filter {tracker in
+                
                 let dateCondition = tracker.schedule.contains { weekDay in
                     weekDay.calendarDayNumber == filterDay
                 } == true
+                var irregularEventCondition = true
+                
+                if tracker.isHabbit == false 
+                {
+                    if self.completedTrackers.contains(where: { completeTracker in
+                        completeTracker.id == tracker.id}) {
+                        let inx = self.completedTrackers.firstIndex{ findTracker in findTracker.id == tracker.id
+                        }
+                        if self.completedTrackers[inx!].date.onlyDate ==  trackerDatePicker.date.onlyDate {
+                            irregularEventCondition = true
+                        } else {
+                            irregularEventCondition = false
+                        }
+                    } else {
+                        irregularEventCondition = true
+                    }
+                }
+        
                 let textCondition = tracker.title.lowercased().contains(filterText) || filterText.isEmpty
-                return dateCondition && textCondition
+                return dateCondition && textCondition && irregularEventCondition
             }
             if trackers.isEmpty {
                 return nil
             }
             return TrackerCategory(title: category.title, trackers: trackers)
         }
+        
         stubSetting()
         collectionView.reloadData()
       
@@ -301,6 +321,8 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
             self.completedTrackers.append(trackerCompleteDAY)
             self.collectionView.reloadItems(at: [indexPath])
         }
+        
+        
     }
 
 }
@@ -318,7 +340,7 @@ extension TrackersViewController: AddTrackersViewControllerDelegate {
         */
         
         self.categories = trackerCategory
-        reloadCurrentTrackers() 
+        reloadCurrentTrackers()
     }
     
 }

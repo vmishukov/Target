@@ -11,6 +11,10 @@ import UIKit
 final class NewHabbitViewController: UIViewController {
     // MARK: - delagate
     weak var addTrackerDelegate: AddTrackersViewControllerDelegate?
+    // MARK: - public variable
+    var categories: [TrackerCategory]?
+    // MARK: - private
+    var schedule: [Weekday]?
     // MARK: - UI ELEMENTS
     private lazy var newHabbitTitle : UILabel = {
         let titleLabel = UILabel()
@@ -170,10 +174,7 @@ final class NewHabbitViewController: UIViewController {
             newHabbittCancelButton.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
-    // MARK: - public variable
-    var categories: [TrackerCategory]?
-    // MARK: - private
-    var schedule: [Weekday]?
+
     // MARK: - OBJC
     @objc func cancelButtonClicked() {
         self.view.window?.rootViewController?.dismiss(animated: true)
@@ -185,7 +186,7 @@ final class NewHabbitViewController: UIViewController {
         let cell = newHabbitSettingsTableView.cellForRow(at: indexPath)
         guard let categoryTitle = cell?.detailTextLabel?.text , var categories = self.categories, let caption = newHabbitTextField.text, let schedule = self.schedule  else { return }
 
-        let tracker = Tracker(id: UUID(), title: caption, color: .ypColorSelection10, emoji: "🥇", schedule: schedule)
+        let tracker = Tracker(id: UUID(), title: caption, color: .ypColorSelection10, emoji: "🥇", isHabbit: true, schedule: schedule)
 
         if let index = categories.firstIndex(where: {cat in
             cat.title == categoryTitle
@@ -229,7 +230,7 @@ extension NewHabbitViewController: UITableViewDataSource {
         switch indexPath.row {
         case 0 :
             cell.textLabel?.text = "Категория"
-            cell.detailTextLabel?.text = "Домашний уют"
+            cell.detailTextLabel?.text = "Домашний уют" //mock
         case 1 :
             cell.textLabel?.text = "Расписание"
         default:

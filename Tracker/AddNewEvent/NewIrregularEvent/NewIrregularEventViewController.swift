@@ -11,7 +11,11 @@ import Foundation
 import UIKit
 
 final class NewIrregularEventViewController: UIViewController {
-    
+    // MARK: - DELEGATE
+    weak var addTrackerDelegate: AddTrackersViewControllerDelegate?
+    // MARK: - public variable
+    var categories: [TrackerCategory]?
+    // MARK: - UI ELEMENTS
     private lazy var NewIrregularEventTitle : UILabel = {
         let titleLabel = UILabel()
         titleLabel.text = "Новое нерегулярное событие"
@@ -114,7 +118,7 @@ final class NewIrregularEventViewController: UIViewController {
         view.addSubview(stackView)
         return stackView
     }()
-    
+    // MARK: - view
     override func viewDidLoad() {
         view.backgroundColor = .white
         newIrregularEventTextFieldLayout()
@@ -123,7 +127,7 @@ final class NewIrregularEventViewController: UIViewController {
         newIrregularEventtButtonsLayout()
         super.viewDidLoad()
     }
-    
+    // MARK: - CONSTRAITS
     private func newIrregularEventTitleLayout() {
         NSLayoutConstraint.activate([
             NewIrregularEventTitle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -178,6 +182,24 @@ final class NewIrregularEventViewController: UIViewController {
     
     @objc func createButtonClicked() {
         
+        let indexPath = IndexPath(row: 0, section: 0)
+        let cell = newIrregularEventSettingsTableView.cellForRow(at: indexPath)
+        guard let categoryTitle = cell?.detailTextLabel?.text , var categories = self.categories, let caption = newIrregularEventTextField.text  else { return }
+
+        let schedule = [Weekday.Monday, Weekday.Tuesday, Weekday.Wednesday, Weekday.Thursday, Weekday.Friday, Weekday.Saturday, Weekday.Sunday]
+        
+        let tracker = Tracker(id: UUID(), title: caption, color: .ypColorSelection10, emoji: "🥇", isHabbit: false, schedule: schedule)
+
+        if let index = categories.firstIndex(where: {cat in
+            cat.title == categoryTitle
+        }) {
+            var trackers = categories[index].trackers
+            trackers.append(tracker)
+            let updatedCategory = TrackerCategory(title: categoryTitle, trackers: trackers)
+            categories.remove(at: index)
+            categories.insert(updatedCategory, at: index)
+        }
+        self.addTrackerDelegate?.addNewTracker(trackerCategory: categories)
     }
 }
 
@@ -211,7 +233,7 @@ extension NewIrregularEventViewController: UITableViewDataSource {
         switch indexPath.row {
         case 0 :
             cell.textLabel?.text = "Категория"
-            cell.detailTextLabel?.text = "Важное" //MOCK
+            cell.detailTextLabel?.text = "Домашний уют" //MOCK
         default:
             ""
         }

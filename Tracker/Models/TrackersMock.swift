@@ -14,12 +14,14 @@ struct TrackersMock {
                             Tracker(id: UUID(),
                                     title: "Полить растения",
                                     color: .ypColorSelection7,
-                                    emoji: "😪",
+                                    emoji: "😪", 
+                                    isHabbit: true,
                                     schedule: [.Monday, .Tuesday, .Friday, .Sunday]),
                             Tracker(id: UUID(),
                                     title: "Уборка",
                                     color: .ypBlue,
-                                    emoji: "😱",
+                                    emoji: "😱", 
+                                    isHabbit: true,
                                     schedule: [.Monday,.Saturday])
                         ]),
         TrackerCategory(title: "Здоровье",
@@ -27,7 +29,8 @@ struct TrackersMock {
                             Tracker(id: UUID(),
                                     title: "Выпить таблетки",
                                     color: .ypColorSelection3,
-                                    emoji: "😻",
+                                    emoji: "😻", 
+                                    isHabbit: true,
                                     schedule: [.Monday,.Wednesday, .Saturday])
                         ]),
         TrackerCategory(title: "Здоровье2",
@@ -35,7 +38,8 @@ struct TrackersMock {
                             Tracker(id: UUID(),
                                     title: "Выпить таблетки",
                                     color: .ypColorSelection3,
-                                    emoji: "😻",
+                                    emoji: "😻", 
+                                    isHabbit: true,
                                     schedule: [.Monday,.Wednesday, .Saturday])
                         ])
 

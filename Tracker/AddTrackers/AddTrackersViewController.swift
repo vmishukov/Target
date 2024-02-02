@@ -97,7 +97,8 @@ final class AddTrackersViewController: UIViewController {
     
     @objc private func didTabAddIrregularEventButton(_ sender: UIButton) {
         let view = NewIrregularEventViewController()
-     
+        view.addTrackerDelegate = self
+        view.categories = self.category
         present(view, animated: true)
     }
 }

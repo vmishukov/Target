@@ -29,8 +29,9 @@ class TrackersCollectionHeader: UICollectionReusableView {
     }
     private func headerCategoryLabelLayout() {
         NSLayoutConstraint.activate([
-            headerCategoryLabel.topAnchor.constraint(equalTo: topAnchor),
-            headerCategoryLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16)
+            headerCategoryLabel.bottomAnchor.constraint(equalTo: bottomAnchor,constant: -12),
+            headerCategoryLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
+            headerCategoryLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12)
         ])
     }
 }

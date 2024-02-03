@@ -52,7 +52,8 @@ final class TrackersViewController: UIViewController {
         trackerSearchBar.placeholder = "Поиск"
         trackerSearchBar.translatesAutoresizingMaskIntoConstraints = false
         trackerSearchBar.searchBarStyle = .minimal
-    
+        trackerSearchBar.delegate = self
+        
         view.addSubview(trackerSearchBar)
         return trackerSearchBar
     }()
@@ -165,6 +166,7 @@ final class TrackersViewController: UIViewController {
                 }
         
                 let textCondition = tracker.title.lowercased().contains(filterText) || filterText.isEmpty
+                
                 return dateCondition && textCondition && irregularEventCondition
             }
             if trackers.isEmpty {
@@ -232,6 +234,9 @@ final class TrackersViewController: UIViewController {
         view.trackerViewdelegate = self
         present(view, animated: true)
     }
+    
+
+    
 }
 
 
@@ -257,12 +262,13 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 8
     }
+ 
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize  {
         let indexPath = IndexPath(row: 0, section: section)
         let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader, at: indexPath)
         
-        return headerView.systemLayoutSizeFitting(CGSize(width: 50, height: 50), withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
+        return headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width, height: UIView.layoutFittingExpandedSize.height), withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
     }
 }
 
@@ -330,19 +336,17 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
 extension TrackersViewController: AddTrackersViewControllerDelegate {
     func addNewTracker(trackerCategory: [TrackerCategory]) {
         //чистка удаленных категорий
-        
-        /*
-        let setCategory = self.categories.filter{ category in
-            trackerCategory.contains{ filter in
-                filter.title == category.title
-            }
-        }
-        */
-        
         self.categories = trackerCategory
         reloadCurrentTrackers()
     }
     
 }
 
-
+// MARK: - TrackersCollectionViewCellDelegate
+extension TrackersViewController : UISearchBarDelegate {
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange textSearched: String)
+    {
+        reloadCurrentTrackers()
+    }
+}

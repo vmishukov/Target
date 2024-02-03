@@ -13,7 +13,6 @@ final class NewHabbitViewController: UIViewController {
     weak var addTrackerDelegate: AddTrackersViewControllerDelegate?
     // MARK: - public variable
     var categories: [TrackerCategory]?
-    // MARK: - private
     var schedule: [Weekday]?
     // MARK: - UI ELEMENTS
     private lazy var newHabbitTitle : UILabel = {
@@ -37,6 +36,8 @@ final class NewHabbitViewController: UIViewController {
         NewHabbitTextField.placeholder = "Введите название трекера"
         NewHabbitTextField.layer.cornerRadius = 16
         NewHabbitTextField.clearButtonMode = .always
+        NewHabbitTextField.addTarget(self, action: #selector(textFieldDidChange(_:)),
+                                  for: .editingChanged)
         NewHabbitTextField.addSubview(newHabbitErrLabel)
         view.addSubview(NewHabbitTextField)
         self.newHabbitTextField = NewHabbitTextField
@@ -126,6 +127,7 @@ final class NewHabbitViewController: UIViewController {
         newHabbitTitleLayout()
         newHabbitSettingsTableViewLayout()
         newHabbittButtonsLayout()
+        updateButtonStatus()
         super.viewDidLoad()
     }
     // MARK: - Layout
@@ -174,7 +176,17 @@ final class NewHabbitViewController: UIViewController {
             newHabbittCancelButton.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
-
+    
+    private func updateButtonStatus() {
+        if newHabbitTextField.text?.count ?? 0 > 0 && schedule?.count ?? 0 > 0 {
+            newHabbitCreateButton.isEnabled = true
+            newHabbitCreateButton.backgroundColor = .ypBlack
+        } else {
+            newHabbitCreateButton.isEnabled = false
+            newHabbitCreateButton.backgroundColor = .ypGray
+        }
+    }
+    
     // MARK: - OBJC
     @objc func cancelButtonClicked() {
         self.view.window?.rootViewController?.dismiss(animated: true)
@@ -198,6 +210,10 @@ final class NewHabbitViewController: UIViewController {
             categories.insert(updatedCategory, at: index)
         }
         self.addTrackerDelegate?.addNewTracker(trackerCategory: categories)
+        self.view.window?.rootViewController?.dismiss(animated: true)
+    }
+    @objc func textFieldDidChange(_ textField: UITextField) {
+        updateButtonStatus()
     }
 }
 // MARK: - UITextFieldDelegate
@@ -212,9 +228,11 @@ extension NewHabbitViewController: UITextFieldDelegate {
     }
     
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
-        newHabbitErrLabel.isHidden = true
+
+        newHabbitCreateButton.backgroundColor = .ypGray
         return true
     }
+
 }
 // MARK: - UITableViewDataSource
 extension NewHabbitViewController: UITableViewDataSource {
@@ -277,9 +295,9 @@ extension NewHabbitViewController: ScheduleViewControllerDelegate {
                     text += element.shortDayName + ", "
                 }
             }
-            
             cell?.detailTextLabel?.text = text
         }
+        updateButtonStatus()
         newHabbitSettingsTableView.reloadData()
     }
 }

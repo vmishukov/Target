@@ -36,6 +36,10 @@ final class NewIrregularEventViewController: UIViewController {
         newIrregularEventTextField.translatesAutoresizingMaskIntoConstraints = false
         newIrregularEventTextField.placeholder = "Введите название трекера"
         newIrregularEventTextField.layer.cornerRadius = 16
+        
+        newIrregularEventTextField.addTarget(self, action: #selector(textFieldDidChange(_:)),
+                                  for: .editingChanged)
+        
         newIrregularEventTextField.clearButtonMode = .always
         newIrregularEventTextField.addSubview(newIrregularEventLabel)
         view.addSubview(newIrregularEventTextField)
@@ -125,6 +129,7 @@ final class NewIrregularEventViewController: UIViewController {
         newIrregularEventTitleLayout()
         newIrregularEventSettingsTableViewLayout()
         newIrregularEventtButtonsLayout()
+        updateButtonStatus() 
         super.viewDidLoad()
     }
     // MARK: - CONSTRAITS
@@ -200,6 +205,21 @@ final class NewIrregularEventViewController: UIViewController {
             categories.insert(updatedCategory, at: index)
         }
         self.addTrackerDelegate?.addNewTracker(trackerCategory: categories)
+        self.view.window?.rootViewController?.dismiss(animated: true)
+    }
+    
+    @objc func textFieldDidChange(_ textField: UITextField) {
+        updateButtonStatus()
+    }
+    // MARK: - private func
+    private func updateButtonStatus() {
+        if newIrregularEventTextField.text?.count ?? 0 > 0  {
+            newIrregularEventCreateButton.isEnabled = true
+            newIrregularEventCreateButton.backgroundColor = .ypBlack
+        } else {
+            newIrregularEventCreateButton.isEnabled = false
+            newIrregularEventCreateButton.backgroundColor = .ypGray
+        }
     }
 }
 

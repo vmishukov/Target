@@ -89,9 +89,11 @@ final class ScheduleViewController : UIViewController {
     }
     // MARK: - OBJC
     @objc func didTapDoneButton() {
-        guard let selectedDays = self.selectedDays else {print("hueta")
+        guard let selectedDays = self.selectedDays else {
+            self.dismiss(animated: true)
             return}
         delegate?.getSelectedDays(schedule: selectedDays)
+        self.dismiss(animated: true)
     }
 }
 // MARK: - UITableViewDataSource

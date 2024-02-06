@@ -49,7 +49,7 @@ final class NewHabbitViewController: UIViewController {
         let errLabel = UILabel()
         errLabel.text = "Ограничение 38 символов"
         errLabel.font = .systemFont(ofSize: 17)
-        errLabel.textColor = UIColor(hex: "F56B6C")
+        errLabel.textColor = .ypRed
         errLabel.translatesAutoresizingMaskIntoConstraints = false
         errLabel.textAlignment = .center
         errLabel.isHidden = true

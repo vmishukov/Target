@@ -15,7 +15,7 @@ final class TrackersViewController: UIViewController {
             target: self,
             action: #selector(self.didTapAddTrackerButton)
         )
-        button.tintColor = UIColor(hex: "1A1B22")
+        button.tintColor = .ypBlack
         button.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(button)
         self.addTrackerButton = button

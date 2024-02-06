@@ -15,7 +15,7 @@ final class AddTrackersViewController: UIViewController {
     private lazy var addTrackerLabel : UILabel = {
         let addTrackerLabel = UILabel()
         addTrackerLabel.text = "Создание трекера"
-        addTrackerLabel.textColor = UIColor(hex: "1A1B22")
+        addTrackerLabel.textColor = .ypBlack
         addTrackerLabel.font = .systemFont(ofSize: 16, weight: .medium)
         view.addSubview(addTrackerLabel)
         addTrackerLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -25,7 +25,7 @@ final class AddTrackersViewController: UIViewController {
     
     private lazy var addHabbitButton: UIButton = {
         let addHabbitButton = UIButton(type: .system) as UIButton
-        addHabbitButton.backgroundColor = UIColor(hex: "1A1B22")
+        addHabbitButton.backgroundColor = .ypBlack
         addHabbitButton.setTitle("Привычка", for: .normal)
         addHabbitButton.setTitleColor(UIColor(hex: "FFFFFF"), for: .normal)
         addHabbitButton.translatesAutoresizingMaskIntoConstraints = false
@@ -39,7 +39,7 @@ final class AddTrackersViewController: UIViewController {
     
     private lazy var addIrregularEventButton: UIButton = {
         let addIrregularEventButton = UIButton(type: .system) as UIButton
-        addIrregularEventButton.backgroundColor = UIColor(hex: "1A1B22")
+        addIrregularEventButton.backgroundColor = .ypBlack
         addIrregularEventButton.setTitle("Нерегулярные событие", for: .normal)
         addIrregularEventButton.setTitleColor(UIColor(hex: "FFFFFF"), for: .normal)
         addIrregularEventButton.addTarget(self, action: #selector(didTabAddIrregularEventButton), for: .touchUpInside)
@@ -54,7 +54,7 @@ final class AddTrackersViewController: UIViewController {
     var category: [TrackerCategory]?
     //MARK: - view func
     override func viewDidLoad() {
-        view.backgroundColor = UIColor(hex: "FFFFFF")
+        view.backgroundColor = .ypWhite
         layoutAddTrackerLabel()
         layoutAddHabbitButton()
         layoutAddIrregularEventButton()

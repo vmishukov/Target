@@ -14,7 +14,7 @@ final class ScheduleViewController : UIViewController {
     private lazy var scheduleTitle: UILabel = {
         let scheduleTitle = UILabel()
         scheduleTitle.text = "Расписание"
-        scheduleTitle.textColor = UIColor(hex: "1A1B22")
+        scheduleTitle.textColor = .ypBlack
         scheduleTitle.font = .systemFont(ofSize: 16, weight: .medium)
         
         view.addSubview(scheduleTitle)

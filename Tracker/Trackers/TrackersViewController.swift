@@ -81,28 +81,29 @@ final class TrackersViewController: UIViewController {
     }()
     // MARK: - Private
     private let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-    private let emojis = [ "🙂", "😻", "🌺", "🐶", "❤️", "😱", "😇", "😡", "🥶", "🤔", "🙌", "🍔", "🥦", "🏓", "🥇", "🎸", "😪"]
-   
+    
     private var categories: [TrackerCategory] = TrackersMock.trackersMock //MOCK FOR NOW
     private var visibleCategories: [TrackerCategory] = []
     private var completedTrackers: [TrackerRecord] = []
     private let dateFormatter = DateFormatter()
+    
     
     // MARK: - view
     override func viewDidLoad() {
         super.viewDidLoad()
         dateFormatter.dateFormat = "dd.MM.yyyy"
         reloadCurrentTrackers()
+        cancelKeyboardGestureSetup()
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.register(TrackersCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        collectionView.register(TrackersCollectionViewCell.self, forCellWithReuseIdentifier: TrackersCollectionViewCell.trakerSettingCell)
         
         collectionView.register(TrackersCollectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         navBarItem()
-        searchBarLayout()
-        errImageLayout()
-        errLabelLayout()
+        layoutSearchBar()
+        layoutErrImage()
+        layoutErrLabel()
         view.addSubview(collectionView)
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: trackerSearchBar.bottomAnchor),
@@ -118,6 +119,13 @@ final class TrackersViewController: UIViewController {
       
     }
     // MARK: - private func
+    private func cancelKeyboardGestureSetup() {
+        let tapGesture = UITapGestureRecognizer(target: self,
+                                                action: #selector(hideKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(tapGesture)
+    }
+    
     private func navBarItem() {
         guard let navigationBar = self.navigationController?.navigationBar else { return }
         navigationBar.topItem?.title = "Трекеры"
@@ -174,10 +182,9 @@ final class TrackersViewController: UIViewController {
             }
             return TrackerCategory(title: category.title, trackers: trackers)
         }
-        
+    
         stubSetting()
         collectionView.reloadData()
-      
     }
     
     private func stubSetting() {
@@ -191,7 +198,7 @@ final class TrackersViewController: UIViewController {
     }
     
     // MARK: - Constraits
-    private func searchBarLayout() {
+    private func layoutSearchBar() {
         NSLayoutConstraint.activate([
             trackerSearchBar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
             trackerSearchBar.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
@@ -200,23 +207,21 @@ final class TrackersViewController: UIViewController {
         trackerSearchBar.directionalLayoutMargins = .init(top: 0, leading: 16, bottom: 0, trailing: 16)
     }
     
-    private func errImageLayout() {
+    private func layoutErrImage() {
         NSLayoutConstraint.activate([
             trackerErrImage.widthAnchor.constraint(equalToConstant: 80),
             trackerErrImage.heightAnchor.constraint(equalToConstant: 80),
             trackerErrImage.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             trackerErrImage.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor)
-        
         ])
     }
     
-    private func errLabelLayout() {
+    private func layoutErrLabel() {
         NSLayoutConstraint.activate([
             trackerErrLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             trackerErrLabel.topAnchor.constraint(equalTo: trackerErrImage.bottomAnchor, constant: 8)
         ])
     }
-    
 
     // MARK: - OBJC
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
@@ -235,11 +240,10 @@ final class TrackersViewController: UIViewController {
         present(view, animated: true)
     }
     
-
-    
+    @objc private func hideKeyboard() {
+        self.trackerSearchBar.endEditing(true)
+    }
 }
-
-
 
 // MARK: - UICollectionViewDelegate
 extension TrackersViewController: UICollectionViewDelegate {
@@ -262,7 +266,6 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 8
     }
- 
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize  {
         let indexPath = IndexPath(row: 0, section: section)
@@ -271,7 +274,6 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
         return headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width, height: UIView.layoutFittingExpandedSize.height), withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
     }
 }
-
 
 // MARK: - UICollectionViewDataSource
 extension TrackersViewController: UICollectionViewDataSource {
@@ -323,15 +325,13 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
                 self.collectionView.reloadItems(at: [indexPath])
             }
         }
-        else {
+        else if(Date().onlyDate >= trackerDatePicker.date.onlyDate) {
             self.completedTrackers.append(trackerCompleteDAY)
             self.collectionView.reloadItems(at: [indexPath])
         }
-        
-        
     }
-
 }
+
 // MARK: - TrackersCollectionViewCellDelegate
 extension TrackersViewController: AddTrackersViewControllerDelegate {
     func addNewTracker(trackerCategory: [TrackerCategory]) {
@@ -349,4 +349,13 @@ extension TrackersViewController : UISearchBarDelegate {
     {
         reloadCurrentTrackers()
     }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar){
+     self.trackerSearchBar.endEditing(true)
+     }
+    
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        self.trackerSearchBar.endEditing(true)
+    }
+    
 }

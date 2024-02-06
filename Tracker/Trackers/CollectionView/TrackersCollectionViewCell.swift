@@ -10,7 +10,8 @@ import UIKit
 final class TrackersCollectionViewCell: UICollectionViewCell {
     // MARK: - delegate
     weak var delegate : TrackersCollectionViewCellDelegate?
-    
+    //MARK: - Identifer
+    static let trakerSettingCell = "cell"
     // MARK: - UI ELEMENTS
     lazy var emojiLabel : UILabel = {
         let emojiLabel = UILabel()
@@ -86,11 +87,11 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     // MARK: - INIT
     override init(frame: CGRect) {
         super.init(frame: frame)
-        rectViewLayout()
-        emojiViewLayout()
-        trackerCaptionLabelLayout()
-        trackerCompleteButtonLayout() 
-        trackersDaysCountLabelLayout()
+        layoutRectView()
+        layoutEmojiView()
+        layoutTrackerCaptionLabel()
+        layoutTrackerCompleteButton() 
+        layoutTrackersDaysCountLabel()
         trackerCaptionLabel.text = "Кошка заслонила камеру на созвоне лмао"
         trackersDaysCountLabel.text = "1 день"
     }
@@ -135,14 +136,14 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: - LAYOUT
-    private func rectViewLayout() {
+    private func layoutRectView() {
         NSLayoutConstraint.activate([
             rectView.widthAnchor.constraint(equalToConstant: 167),
             rectView.heightAnchor.constraint(equalToConstant: 90)
         ])
     }
     
-    private func emojiViewLayout() {
+    private func layoutEmojiView() {
         NSLayoutConstraint.activate([
             emojiLabel.topAnchor.constraint(equalTo: rectView.topAnchor, constant: 12),
             emojiLabel.leadingAnchor.constraint(equalTo: rectView.leadingAnchor, constant: 12),
@@ -151,7 +152,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         ])
     }
     
-    private func trackerCaptionLabelLayout() {
+    private func layoutTrackerCaptionLabel() {
         NSLayoutConstraint.activate([
             trackerCaptionLabel.topAnchor.constraint(equalTo: emojiLabel.bottomAnchor,constant: 8),
             trackerCaptionLabel.leadingAnchor.constraint(equalTo: rectView.leadingAnchor, constant: 12),
@@ -160,7 +161,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         ])
     }
     
-    private func trackerCompleteButtonLayout() {
+    private func layoutTrackerCompleteButton() {
         NSLayoutConstraint.activate([
             trackerCompleteButton.topAnchor.constraint(equalTo: rectView.bottomAnchor, constant: 8),
             trackerCompleteButton.trailingAnchor.constraint(equalTo: rectView.trailingAnchor, constant: -12),
@@ -169,7 +170,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         ])
     }
     
-    private func trackersDaysCountLabelLayout() {
+    private func layoutTrackersDaysCountLabel() {
         NSLayoutConstraint.activate([
             trackersDaysCountLabel.leadingAnchor.constraint(equalTo: rectView.leadingAnchor, constant: 12),
             trackersDaysCountLabel.topAnchor.constraint(equalTo: rectView.bottomAnchor, constant: 16)

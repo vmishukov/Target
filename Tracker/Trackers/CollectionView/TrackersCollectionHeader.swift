@@ -21,13 +21,13 @@ class TrackersCollectionHeader: UICollectionReusableView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        headerCategoryLabelLayout()
+        layoutHeaderCategoryLabel()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    private func headerCategoryLabelLayout() {
+    private func layoutHeaderCategoryLabel() {
         NSLayoutConstraint.activate([
             headerCategoryLabel.bottomAnchor.constraint(equalTo: bottomAnchor,constant: -12),
             headerCategoryLabel.centerYAnchor.constraint(equalTo: centerYAnchor),

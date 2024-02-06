@@ -13,7 +13,7 @@ final class ScheduleSettingCell: UITableViewCell {
     //MARK: - Delegate
     weak var delegate: ScheduleCellDelegate?
     //MARK: - Identifer
-    static let cellIdentifer = "cell"
+    static let scheduleSettingCell = "cell"
     //MARK: - UI
     private lazy var daySwitch: UISwitch = {
        let daySwitch = UISwitch()

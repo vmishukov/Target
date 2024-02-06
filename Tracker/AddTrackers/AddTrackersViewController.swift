@@ -55,21 +55,21 @@ final class AddTrackersViewController: UIViewController {
     //MARK: - view func
     override func viewDidLoad() {
         view.backgroundColor = UIColor(hex: "FFFFFF")
-        addTrackerLabelLayout()
-        addHabbitButtonLayout()
-        addIrregularEventButtonLayout()
+        layoutAddTrackerLabel()
+        layoutAddHabbitButton()
+        layoutAddIrregularEventButton()
         super.viewDidLoad()
     }
     
     //MARK: - Layout
-    private func addTrackerLabelLayout() {
+    private func layoutAddTrackerLabel() {
         NSLayoutConstraint.activate([
             addTrackerLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             addTrackerLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 38)
         ])
     }
     
-    private func addHabbitButtonLayout() {
+    private func layoutAddHabbitButton() {
         NSLayoutConstraint.activate([
             addHabbitButton.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
             addHabbitButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
@@ -79,7 +79,7 @@ final class AddTrackersViewController: UIViewController {
         ])
     }
     
-    private func addIrregularEventButtonLayout() {
+    private func layoutAddIrregularEventButton() {
         NSLayoutConstraint.activate([
             addIrregularEventButton.leadingAnchor.constraint(equalTo: addHabbitButton.leadingAnchor),
             addIrregularEventButton.trailingAnchor.constraint(equalTo: addHabbitButton.trailingAnchor),

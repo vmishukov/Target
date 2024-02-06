@@ -125,39 +125,40 @@ final class NewIrregularEventViewController: UIViewController {
     // MARK: - view
     override func viewDidLoad() {
         view.backgroundColor = .white
-        newIrregularEventTextFieldLayout()
-        newIrregularEventTitleLayout()
-        newIrregularEventSettingsTableViewLayout()
-        newIrregularEventtButtonsLayout()
+        layoutNewIrregularEventTextField()
+        layoutNewIrregularEventTitle()
+        cancelKeyboardGestureSetup()
+        layoutNewIrregularEventSettingsTableView()
+        layoutNewIrregularEventtButtons()
         updateButtonStatus() 
         super.viewDidLoad()
     }
     // MARK: - CONSTRAITS
-    private func newIrregularEventTitleLayout() {
+    private func layoutNewIrregularEventTitle() {
         NSLayoutConstraint.activate([
             NewIrregularEventTitle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             NewIrregularEventTitle.topAnchor.constraint(equalTo: view.topAnchor, constant: 38)
         ])
     }
     
-    private func newIrregularEventTextFieldLayout() {
+    private func layoutNewIrregularEventTextField() {
         NSLayoutConstraint.activate([
             newIrregularEventTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             newIrregularEventTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             newIrregularEventTextField.topAnchor.constraint(equalTo: NewIrregularEventTitle.bottomAnchor, constant: 38),
             newIrregularEventTextField.heightAnchor.constraint(equalToConstant: 75)
         ])
-        newIrregularEventErrLabelLayout()
+        layoutNewIrregularEventErrLabel()
     }
     
-    private func newIrregularEventErrLabelLayout() {
+    private func layoutNewIrregularEventErrLabel() {
         NSLayoutConstraint.activate([
             newIrregularEventLabel.centerXAnchor.constraint(equalTo: newIrregularEventTextField.centerXAnchor),
             newIrregularEventLabel.topAnchor.constraint(equalTo: newIrregularEventTextField.bottomAnchor, constant: 8)
         ])
     }
     
-    private func newIrregularEventSettingsTableViewLayout() {
+    private func layoutNewIrregularEventSettingsTableView() {
         NSLayoutConstraint.activate([
             newIrregularEventSettingsTableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             newIrregularEventSettingsTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
@@ -166,7 +167,7 @@ final class NewIrregularEventViewController: UIViewController {
         ])
     }
     
-    private func newIrregularEventtButtonsLayout() {
+    private func layoutNewIrregularEventtButtons() {
         NSLayoutConstraint.activate([
             newHabbbitButtonStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             
@@ -183,6 +184,10 @@ final class NewIrregularEventViewController: UIViewController {
     // MARK: - OBJC
     @objc func cancelButtonClicked() {
         self.view.window?.rootViewController?.dismiss(animated: true)
+    }
+    
+    @objc func hideKeyboard() {
+        self.newIrregularEventTextField.endEditing(true)
     }
     
     @objc func createButtonClicked() {
@@ -221,6 +226,12 @@ final class NewIrregularEventViewController: UIViewController {
             newIrregularEventCreateButton.backgroundColor = .ypGray
         }
     }
+    private func cancelKeyboardGestureSetup() {
+        let tapGesture = UITapGestureRecognizer(target: self,
+                                                action: #selector(hideKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(tapGesture)
+    }
 }
 
 // MARK: - UITextFieldDelegate
@@ -238,6 +249,14 @@ extension NewIrregularEventViewController: UITextFieldDelegate {
         newIrregularEventLabel.isHidden = true
         return true
     }
+    
+   
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.newIrregularEventTextField.resignFirstResponder()
+        return true
+    }
+    
+     
 }
 // MARK: - UITableViewDataSource
 extension NewIrregularEventViewController: UITableViewDataSource {

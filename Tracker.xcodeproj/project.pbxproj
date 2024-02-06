@@ -12,6 +12,7 @@
 		914A86E72B668EFA00F2523B /* AddTrackersViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914A86E62B668EFA00F2523B /* AddTrackersViewControllerDelegate.swift */; };
 		914A86EB2B692FF000F2523B /* ScheduleViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914A86EA2B692FF000F2523B /* ScheduleViewControllerDelegate.swift */; };
 		914A86ED2B6BD0D200F2523B /* ScheduleCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914A86EC2B6BD0D200F2523B /* ScheduleCellDelegate.swift */; };
+		914A86F12B7136AF00F2523B /* DateComponents+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914A86F02B7136AF00F2523B /* DateComponents+Extensions.swift */; };
 		915050732B52795F001E9DF1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915050722B52795F001E9DF1 /* AppDelegate.swift */; };
 		915050752B52795F001E9DF1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915050742B52795F001E9DF1 /* SceneDelegate.swift */; };
 		915050772B52795F001E9DF1 /* StatisticViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915050762B52795F001E9DF1 /* StatisticViewController.swift */; };
@@ -43,6 +44,7 @@
 		914A86E62B668EFA00F2523B /* AddTrackersViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTrackersViewControllerDelegate.swift; sourceTree = "<group>"; };
 		914A86EA2B692FF000F2523B /* ScheduleViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleViewControllerDelegate.swift; sourceTree = "<group>"; };
 		914A86EC2B6BD0D200F2523B /* ScheduleCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleCellDelegate.swift; sourceTree = "<group>"; };
+		914A86F02B7136AF00F2523B /* DateComponents+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateComponents+Extensions.swift"; sourceTree = "<group>"; };
 		9150506F2B52795F001E9DF1 /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		915050722B52795F001E9DF1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		915050742B52795F001E9DF1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -123,6 +125,7 @@
 				9150508D2B550639001E9DF1 /* UIView+Extensions.swift */,
 				915050E52B5E5246001E9DF1 /* UITextField+Extensions.swift */,
 				914A86E42B66864900F2523B /* Date+Extensions.swift */,
+				914A86F02B7136AF00F2523B /* DateComponents+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -287,6 +290,7 @@
 				915050DA2B58F02D001E9DF1 /* TrackerCategory.swift in Sources */,
 				9150508E2B550639001E9DF1 /* UIView+Extensions.swift in Sources */,
 				915050F62B63AEC1001E9DF1 /* ScheduleViewController.swift in Sources */,
+				914A86F12B7136AF00F2523B /* DateComponents+Extensions.swift in Sources */,
 				914A86E72B668EFA00F2523B /* AddTrackersViewControllerDelegate.swift in Sources */,
 				9150508A2B53C372001E9DF1 /* UIColor+Extensions.swift in Sources */,
 				915050772B52795F001E9DF1 /* StatisticViewController.swift in Sources */,

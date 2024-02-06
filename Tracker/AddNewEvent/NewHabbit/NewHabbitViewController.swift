@@ -123,39 +123,57 @@ final class NewHabbitViewController: UIViewController {
     // MARK: - View
     override func viewDidLoad() {
         view.backgroundColor = .white
-        newHabbitTextFieldLayout()
-        newHabbitTitleLayout()
-        newHabbitSettingsTableViewLayout()
-        newHabbittButtonsLayout()
+        layoutNewHabbitTextField()
+        layoutNewHabbitTitle()
+        layoutNewHabbitSettingsTableView()
+        layoutNewHabbittButtons()
         updateButtonStatus()
+        cancelKeyboardGestureSetup()
         super.viewDidLoad()
     }
+    // MARK: Private func
+    private func cancelKeyboardGestureSetup() {
+        let tapGesture = UITapGestureRecognizer(target: self,
+                                                action: #selector(hideKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(tapGesture)
+    }
+    
+    private func updateButtonStatus() {
+        if newHabbitTextField.text?.count ?? 0 > 0 && schedule?.count ?? 0 > 0 {
+            newHabbitCreateButton.isEnabled = true
+            newHabbitCreateButton.backgroundColor = .ypBlack
+        } else {
+            newHabbitCreateButton.isEnabled = false
+            newHabbitCreateButton.backgroundColor = .ypGray
+        }
+    }
     // MARK: - Layout
-    private func newHabbitTitleLayout() {
+    private func layoutNewHabbitTitle() {
         NSLayoutConstraint.activate([
             newHabbitTitle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             newHabbitTitle.topAnchor.constraint(equalTo: view.topAnchor, constant: 38)
         ])
     }
     
-    private func newHabbitTextFieldLayout() {
+    private func layoutNewHabbitTextField() {
         NSLayoutConstraint.activate([
             newHabbitTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             newHabbitTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             newHabbitTextField.topAnchor.constraint(equalTo: newHabbitTitle.bottomAnchor, constant: 38),
             newHabbitTextField.heightAnchor.constraint(equalToConstant: 75)
         ])
-        newHabbitErrLabelLayout()
+        layoutNewHabbitErrLabel()
     }
     
-    private func newHabbitErrLabelLayout() {
+    private func layoutNewHabbitErrLabel() {
         NSLayoutConstraint.activate([
             newHabbitErrLabel.centerXAnchor.constraint(equalTo: newHabbitTextField.centerXAnchor),
             newHabbitErrLabel.topAnchor.constraint(equalTo: newHabbitTextField.bottomAnchor, constant: 8)
         ])
     }
     
-    private func newHabbitSettingsTableViewLayout() {
+    private func layoutNewHabbitSettingsTableView() {
         NSLayoutConstraint.activate([
             newHabbitSettingsTableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             newHabbitSettingsTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
@@ -164,7 +182,7 @@ final class NewHabbitViewController: UIViewController {
         ])
     }
     
-    private func newHabbittButtonsLayout() {
+    private func layoutNewHabbittButtons() {
         NSLayoutConstraint.activate([
             newHabbbitButtonStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             
@@ -177,19 +195,12 @@ final class NewHabbitViewController: UIViewController {
         ])
     }
     
-    private func updateButtonStatus() {
-        if newHabbitTextField.text?.count ?? 0 > 0 && schedule?.count ?? 0 > 0 {
-            newHabbitCreateButton.isEnabled = true
-            newHabbitCreateButton.backgroundColor = .ypBlack
-        } else {
-            newHabbitCreateButton.isEnabled = false
-            newHabbitCreateButton.backgroundColor = .ypGray
-        }
-    }
-    
     // MARK: - OBJC
     @objc func cancelButtonClicked() {
         self.view.window?.rootViewController?.dismiss(animated: true)
+    }
+    @objc func hideKeyboard() {
+        self.newHabbitTextField.endEditing(true)
     }
     
     @objc func createButtonClicked() {
@@ -228,8 +239,12 @@ extension NewHabbitViewController: UITextFieldDelegate {
     }
     
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
-
-        newHabbitCreateButton.backgroundColor = .ypGray
+        newHabbitErrLabel.isHidden = true
+        return true
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.newHabbitTextField.resignFirstResponder()
         return true
     }
 

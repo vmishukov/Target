@@ -40,9 +40,13 @@ final class ScheduleViewController : UIViewController {
     
     private lazy var scheduleTableView: UITableView = {
         var scheduleTableView = UITableView(frame: .zero)
-        scheduleTableView.register(ScheduleSettingCell.self, forCellReuseIdentifier: ScheduleSettingCell.cellIdentifer)
-       
-        scheduleTableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        scheduleTableView.register(ScheduleSettingCell.self, forCellReuseIdentifier: ScheduleSettingCell.scheduleSettingCell)
+        scheduleTableView.allowsSelection = false
+        scheduleTableView.backgroundColor = .ypWhite
+    
+      //  scheduleTableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        //scheduleTableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMinYCorner, .layerMaxXMaxYCorner]
+       // scheduleTableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         scheduleTableView.layer.masksToBounds = true
         scheduleTableView.translatesAutoresizingMaskIntoConstraints = false
         scheduleTableView.delegate = self
@@ -57,20 +61,20 @@ final class ScheduleViewController : UIViewController {
     // MARK: - view
     override func viewDidLoad() {
         view.backgroundColor = .ypWhite
-        scheduleTitleLayout()
-        doneButtonLayout()
-        scheduleTableViewLayout()
+        layoutScheduleTitle()
+        layoutDoneButton()
+        layoutScheduleTableView()
         super.viewDidLoad()
     }
     // MARK: - LAYOUT
-    private func scheduleTitleLayout() {
+    private func layoutScheduleTitle() {
         NSLayoutConstraint.activate([
             scheduleTitle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             scheduleTitle.topAnchor.constraint(equalTo: view.topAnchor, constant: 38)
         ])
     }
     
-    private func doneButtonLayout() {
+    private func layoutDoneButton() {
         NSLayoutConstraint.activate([
             doneButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             doneButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
@@ -79,7 +83,7 @@ final class ScheduleViewController : UIViewController {
         ])
     }
     
-    private func scheduleTableViewLayout() {
+    private func layoutScheduleTableView() {
         NSLayoutConstraint.activate([
             scheduleTableView.topAnchor.constraint(equalTo: scheduleTitle.bottomAnchor, constant: 30),
             scheduleTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
@@ -103,7 +107,7 @@ extension ScheduleViewController : UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: ScheduleSettingCell.cellIdentifer, for: indexPath) as? ScheduleSettingCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: ScheduleSettingCell.scheduleSettingCell, for: indexPath) as? ScheduleSettingCell else {
             assertionFailure("Не удалось создать ячейку дня недели ScheduleSettingCell")
             return UITableViewCell()
         }
@@ -126,7 +130,7 @@ extension ScheduleViewController : UITableViewDataSource {
         if indexPath.row ==  Weekday.allCases.count - 1 {
             cell.layer.cornerRadius = 16
             cell.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
-           
+            cell.separatorInset.right = .greatestFiniteMagnitude
             cell.clipsToBounds = true
         }
         return cell

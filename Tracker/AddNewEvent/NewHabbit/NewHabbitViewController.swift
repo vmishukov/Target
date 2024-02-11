@@ -18,6 +18,8 @@ final class NewHabbitViewController: UIViewController {
     private let newHabbitCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     private let emojiArray = Constants.emojiArray
     private let sectionColors = Constants.sectionColors
+    private var selectedEmoji: String?
+    private var selectedColor: UIColor?
     // MARK: - UI ELEMENTS
     private lazy var newHabbitTitle : UILabel = {
         let titleLabel = UILabel()
@@ -174,7 +176,7 @@ final class NewHabbitViewController: UIViewController {
     }
     
     private func updateButtonStatus() {
-        if newHabbitTextField.text?.count ?? 0 > 0 && schedule?.count ?? 0 > 0 {
+        if newHabbitTextField.text?.count ?? 0 > 0 && schedule?.count ?? 0 > 0 && selectedColor != nil && selectedEmoji != nil {
             newHabbitCreateButton.isEnabled = true
             newHabbitCreateButton.backgroundColor = .ypBlack
         } else {
@@ -188,6 +190,7 @@ final class NewHabbitViewController: UIViewController {
         newHabbitCollectionView.dataSource = self
         newHabbitCollectionView.isScrollEnabled = false
         newHabbitCollectionView.bounces = false
+        newHabbitCollectionView.allowsMultipleSelection = true
         newHabbitCollectionView.register(SettingEmojiCell.self, forCellWithReuseIdentifier: SettingEmojiCell.cellIdentifier)
         newHabbitCollectionView.register(SettingColorCell.self, forCellWithReuseIdentifier: SettingColorCell.cellIdentifier)
         newHabbitCollectionView.register(SettingCollectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SettingCollectionHeader.identifier)
@@ -284,9 +287,9 @@ final class NewHabbitViewController: UIViewController {
        // category?.remove(at: 1)
         let indexPath = IndexPath(row: 0, section: 0)
         let cell = newHabbitSettingsTableView.cellForRow(at: indexPath)
-        guard let categoryTitle = cell?.detailTextLabel?.text , var categories = self.categories, let caption = newHabbitTextField.text, let schedule = self.schedule  else { return }
+        guard let categoryTitle = cell?.detailTextLabel?.text , var categories = self.categories, let caption = newHabbitTextField.text, let schedule = self.schedule, let selectedColor = self.selectedColor, let selectedEmoji = self.selectedEmoji  else { return }
 
-        let tracker = Tracker(id: UUID(), title: caption, color: .ypColorSelection10, emoji: "🥇", isHabbit: true, schedule: schedule)
+        let tracker = Tracker(id: UUID(), title: caption, color: selectedColor, emoji: selectedEmoji, isHabbit: true, schedule: schedule)
 
         if let index = categories.firstIndex(where: {cat in
             cat.title == categoryTitle
@@ -306,6 +309,28 @@ final class NewHabbitViewController: UIViewController {
 }
 // MARK: - UICollectionViewDelegate
 extension NewHabbitViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+        collectionView.indexPathsForSelectedItems?.filter({ $0.section == indexPath.section }).forEach({ collectionView.deselectItem(at: $0, animated: true) })
+        return true
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.section == 0 {
+            self.selectedEmoji = emojiArray[indexPath.row]
+        } else {
+            self.selectedColor = sectionColors[indexPath.row]
+        }
+        updateButtonStatus()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        if indexPath.section == 0 {
+            self.selectedEmoji = nil
+        } else {
+            self.selectedColor = nil
+        }
+        updateButtonStatus()
+    }
     
 }
 
@@ -336,13 +361,11 @@ extension NewHabbitViewController: UICollectionViewDelegateFlowLayout {
 // MARK: - UICollectionViewDataSource
 extension NewHabbitViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let numberOfItemsInSection = section == 1 ? emojiArray.count : sectionColors.count
-        
+        let numberOfItemsInSection = section == 0 ? emojiArray.count : sectionColors.count
         return numberOfItemsInSection
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
         if indexPath.section == 0 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SettingEmojiCell.cellIdentifier, for: indexPath) as? SettingEmojiCell else {return UICollectionViewCell()}
             cell.settingEmojiCell(emoji: emojiArray[indexPath.row])
@@ -422,7 +445,6 @@ extension NewHabbitViewController: UITableViewDelegate {
             tableView.deselectRow(at: indexPath, animated: true)
         default:
             tableView.deselectRow(at: indexPath, animated: true)
-            
         }
     }
 }

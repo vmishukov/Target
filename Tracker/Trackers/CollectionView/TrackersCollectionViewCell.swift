@@ -92,8 +92,6 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         layoutTrackerCaptionLabel()
         layoutTrackerCompleteButton() 
         layoutTrackersDaysCountLabel()
-        trackerCaptionLabel.text = "Кошка заслонила камеру на созвоне лмао"
-        trackersDaysCountLabel.text = "1 день"
     }
     
     // MARK: - public func

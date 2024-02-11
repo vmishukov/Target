@@ -96,10 +96,12 @@ final class TrackersViewController: UIViewController {
         cancelKeyboardGestureSetup()
         collectionView.dataSource = self
         collectionView.delegate = self
+    
         collectionView.register(TrackersCollectionViewCell.self, forCellWithReuseIdentifier: TrackersCollectionViewCell.trakerSettingCell)
         
         collectionView.register(TrackersCollectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        
         navBarItem()
         layoutSearchBar()
         layoutErrImage()
@@ -306,6 +308,7 @@ extension TrackersViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
         let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: TrackersCollectionHeader.identifier, for: indexPath) as! TrackersCollectionHeader
+        
         view.headerCategoryLabel.font = .boldSystemFont(ofSize: 19)
         view.headerCategoryLabel.text = visibleCategories[indexPath.section].title
         return view

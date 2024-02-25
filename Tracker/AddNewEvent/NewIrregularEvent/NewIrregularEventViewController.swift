@@ -194,12 +194,12 @@ final class NewIrregularEventViewController: UIViewController {
         
         let indexPath = IndexPath(row: 0, section: 0)
         let cell = newIrregularEventSettingsTableView.cellForRow(at: indexPath)
-        guard let categoryTitle = cell?.detailTextLabel?.text , var categories = self.categories, let caption = newIrregularEventTextField.text  else { return }
+        guard let categoryTitle = cell?.detailTextLabel?.text , let caption = newIrregularEventTextField.text  else { return }
 
         let schedule = [Weekday.Monday, Weekday.Tuesday, Weekday.Wednesday, Weekday.Thursday, Weekday.Friday, Weekday.Saturday, Weekday.Sunday]
         
         let tracker = Tracker(id: UUID(), title: caption, color: .ypColorSelection10, emoji: "🥇", isHabbit: false, schedule: schedule)
-
+        /*
         if let index = categories.firstIndex(where: {cat in
             cat.title == categoryTitle
         }) {
@@ -209,7 +209,9 @@ final class NewIrregularEventViewController: UIViewController {
             categories.remove(at: index)
             categories.insert(updatedCategory, at: index)
         }
-        self.addTrackerDelegate?.addNewTracker(trackerCategory: categories)
+         */
+        
+        self.addTrackerDelegate?.addNewTracker(tracker: tracker, categoryTitle: categoryTitle)
         self.view.window?.rootViewController?.dismiss(animated: true)
     }
     
@@ -272,7 +274,7 @@ extension NewIrregularEventViewController: UITableViewDataSource {
         switch indexPath.row {
         case 0 :
             cell.textLabel?.text = "Категория"
-            cell.detailTextLabel?.text = "Домашний уют" //MOCK
+            cell.detailTextLabel?.text = "test" //MOCK
         default:
             ""
         }

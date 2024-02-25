@@ -18,7 +18,7 @@ enum TrackerCategoryStoreError: Error {
 }
 
 final class TrackerCategoryStore {
-    let context: NSManagedObjectContext
+   private let context: NSManagedObjectContext
     
     convenience init() {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext

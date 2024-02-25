@@ -119,8 +119,10 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     
     // MARK: - private func
     private func daysCaption(dayNumber: Int) -> String {
-        if dayNumber > 0 || dayNumber % 10 == 2 || dayNumber % 10 == 3 || dayNumber % 10 == 4 {
+        if dayNumber > 0 && ( dayNumber % 10 == 2 || dayNumber % 10 == 3 || dayNumber % 10 == 4) {
             return "дня"
+        } else if dayNumber == 0 {
+            return "день"
         } else {
             return "дней"
         }

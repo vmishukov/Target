@@ -12,12 +12,12 @@ import UIKit
 
 final class TrackerStore {
     private let context: NSManagedObjectContext
-    
+    // MARK: - INIT
     convenience init() {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        
         self.init(context: context)
     }
-    
     init (context: NSManagedObjectContext) {
         self.context = context
     }
@@ -29,7 +29,7 @@ final class TrackerStore {
         addTrackerToTrackerCategory(trackerCategoryName, trackerCoreData)
     }
     
-    func updateExistingTracker(_ trackerCoreData: TrackerCoreData, with tracker: Tracker) {
+   private func updateExistingTracker(_ trackerCoreData: TrackerCoreData, with tracker: Tracker) {
         trackerCoreData.tracker_id = tracker.id
         trackerCoreData.title = tracker.title
         trackerCoreData.color = tracker.color
@@ -38,7 +38,7 @@ final class TrackerStore {
         trackerCoreData.schedule = tracker.schedule as NSObject
     }
     
-    func addTrackerToTrackerCategory(_ trackerCategoryName: String,_ tracker: TrackerCoreData) {
+   private func addTrackerToTrackerCategory(_ trackerCategoryName: String,_ tracker: TrackerCoreData) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "TrackerCategoryCoreData")
         fetchRequest.returnsObjectsAsFaults = false
         fetchRequest.predicate = NSPredicate(format: "%K == %@",

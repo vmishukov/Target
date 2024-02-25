@@ -287,20 +287,11 @@ final class NewHabbitViewController: UIViewController {
        // category?.remove(at: 1)
         let indexPath = IndexPath(row: 0, section: 0)
         let cell = newHabbitSettingsTableView.cellForRow(at: indexPath)
-        guard let categoryTitle = cell?.detailTextLabel?.text , var categories = self.categories, let caption = newHabbitTextField.text, let schedule = self.schedule, let selectedColor = self.selectedColor, let selectedEmoji = self.selectedEmoji  else { return }
+        guard let categoryTitle = cell?.detailTextLabel?.text , let caption = newHabbitTextField.text, let schedule = self.schedule, let selectedColor = self.selectedColor, let selectedEmoji = self.selectedEmoji  else { return }
 
         let tracker = Tracker(id: UUID(), title: caption, color: selectedColor, emoji: selectedEmoji, isHabbit: true, schedule: schedule)
-
-        if let index = categories.firstIndex(where: {cat in
-            cat.title == categoryTitle
-        }) {
-            var trackers = categories[index].trackers
-            trackers.append(tracker)
-            let updatedCategory = TrackerCategory(title: categoryTitle, trackers: trackers)
-            categories.remove(at: index)
-            categories.insert(updatedCategory, at: index)
-        }
-        self.addTrackerDelegate?.addNewTracker(trackerCategory: categories)
+        
+        self.addTrackerDelegate?.addNewTracker(tracker: tracker, categoryTitle: categoryTitle)
         self.view.window?.rootViewController?.dismiss(animated: true)
     }
     @objc func textFieldDidChange(_ textField: UITextField) {
@@ -420,7 +411,7 @@ extension NewHabbitViewController: UITableViewDataSource {
         switch indexPath.row {
         case 0 :
             cell.textLabel?.text = "Категория"
-            cell.detailTextLabel?.text = "Домашний уют" //mock
+            cell.detailTextLabel?.text = "test" //mock
         case 1 :
             cell.textLabel?.text = "Расписание"
         default:

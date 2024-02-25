@@ -104,7 +104,7 @@ final class AddTrackersViewController: UIViewController {
 }
 
 extension AddTrackersViewController: AddTrackersViewControllerDelegate {
-    func addNewTracker(trackerCategory: [TrackerCategory]) {
-        trackerViewdelegate?.addNewTracker(trackerCategory: trackerCategory)
+    func addNewTracker(tracker: Tracker, categoryTitle: String) {
+        trackerViewdelegate?.addNewTracker(tracker: tracker, categoryTitle: categoryTitle)
     }
 }

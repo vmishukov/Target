@@ -8,6 +8,6 @@
 import Foundation
 
 protocol AddTrackersViewControllerDelegate: AnyObject {
-    func addNewTracker(trackerCategory: [TrackerCategory])
+    func addNewTracker(tracker: Tracker, categoryTitle: String)
     
 }

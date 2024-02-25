@@ -82,27 +82,26 @@ final class TrackersViewController: UIViewController {
     // MARK: - Private
     private let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     
-    private var categories: [TrackerCategory] = TrackersMock.trackersMock //MOCK FOR NOW
+    private var categories: [TrackerCategory] = [] //MOCK FOR NOW
     private var visibleCategories: [TrackerCategory] = []
     private var completedTrackers: [TrackerRecord] = []
     private let dateFormatter = DateFormatter()
     
-    
+    private var dataProvider: TrackerDataProviderProtocol?
     // MARK: - view
 
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         dateFormatter.dateFormat = "dd.MM.yyyy"
        // trackerCategoryStore.clearDatabase()
         
-        reloadCurrentTrackers()
+        dataProvider = TrackerDataProvider(delegate: self)
+        reloadTrackerRecords()
+        
         cancelKeyboardGestureSetup()
         collectionView.dataSource = self
         collectionView.delegate = self
-
-        
-        
+      
         collectionView.register(TrackersCollectionViewCell.self, forCellWithReuseIdentifier: TrackersCollectionViewCell.trakerSettingCell)
         
         collectionView.register(TrackersCollectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
@@ -119,6 +118,9 @@ final class TrackersViewController: UIViewController {
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
+        
+        reloadTrackers()
+        
     }
     
     
@@ -152,6 +154,22 @@ final class TrackersViewController: UIViewController {
         let rightButton = UIBarButtonItem(customView: trackerDatePicker)
         navigationItem.rightBarButtonItem = rightButton
     }
+    
+    private func reloadTrackers() {
+        guard let newCategories = dataProvider?.fetchTrackerCategories() else{
+            return
+        }
+        self.categories = newCategories
+        reloadCurrentTrackers()
+    }
+    
+    private func reloadTrackerRecords() {
+        guard let newTrackerRecords = dataProvider?.fetchTrackerRecord() else{
+            return
+        }
+        self.completedTrackers = newTrackerRecords
+    }
+    
     private func reloadCurrentTrackers() {
         let calendar = Calendar.current
         let filterDay = calendar.component(.weekday, from: trackerDatePicker.date)
@@ -322,60 +340,44 @@ extension TrackersViewController: UICollectionViewDataSource {
 }
 // MARK: - TrackersCollectionViewCellDelegate
 
-private let trackerCategoryStore = TrackerCategoryStore()
-private let sobaka =  Tracker(id: UUID(),
-                     title: "Test)",
-                     color: .ypColorSelection7,
-                     emoji: "😪",
-                     isHabbit: true,
-                     schedule: [.Monday, .Tuesday, .Friday, .Sunday])
-
-private let mat = TrackerCategory(title: "test", trackers: [])
-private let trackerStore = TrackerStore()
-private let trackerRecordStore = TrackerRecordStore()
 extension TrackersViewController: TrackersCollectionViewCellDelegate {
     func addCompleteDay(id: UUID, indexPath: IndexPath) {
-
-        do {
-            guard let tracker = try trackerCategoryStore.fetchTrackersCoreDataFromTrackerCategory(title: "test")?.first?.id else {
-                return
-            }
-            try trackerRecordStore.addNewTrackerRecord(trackerDatePicker.date, tracker)
-            try print(trackerRecordStore.fetchTrackerRecord())
-            try trackerRecordStore.removeRecord(tracker, date: trackerDatePicker.date)
-            try print(trackerRecordStore.fetchTrackerRecord())
-            
-            try print(trackerCategoryStore.fetchTrackerCategories())
-            try print(trackerCategoryStore.fetchTrackerCategories())
-        } catch {
-            print(error)
-        }
-        
         let trackerCompleteDAY = TrackerRecord(Id: id, date: trackerDatePicker.date)
         
         if completedTrackers.contains(where: {record in record.id == trackerCompleteDAY.id && record.date.onlyDate == trackerCompleteDAY.date.onlyDate
         }) {
             if let index = completedTrackers.firstIndex(where: {record in record.id == trackerCompleteDAY.id && record.date.onlyDate == trackerCompleteDAY.date.onlyDate
             }) {
+                self.dataProvider?.removeRecord(completedTrackers[index].id, date: completedTrackers[index].date)
                 completedTrackers.remove(at: index)
                 self.collectionView.reloadItems(at: [indexPath])
+            
             }
         }
         else if(Date().onlyDate >= trackerDatePicker.date.onlyDate) {
+            self.dataProvider?.addNewTrackerRecord(trackerCompleteDAY.date, trackerCompleteDAY.id)
             self.completedTrackers.append(trackerCompleteDAY)
             self.collectionView.reloadItems(at: [indexPath])
+       
         }
+        reloadTrackerRecords()
     }
 }
 
 // MARK: - TrackersCollectionViewCellDelegate
 extension TrackersViewController: AddTrackersViewControllerDelegate {
+    func addNewTracker(tracker: Tracker, categoryTitle: String) {
+        self.dataProvider?.addNewTracker(tracker, trackerCategoryName: categoryTitle)
+        reloadTrackers()
+    }
+    /*
     func addNewTracker(trackerCategory: [TrackerCategory]) {
         //чистка удаленных категорий
+   
         self.categories = trackerCategory
         reloadCurrentTrackers()
     }
-    
+    */
 }
 
 // MARK: - TrackersCollectionViewCellDelegate
@@ -394,4 +396,11 @@ extension TrackersViewController : UISearchBarDelegate {
         self.trackerSearchBar.endEditing(true)
     }
     
+}
+
+// MARK: - TrackerDataProviderDelegate
+extension TrackersViewController : TrackerDataProviderDelegate {
+    func trackerStoreDidChange() {
+        reloadTrackers()
+    }
 }

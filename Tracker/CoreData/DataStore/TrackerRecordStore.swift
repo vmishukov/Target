@@ -15,7 +15,7 @@ enum TrackerRecordStoreError: Error {
 }
 
 final class TrackerRecordStore {
-    let context: NSManagedObjectContext
+   private let context: NSManagedObjectContext
     
     convenience init () {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -52,20 +52,20 @@ final class TrackerRecordStore {
         }
     }
     //MARK: - remove record
-    func removeRecord(_ trackerId: UUID, date: Date) {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "TrackerRecordCoreData")
-        fetchRequest.returnsObjectsAsFaults = false
-        fetchRequest.predicate = NSPredicate(format: "%K.%K == %@ AND %K == %@",
-                                             #keyPath(TrackerRecordCoreData.tracker),
-                                             #keyPath(TrackerCoreData.tracker_id),
-                                             trackerId as NSUUID,
-                                             #keyPath(TrackerRecordCoreData.date),
-                                             date as NSDate)
-        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-        do {
-            try context.execute(deleteRequest)
-        } catch let error as NSError {
-            print(error)
+    func removeRecord(_ trackerId: UUID, date: Date) throws {
+        let request = TrackerRecordCoreData.fetchRequest()
+        let trackerRecords = try context.fetch(request)
+        let filterRecord = trackerRecords.first {
+            $0.tracker?.tracker_id == trackerId && $0.date == date
+        }
+        
+        if let trackerRecordCoreData = filterRecord {
+            do {
+                context.delete(trackerRecordCoreData)
+                try context.save()
+            } catch let error as NSError {
+                assertionFailure("\(error)")
+            }
         }
     }
     
@@ -100,6 +100,16 @@ final class TrackerRecordStore {
             print("Fetch Failed: \(error)")
         }
         return nil
+    }
+    
+    func deleteRequest() {
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "TrackerRecordCoreData")
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        do {
+            try context.execute(deleteRequest)
+        } catch let error as NSError {
+            print(error)
+        }
     }
 }
 

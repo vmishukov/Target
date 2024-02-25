@@ -89,14 +89,20 @@ final class TrackersViewController: UIViewController {
     
     
     // MARK: - view
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         dateFormatter.dateFormat = "dd.MM.yyyy"
+       // trackerCategoryStore.clearDatabase()
+        
         reloadCurrentTrackers()
         cancelKeyboardGestureSetup()
         collectionView.dataSource = self
         collectionView.delegate = self
-    
+
+        
+        
         collectionView.register(TrackersCollectionViewCell.self, forCellWithReuseIdentifier: TrackersCollectionViewCell.trakerSettingCell)
         
         collectionView.register(TrackersCollectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
@@ -315,8 +321,32 @@ extension TrackersViewController: UICollectionViewDataSource {
     }
 }
 // MARK: - TrackersCollectionViewCellDelegate
+
+private let trackerCategoryStore = TrackerCategoryStore()
+private let sobaka =  Tracker(id: UUID(),
+                     title: "Test)",
+                     color: .ypColorSelection7,
+                     emoji: "😪",
+                     isHabbit: true,
+                     schedule: [.Monday, .Tuesday, .Friday, .Sunday])
+
+private let mat = TrackerCategory(title: "test", trackers: [])
+private let trackerStore = TrackerStore()
+private let trackerRecordStore = TrackerRecordStore()
 extension TrackersViewController: TrackersCollectionViewCellDelegate {
     func addCompleteDay(id: UUID, indexPath: IndexPath) {
+
+        do {
+            guard let tracker = try trackerCategoryStore.fetchTrackersCoreDataFromTrackerCategory(title: "test")?.first?.id else {
+                return
+            }
+            
+            try print(trackerRecordStore.fetchTrackerRecord())
+            try print(trackerCategoryStore.fetchTrackerCategories())
+            try print(trackerCategoryStore.fetchTrackerCategories())
+        } catch {
+            print(error)
+        }
         
         let trackerCompleteDAY = TrackerRecord(Id: id, date: trackerDatePicker.date)
         

@@ -104,7 +104,7 @@
 		912082E02B7CF62C000263D9 /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
-				912083132B80F10B000263D9 /* Domain */,
+				912083132B80F10B000263D9 /* DataStore */,
 				912082E12B7CF647000263D9 /* Transformable */,
 				9141EB952B7CF13100777A62 /* TrackerDataModel.xcdatamodeld */,
 			);
@@ -119,14 +119,14 @@
 			path = Transformable;
 			sourceTree = "<group>";
 		};
-		912083132B80F10B000263D9 /* Domain */ = {
+		912083132B80F10B000263D9 /* DataStore */ = {
 			isa = PBXGroup;
 			children = (
 				912083142B80F13E000263D9 /* TrackerStore.swift */,
 				912083162B80F15C000263D9 /* TrackerCategoryStore.swift */,
 				912083182B80F16E000263D9 /* TrackerRecordStore.swift */,
 			);
-			path = Domain;
+			path = DataStore;
 			sourceTree = "<group>";
 		};
 		915050662B52795F001E9DF1 = {

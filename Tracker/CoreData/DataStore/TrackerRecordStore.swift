@@ -55,14 +55,18 @@ final class TrackerRecordStore {
     func removeRecord(_ trackerId: UUID, date: Date) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "TrackerRecordCoreData")
         fetchRequest.returnsObjectsAsFaults = false
-        fetchRequest.predicate = NSPredicate(format: "#K.#K == %@ AND #K == %@",
+        fetchRequest.predicate = NSPredicate(format: "%K.%K == %@ AND %K == %@",
                                              #keyPath(TrackerRecordCoreData.tracker),
                                              #keyPath(TrackerCoreData.tracker_id),
                                              trackerId as NSUUID,
                                              #keyPath(TrackerRecordCoreData.date),
                                              date as NSDate)
-        
-        
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        do {
+            try context.execute(deleteRequest)
+        } catch let error as NSError {
+            print(error)
+        }
     }
     
 //MARK: - FETCH TRACKER RECORD

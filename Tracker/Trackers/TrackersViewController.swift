@@ -340,8 +340,11 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
             guard let tracker = try trackerCategoryStore.fetchTrackersCoreDataFromTrackerCategory(title: "test")?.first?.id else {
                 return
             }
-            
+            try trackerRecordStore.addNewTrackerRecord(trackerDatePicker.date, tracker)
             try print(trackerRecordStore.fetchTrackerRecord())
+            try trackerRecordStore.removeRecord(tracker, date: trackerDatePicker.date)
+            try print(trackerRecordStore.fetchTrackerRecord())
+            
             try print(trackerCategoryStore.fetchTrackerCategories())
             try print(trackerCategoryStore.fetchTrackerCategories())
         } catch {

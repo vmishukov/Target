@@ -91,6 +91,7 @@ final class TrackersViewController: UIViewController {
     // MARK: - lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        reloadTrackers()
         dateFormatter.dateFormat = "dd.MM.yyyy"
        // trackerCategoryStore.clearDatabase()
         
@@ -98,7 +99,7 @@ final class TrackersViewController: UIViewController {
         checkMockCategory()
     
         
-        reloadTrackers()
+    
         reloadTrackerRecords()
         
         cancelKeyboardGestureSetup()
@@ -121,7 +122,8 @@ final class TrackersViewController: UIViewController {
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
-        
+
+        reloadTrackers()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -173,6 +175,7 @@ final class TrackersViewController: UIViewController {
             return
         }
         self.categories = newCategories
+        
         reloadCurrentTrackers()
     }
     
@@ -354,6 +357,8 @@ extension TrackersViewController: UICollectionViewDataSource {
 // MARK: - TrackersCollectionViewCellDelegate
 
 extension TrackersViewController: TrackersCollectionViewCellDelegate {
+    
+    
     func addCompleteDay(id: UUID, indexPath: IndexPath) {
         let trackerCompleteDAY = TrackerRecord(Id: id, date: trackerDatePicker.date)
         
@@ -362,18 +367,21 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
             if let index = completedTrackers.firstIndex(where: {record in record.id == trackerCompleteDAY.id && record.date.onlyDate == trackerCompleteDAY.date.onlyDate
             }) {
                 self.dataProvider?.removeRecord(completedTrackers[index].id, date: completedTrackers[index].date)
-                completedTrackers.remove(at: index)
-                self.collectionView.reloadItems(at: [indexPath])
+               // completedTrackers.remove(at: index)
+            //    self.collectionView.reloadItems(at: [indexPath])
             }
         }
         else if(Date().onlyDate >= trackerDatePicker.date.onlyDate) {
-            self.dataProvider?.addNewTrackerRecord(trackerCompleteDAY.date, trackerCompleteDAY.id)
-            self.completedTrackers.append(trackerCompleteDAY)
-            self.collectionView.reloadItems(at: [indexPath])
+           self.dataProvider?.addNewTrackerRecord(trackerCompleteDAY.date, trackerCompleteDAY.id)
+          //  self.completedTrackers.append(trackerCompleteDAY)
+         //   self.collectionView.reloadItems(at: [indexPath])
        
         }
+       
         reloadTrackerRecords()
+   //     reloadTrackers()
     }
+     
 }
 
 // MARK: - TrackersCollectionViewCellDelegate

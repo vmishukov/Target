@@ -63,6 +63,7 @@ final class TrackerCategoryStore {
                                         #keyPath(TrackerCoreData.category),
                                         #keyPath(TrackerCategoryCoreData.title),
                                         title)
+        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: false)]
         
         let trackersCoreData = try context.fetch(request)
         return try trackersCoreData.map{ try self.tracker(trackerCoreData: $0) }

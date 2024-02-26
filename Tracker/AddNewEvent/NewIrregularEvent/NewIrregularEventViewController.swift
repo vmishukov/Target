@@ -13,9 +13,37 @@ import UIKit
 final class NewIrregularEventViewController: UIViewController {
     // MARK: - DELEGATE
     weak var addTrackerDelegate: AddTrackersViewControllerDelegate?
-    // MARK: - public variable
-    var categories: [TrackerCategory]?
+    // MARK: - PRIVATE
+    private let emojiArray = Constants.emojiArray
+    private let sectionColors = Constants.sectionColors
+    private var selectedEmoji: String?
+    private var selectedColor: UIColor?
     // MARK: - UI ELEMENTS
+    private let NewIrregularEventCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    
+    private lazy var NewIrregularEventScrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.backgroundColor = .ypWhite
+        
+        scrollView.alwaysBounceVertical = true
+        scrollView.showsVerticalScrollIndicator = true
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+ 
+        self.NewIrregularEventScrollView = scrollView
+        view.addSubview(scrollView)
+        scrollView.addSubview(containerView)
+        return scrollView
+    }()
+    
+    private lazy var containerView: UIView = {
+        let containerView = UIView()
+        containerView.clipsToBounds = true
+        containerView.isUserInteractionEnabled = true
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        self.containerView = containerView
+        return containerView
+    }()
+    
     private lazy var NewIrregularEventTitle : UILabel = {
         let titleLabel = UILabel()
         titleLabel.text = "Новое нерегулярное событие"
@@ -42,7 +70,7 @@ final class NewIrregularEventViewController: UIViewController {
         
         newIrregularEventTextField.clearButtonMode = .always
         newIrregularEventTextField.addSubview(newIrregularEventLabel)
-        view.addSubview(newIrregularEventTextField)
+        containerView.addSubview(newIrregularEventTextField)
         self.newIrregularEventTextField = newIrregularEventTextField
         self.newIrregularEventTextField.delegate = self
         return newIrregularEventTextField
@@ -72,7 +100,7 @@ final class NewIrregularEventViewController: UIViewController {
         settingsTableView.delegate = self
         settingsTableView.dataSource = self
         self.newIrregularEventSettingsTableView = settingsTableView
-        view.addSubview(settingsTableView)
+        containerView.addSubview(settingsTableView)
         return settingsTableView
     }()
     
@@ -122,15 +150,21 @@ final class NewIrregularEventViewController: UIViewController {
         view.addSubview(stackView)
         return stackView
     }()
-    // MARK: - view
+    // MARK: - lifecycle
     override func viewDidLoad() {
         view.backgroundColor = .white
         layoutNewIrregularEventTextField()
         layoutNewIrregularEventTitle()
         cancelKeyboardGestureSetup()
+        constraitNewIrregularEventScrollView()
+        constraitContainerView()
+        emojiCollectionSetup()
+        
         layoutNewIrregularEventSettingsTableView()
+        
         layoutNewIrregularEventtButtons()
-        updateButtonStatus() 
+        constraitContainerView()
+        updateButtonStatus()
         super.viewDidLoad()
     }
     // MARK: - CONSTRAITS
@@ -143,9 +177,9 @@ final class NewIrregularEventViewController: UIViewController {
     
     private func layoutNewIrregularEventTextField() {
         NSLayoutConstraint.activate([
-            newIrregularEventTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            newIrregularEventTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            newIrregularEventTextField.topAnchor.constraint(equalTo: NewIrregularEventTitle.bottomAnchor, constant: 38),
+            newIrregularEventTextField.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
+            newIrregularEventTextField.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
+            newIrregularEventTextField.topAnchor.constraint(equalTo: containerView.topAnchor),
             newIrregularEventTextField.heightAnchor.constraint(equalToConstant: 75)
         ])
         layoutNewIrregularEventErrLabel()
@@ -160,8 +194,8 @@ final class NewIrregularEventViewController: UIViewController {
     
     private func layoutNewIrregularEventSettingsTableView() {
         NSLayoutConstraint.activate([
-            newIrregularEventSettingsTableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            newIrregularEventSettingsTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            newIrregularEventSettingsTableView.leadingAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            newIrregularEventSettingsTableView.trailingAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             newIrregularEventSettingsTableView.topAnchor.constraint(equalTo: newIrregularEventTextField.bottomAnchor, constant: 24),
             newIrregularEventSettingsTableView.heightAnchor.constraint(equalToConstant: 75)
         ])
@@ -181,6 +215,35 @@ final class NewIrregularEventViewController: UIViewController {
         ])
     }
     
+    private func constraitEmojiCollection() {
+        NSLayoutConstraint.activate([
+            NewIrregularEventCollectionView.topAnchor.constraint(equalTo: newIrregularEventSettingsTableView.bottomAnchor),
+            NewIrregularEventCollectionView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            NewIrregularEventCollectionView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
+            NewIrregularEventCollectionView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,constant: -16),
+        ])
+    }
+    
+    private func constraitContainerView() {
+        NSLayoutConstraint.activate([
+            containerView.topAnchor.constraint(equalTo: NewIrregularEventScrollView.topAnchor),
+            containerView.leadingAnchor.constraint(equalTo: NewIrregularEventScrollView.leadingAnchor),
+            containerView.widthAnchor.constraint(equalTo: NewIrregularEventScrollView.widthAnchor),
+            containerView.trailingAnchor.constraint(equalTo: NewIrregularEventScrollView.trailingAnchor),
+            containerView.bottomAnchor.constraint(equalTo: NewIrregularEventScrollView.bottomAnchor),
+            containerView.heightAnchor.constraint(equalTo: NewIrregularEventScrollView.heightAnchor,constant: 90)
+        ])
+    }
+    
+    private func constraitNewIrregularEventScrollView() {
+        NSLayoutConstraint.activate([
+            NewIrregularEventScrollView.topAnchor.constraint(equalTo: NewIrregularEventTitle.bottomAnchor, constant: 38),
+            NewIrregularEventScrollView.bottomAnchor.constraint(equalTo: newHabbbitButtonStackView.topAnchor,constant: -16),
+            NewIrregularEventScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            NewIrregularEventScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+    }
+    
     // MARK: - OBJC
     @objc func cancelButtonClicked() {
         self.view.window?.rootViewController?.dismiss(animated: true)
@@ -194,22 +257,11 @@ final class NewIrregularEventViewController: UIViewController {
         
         let indexPath = IndexPath(row: 0, section: 0)
         let cell = newIrregularEventSettingsTableView.cellForRow(at: indexPath)
-        guard let categoryTitle = cell?.detailTextLabel?.text , let caption = newIrregularEventTextField.text  else { return }
+        guard let categoryTitle = cell?.detailTextLabel?.text , let caption = newIrregularEventTextField.text, let selectedColor = self.selectedColor, let selectedEmoji = self.selectedEmoji  else { return }
 
         let schedule = [Weekday.Monday, Weekday.Tuesday, Weekday.Wednesday, Weekday.Thursday, Weekday.Friday, Weekday.Saturday, Weekday.Sunday]
         
-        let tracker = Tracker(id: UUID(), title: caption, color: .ypColorSelection10, emoji: "🥇", isHabbit: false, schedule: schedule)
-        /*
-        if let index = categories.firstIndex(where: {cat in
-            cat.title == categoryTitle
-        }) {
-            var trackers = categories[index].trackers
-            trackers.append(tracker)
-            let updatedCategory = TrackerCategory(title: categoryTitle, trackers: trackers)
-            categories.remove(at: index)
-            categories.insert(updatedCategory, at: index)
-        }
-         */
+        let tracker = Tracker(id: UUID(), title: caption, color: selectedColor, emoji: selectedEmoji, isHabbit: false, schedule: schedule)
         
         self.addTrackerDelegate?.addNewTracker(tracker: tracker, categoryTitle: categoryTitle)
         self.view.window?.rootViewController?.dismiss(animated: true)
@@ -220,7 +272,7 @@ final class NewIrregularEventViewController: UIViewController {
     }
     // MARK: - private func
     private func updateButtonStatus() {
-        if newIrregularEventTextField.text?.count ?? 0 > 0  {
+        if newIrregularEventTextField.text?.count ?? 0 > 0 && selectedColor != nil && selectedEmoji != nil  {
             newIrregularEventCreateButton.isEnabled = true
             newIrregularEventCreateButton.backgroundColor = .ypBlack
         } else {
@@ -234,8 +286,97 @@ final class NewIrregularEventViewController: UIViewController {
         tapGesture.cancelsTouchesInView = false
         self.view.addGestureRecognizer(tapGesture)
     }
+    
+    private func emojiCollectionSetup() {
+        NewIrregularEventCollectionView.delegate = self
+        NewIrregularEventCollectionView.dataSource = self
+        NewIrregularEventCollectionView.isScrollEnabled = false
+        NewIrregularEventCollectionView.bounces = false
+        NewIrregularEventCollectionView.allowsMultipleSelection = true
+        NewIrregularEventCollectionView.register(SettingEmojiCell.self, forCellWithReuseIdentifier: SettingEmojiCell.cellIdentifier)
+        NewIrregularEventCollectionView.register(SettingColorCell.self, forCellWithReuseIdentifier: SettingColorCell.cellIdentifier)
+        NewIrregularEventCollectionView.register(SettingCollectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SettingCollectionHeader.identifier)
+        NewIrregularEventCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.addSubview(NewIrregularEventCollectionView)
+        constraitEmojiCollection()
+    }
+}
+// MARK: - UICollectionViewDelegate
+extension NewIrregularEventViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+        collectionView.indexPathsForSelectedItems?.filter({ $0.section == indexPath.section }).forEach({ collectionView.deselectItem(at: $0, animated: true) })
+        return true
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.section == 0 {
+            self.selectedEmoji = emojiArray[indexPath.row]
+        } else {
+            self.selectedColor = sectionColors[indexPath.row]
+        }
+        updateButtonStatus()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        if indexPath.section == 0 {
+            self.selectedEmoji = nil
+        } else {
+            self.selectedColor = nil
+        }
+        updateButtonStatus()
+    }
+    
 }
 
+// MARK: - UICollectionViewDelegateFlowLayout
+extension NewIrregularEventViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let availibleWidth = NewIrregularEventCollectionView.frame.width - 9
+        let cellWidth = availibleWidth / CGFloat(7)
+        return CGSize(width: cellWidth, height: cellWidth)
+    }
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 2
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 8
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize  {
+        let indexPath = IndexPath(row: 0, section: section)
+        let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader, at: indexPath)
+        
+        return headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width, height: UIView.layoutFittingExpandedSize.height), withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
+    }
+}
+
+// MARK: - UICollectionViewDataSource
+extension NewIrregularEventViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        let numberOfItemsInSection = section == 0 ? emojiArray.count : sectionColors.count
+        return numberOfItemsInSection
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if indexPath.section == 0 {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SettingEmojiCell.cellIdentifier, for: indexPath) as? SettingEmojiCell else {return UICollectionViewCell()}
+            cell.settingEmojiCell(emoji: emojiArray[indexPath.row])
+            return cell
+        } else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SettingColorCell.cellIdentifier, for: indexPath) as? SettingColorCell else {return UICollectionViewCell()}
+            cell.settingColorCell(color: sectionColors[indexPath.row])
+            return cell
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: SettingCollectionHeader.identifier, for: indexPath) as! SettingCollectionHeader
+        indexPath.section == 0 ? view.settingHeaderSetup(titleText: "Emoji") :  view.settingHeaderSetup(titleText: "Цвет")
+        return view
+    }
+}
 // MARK: - UITextFieldDelegate
 extension NewIrregularEventViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {

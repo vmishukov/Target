@@ -91,14 +91,12 @@ final class AddTrackersViewController: UIViewController {
     @objc private func didTabAddHabbitButton(_ sender: UIButton) {
         let view = NewHabbitViewController()
         view.addTrackerDelegate = self
-        view.categories = self.category
         present(view, animated: true)
     }
     
     @objc private func didTabAddIrregularEventButton(_ sender: UIButton) {
         let view = NewIrregularEventViewController()
         view.addTrackerDelegate = self
-        view.categories = self.category
         present(view, animated: true)
     }
 }

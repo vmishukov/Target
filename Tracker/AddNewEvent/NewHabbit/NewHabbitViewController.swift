@@ -12,15 +12,15 @@ final class NewHabbitViewController: UIViewController {
     // MARK: - delagate
     weak var addTrackerDelegate: AddTrackersViewControllerDelegate?
     // MARK: - public variable
-    var categories: [TrackerCategory]?
     var schedule: [Weekday]?
     // MARK: - private
-    private let newHabbitCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     private let emojiArray = Constants.emojiArray
     private let sectionColors = Constants.sectionColors
     private var selectedEmoji: String?
     private var selectedColor: UIColor?
     // MARK: - UI ELEMENTS
+    private let newHabbitCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    
     private lazy var newHabbitTitle : UILabel = {
         let titleLabel = UILabel()
         titleLabel.text = "Новая привычка"
@@ -284,7 +284,6 @@ final class NewHabbitViewController: UIViewController {
     }
     
     @objc func createButtonClicked() {
-       // category?.remove(at: 1)
         let indexPath = IndexPath(row: 0, section: 0)
         let cell = newHabbitSettingsTableView.cellForRow(at: indexPath)
         guard let categoryTitle = cell?.detailTextLabel?.text , let caption = newHabbitTextField.text, let schedule = self.schedule, let selectedColor = self.selectedColor, let selectedEmoji = self.selectedEmoji  else { return }

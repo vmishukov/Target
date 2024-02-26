@@ -82,20 +82,23 @@ final class TrackersViewController: UIViewController {
     // MARK: - Private
     private let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     
-    private var categories: [TrackerCategory] = [] //MOCK FOR NOW
+    private var categories: [TrackerCategory] = []
     private var visibleCategories: [TrackerCategory] = []
     private var completedTrackers: [TrackerRecord] = []
     private let dateFormatter = DateFormatter()
     
     private var dataProvider: TrackerDataProviderProtocol?
-    // MARK: - view
-
+    // MARK: - lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         dateFormatter.dateFormat = "dd.MM.yyyy"
        // trackerCategoryStore.clearDatabase()
         
         dataProvider = TrackerDataProvider(delegate: self)
+        checkMockCategory()
+    
+        
+        reloadTrackers()
         reloadTrackerRecords()
         
         cancelKeyboardGestureSetup()
@@ -119,16 +122,26 @@ final class TrackersViewController: UIViewController {
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
         
-        reloadTrackers()
-        
     }
-    
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
       
     }
     // MARK: - private func
+    private func checkMockCategory() {
+        guard let category = dataProvider?.fetchTrackerCategories() else {
+            let mockCategory = TrackerCategory(title: "test", trackers: [])
+            dataProvider?.addNewTrackerCategory(mockCategory)
+            return
+        }
+        
+        if category.isEmpty {
+            let mockCategory = TrackerCategory(title: "test", trackers: [])
+            dataProvider?.addNewTrackerCategory(mockCategory)
+        }
+    }
+    
     private func cancelKeyboardGestureSetup() {
         let tapGesture = UITapGestureRecognizer(target: self,
                                                 action: #selector(hideKeyboard))
@@ -351,7 +364,6 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
                 self.dataProvider?.removeRecord(completedTrackers[index].id, date: completedTrackers[index].date)
                 completedTrackers.remove(at: index)
                 self.collectionView.reloadItems(at: [indexPath])
-            
             }
         }
         else if(Date().onlyDate >= trackerDatePicker.date.onlyDate) {
@@ -370,14 +382,6 @@ extension TrackersViewController: AddTrackersViewControllerDelegate {
         self.dataProvider?.addNewTracker(tracker, trackerCategoryName: categoryTitle)
         reloadTrackers()
     }
-    /*
-    func addNewTracker(trackerCategory: [TrackerCategory]) {
-        //чистка удаленных категорий
-   
-        self.categories = trackerCategory
-        reloadCurrentTrackers()
-    }
-    */
 }
 
 // MARK: - TrackersCollectionViewCellDelegate
@@ -395,7 +399,6 @@ extension TrackersViewController : UISearchBarDelegate {
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         self.trackerSearchBar.endEditing(true)
     }
-    
 }
 
 // MARK: - TrackerDataProviderDelegate

@@ -66,7 +66,7 @@ final class TrackerStore {
         do {
             try context.execute(deleteRequest)
         } catch let error as NSError {
-            print(error)
+            assertionFailure("\(error)")
         }
     }
 }

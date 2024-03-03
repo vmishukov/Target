@@ -92,8 +92,6 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         layoutTrackerCaptionLabel()
         layoutTrackerCompleteButton() 
         layoutTrackersDaysCountLabel()
-        trackerCaptionLabel.text = "Кошка заслонила камеру на созвоне лмао"
-        trackersDaysCountLabel.text = "1 день"
     }
     
     // MARK: - public func
@@ -121,7 +119,9 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     
     // MARK: - private func
     private func daysCaption(dayNumber: Int) -> String {
-        if dayNumber > 0 || dayNumber % 10 == 2 || dayNumber % 10 == 3 || dayNumber % 10 == 4 {
+        if dayNumber == 0 {
+            return "дней"
+        } else if  dayNumber > 0 && ( dayNumber % 10 == 2 || dayNumber % 10 == 3 || dayNumber % 10 == 4){
             return "дня"
         } else {
             return "дней"

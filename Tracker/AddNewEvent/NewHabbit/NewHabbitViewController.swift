@@ -12,9 +12,15 @@ final class NewHabbitViewController: UIViewController {
     // MARK: - delagate
     weak var addTrackerDelegate: AddTrackersViewControllerDelegate?
     // MARK: - public variable
-    var categories: [TrackerCategory]?
     var schedule: [Weekday]?
+    // MARK: - private
+    private let emojiArray = Constants.emojiArray
+    private let sectionColors = Constants.sectionColors
+    private var selectedEmoji: String?
+    private var selectedColor: UIColor?
     // MARK: - UI ELEMENTS
+    private let newHabbitCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    
     private lazy var newHabbitTitle : UILabel = {
         let titleLabel = UILabel()
         titleLabel.text = "Новая привычка"
@@ -26,11 +32,35 @@ final class NewHabbitViewController: UIViewController {
         return titleLabel
     }()
     
+    private lazy var newHabbitScrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.backgroundColor = .ypWhite
+        
+        scrollView.alwaysBounceVertical = true
+        scrollView.showsVerticalScrollIndicator = true
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+ 
+        self.newHabbitScrollView = scrollView
+        view.addSubview(scrollView)
+        scrollView.addSubview(containerView)
+        return scrollView
+    }()
+    
+    private lazy var containerView: UIView = {
+        let containerView = UIView()
+        containerView.clipsToBounds = true
+        containerView.isUserInteractionEnabled = true
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        self.containerView = containerView
+        return containerView
+    }()
+    
     private lazy var newHabbitTextField : UITextField = {
         let NewHabbitTextField = UITextField()
         let paddingViewLeft: UIView = UIView.init(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
         NewHabbitTextField.leftView = paddingViewLeft
         NewHabbitTextField.leftViewMode = .always
+       
         NewHabbitTextField.layer.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 0.3).cgColor
         NewHabbitTextField.translatesAutoresizingMaskIntoConstraints = false
         NewHabbitTextField.placeholder = "Введите название трекера"
@@ -39,7 +69,7 @@ final class NewHabbitViewController: UIViewController {
         NewHabbitTextField.addTarget(self, action: #selector(textFieldDidChange(_:)),
                                   for: .editingChanged)
         NewHabbitTextField.addSubview(newHabbitErrLabel)
-        view.addSubview(NewHabbitTextField)
+        containerView.addSubview(NewHabbitTextField)
         self.newHabbitTextField = NewHabbitTextField
         self.newHabbitTextField.delegate = self
         return NewHabbitTextField
@@ -70,7 +100,7 @@ final class NewHabbitViewController: UIViewController {
         settingsTableView.delegate = self
         settingsTableView.dataSource = self
         self.newHabbitSettingsTableView = settingsTableView
-        view.addSubview(settingsTableView)
+        containerView.addSubview(settingsTableView)
         return settingsTableView
     }()
     
@@ -120,18 +150,24 @@ final class NewHabbitViewController: UIViewController {
         view.addSubview(stackView)
         return stackView
     }()
-    // MARK: - View
+    // MARK: - Life cycle
     override func viewDidLoad() {
         view.backgroundColor = .white
-        layoutNewHabbitTextField()
-        layoutNewHabbitTitle()
-        layoutNewHabbitSettingsTableView()
-        layoutNewHabbittButtons()
+        
+        constraitNewHabbitTitle()
+        constraitNewHabbitScrollView()
+        constraitContainerView()
+        constraitNewHabbitTextField()
+        emojiCollectionSetup()
+        
+        constraitNewHabbitSettingsTableView()
+        constraitNewHabbittButtons()
         updateButtonStatus()
         cancelKeyboardGestureSetup()
+
         super.viewDidLoad()
     }
-    // MARK: Private func
+    // MARK: - Private func
     private func cancelKeyboardGestureSetup() {
         let tapGesture = UITapGestureRecognizer(target: self,
                                                 action: #selector(hideKeyboard))
@@ -140,7 +176,7 @@ final class NewHabbitViewController: UIViewController {
     }
     
     private func updateButtonStatus() {
-        if newHabbitTextField.text?.count ?? 0 > 0 && schedule?.count ?? 0 > 0 {
+        if newHabbitTextField.text?.count ?? 0 > 0 && schedule?.count ?? 0 > 0 && selectedColor != nil && selectedEmoji != nil {
             newHabbitCreateButton.isEnabled = true
             newHabbitCreateButton.backgroundColor = .ypBlack
         } else {
@@ -148,41 +184,85 @@ final class NewHabbitViewController: UIViewController {
             newHabbitCreateButton.backgroundColor = .ypGray
         }
     }
-    // MARK: - Layout
-    private func layoutNewHabbitTitle() {
+    
+    private func emojiCollectionSetup() {
+        newHabbitCollectionView.delegate = self
+        newHabbitCollectionView.dataSource = self
+        newHabbitCollectionView.isScrollEnabled = false
+        newHabbitCollectionView.bounces = false
+        newHabbitCollectionView.allowsMultipleSelection = true
+        newHabbitCollectionView.register(SettingEmojiCell.self, forCellWithReuseIdentifier: SettingEmojiCell.cellIdentifier)
+        newHabbitCollectionView.register(SettingColorCell.self, forCellWithReuseIdentifier: SettingColorCell.cellIdentifier)
+        newHabbitCollectionView.register(SettingCollectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SettingCollectionHeader.identifier)
+        newHabbitCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.addSubview(newHabbitCollectionView)
+        constraitEmojiCollection()
+    }
+    
+    // MARK: - constrait
+    private func constraitEmojiCollection() {
+        NSLayoutConstraint.activate([
+            newHabbitCollectionView.topAnchor.constraint(equalTo: newHabbitSettingsTableView.bottomAnchor),
+            newHabbitCollectionView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            newHabbitCollectionView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
+            newHabbitCollectionView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,constant: -16),
+        
+            
+        ])
+    }
+    private func constraitContainerView() {
+        NSLayoutConstraint.activate([
+            containerView.topAnchor.constraint(equalTo: newHabbitScrollView.topAnchor),
+            containerView.leadingAnchor.constraint(equalTo: newHabbitScrollView.leadingAnchor),
+            containerView.widthAnchor.constraint(equalTo: newHabbitScrollView.widthAnchor),
+            containerView.trailingAnchor.constraint(equalTo: newHabbitScrollView.trailingAnchor),
+            containerView.bottomAnchor.constraint(equalTo: newHabbitScrollView.bottomAnchor),
+            containerView.heightAnchor.constraint(equalTo: newHabbitScrollView.heightAnchor,constant: 170)
+        ])
+    }
+    private func constraitNewHabbitScrollView() {
+        NSLayoutConstraint.activate([
+            newHabbitScrollView.topAnchor.constraint(equalTo: newHabbitTitle.bottomAnchor, constant: 38),
+            newHabbitScrollView.bottomAnchor.constraint(equalTo: newHabbbitButtonStackView.topAnchor,constant: -16),
+            newHabbitScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            newHabbitScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+    }
+    private func constraitNewHabbitTitle() {
         NSLayoutConstraint.activate([
             newHabbitTitle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             newHabbitTitle.topAnchor.constraint(equalTo: view.topAnchor, constant: 38)
         ])
     }
     
-    private func layoutNewHabbitTextField() {
+    private func constraitNewHabbitTextField() {
         NSLayoutConstraint.activate([
-            newHabbitTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            newHabbitTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            newHabbitTextField.topAnchor.constraint(equalTo: newHabbitTitle.bottomAnchor, constant: 38),
+            newHabbitTextField.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
+            newHabbitTextField.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
+            
+            newHabbitTextField.topAnchor.constraint(equalTo: containerView.topAnchor),
             newHabbitTextField.heightAnchor.constraint(equalToConstant: 75)
         ])
-        layoutNewHabbitErrLabel()
+        constraitNewHabbitErrLabel()
     }
     
-    private func layoutNewHabbitErrLabel() {
+    private func constraitNewHabbitErrLabel() {
         NSLayoutConstraint.activate([
             newHabbitErrLabel.centerXAnchor.constraint(equalTo: newHabbitTextField.centerXAnchor),
             newHabbitErrLabel.topAnchor.constraint(equalTo: newHabbitTextField.bottomAnchor, constant: 8)
         ])
     }
     
-    private func layoutNewHabbitSettingsTableView() {
+    private func constraitNewHabbitSettingsTableView() {
         NSLayoutConstraint.activate([
-            newHabbitSettingsTableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            newHabbitSettingsTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            newHabbitSettingsTableView.leadingAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            newHabbitSettingsTableView.trailingAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             newHabbitSettingsTableView.topAnchor.constraint(equalTo: newHabbitTextField.bottomAnchor, constant: 24),
             newHabbitSettingsTableView.heightAnchor.constraint(equalToConstant: 150)
         ])
     }
     
-    private func layoutNewHabbittButtons() {
+    private func constraitNewHabbittButtons() {
         NSLayoutConstraint.activate([
             newHabbbitButtonStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             
@@ -204,29 +284,96 @@ final class NewHabbitViewController: UIViewController {
     }
     
     @objc func createButtonClicked() {
-       // category?.remove(at: 1)
         let indexPath = IndexPath(row: 0, section: 0)
         let cell = newHabbitSettingsTableView.cellForRow(at: indexPath)
-        guard let categoryTitle = cell?.detailTextLabel?.text , var categories = self.categories, let caption = newHabbitTextField.text, let schedule = self.schedule  else { return }
+        guard let categoryTitle = cell?.detailTextLabel?.text , let caption = newHabbitTextField.text, let schedule = self.schedule, let selectedColor = self.selectedColor, let selectedEmoji = self.selectedEmoji  else { return }
 
-        let tracker = Tracker(id: UUID(), title: caption, color: .ypColorSelection10, emoji: "🥇", isHabbit: true, schedule: schedule)
-
-        if let index = categories.firstIndex(where: {cat in
-            cat.title == categoryTitle
-        }) {
-            var trackers = categories[index].trackers
-            trackers.append(tracker)
-            let updatedCategory = TrackerCategory(title: categoryTitle, trackers: trackers)
-            categories.remove(at: index)
-            categories.insert(updatedCategory, at: index)
-        }
-        self.addTrackerDelegate?.addNewTracker(trackerCategory: categories)
+        let tracker = Tracker(id: UUID(), title: caption, color: selectedColor, emoji: selectedEmoji, isHabbit: true, schedule: schedule)
+        
+        self.addTrackerDelegate?.addNewTracker(tracker: tracker, categoryTitle: categoryTitle)
         self.view.window?.rootViewController?.dismiss(animated: true)
     }
     @objc func textFieldDidChange(_ textField: UITextField) {
         updateButtonStatus()
     }
 }
+// MARK: - UICollectionViewDelegate
+extension NewHabbitViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+        collectionView.indexPathsForSelectedItems?.filter({ $0.section == indexPath.section }).forEach({ collectionView.deselectItem(at: $0, animated: true) })
+        return true
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.section == 0 {
+            self.selectedEmoji = emojiArray[indexPath.row]
+        } else {
+            self.selectedColor = sectionColors[indexPath.row]
+        }
+        updateButtonStatus()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        if indexPath.section == 0 {
+            self.selectedEmoji = nil
+        } else {
+            self.selectedColor = nil
+        }
+        updateButtonStatus()
+    }
+    
+}
+
+// MARK: - UICollectionViewDelegateFlowLayout
+extension NewHabbitViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let availibleWidth = newHabbitCollectionView.frame.width - 9
+        let cellWidth = availibleWidth / CGFloat(7)
+        return CGSize(width: cellWidth, height: cellWidth)
+    }
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 2
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 8
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize  {
+        let indexPath = IndexPath(row: 0, section: section)
+        let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader, at: indexPath)
+        
+        return headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width, height: UIView.layoutFittingExpandedSize.height), withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
+    }
+}
+
+// MARK: - UICollectionViewDataSource
+extension NewHabbitViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        let numberOfItemsInSection = section == 0 ? emojiArray.count : sectionColors.count
+        return numberOfItemsInSection
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if indexPath.section == 0 {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SettingEmojiCell.cellIdentifier, for: indexPath) as? SettingEmojiCell else {return UICollectionViewCell()}
+            cell.settingEmojiCell(emoji: emojiArray[indexPath.row])
+            return cell
+        } else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SettingColorCell.cellIdentifier, for: indexPath) as? SettingColorCell else {return UICollectionViewCell()}
+            cell.settingColorCell(color: sectionColors[indexPath.row])
+            return cell
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: SettingCollectionHeader.identifier, for: indexPath) as! SettingCollectionHeader
+        indexPath.section == 0 ? view.settingHeaderSetup(titleText: "Emoji") :  view.settingHeaderSetup(titleText: "Цвет")
+        return view
+    }
+}
+
 // MARK: - UITextFieldDelegate
 extension NewHabbitViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -263,7 +410,7 @@ extension NewHabbitViewController: UITableViewDataSource {
         switch indexPath.row {
         case 0 :
             cell.textLabel?.text = "Категория"
-            cell.detailTextLabel?.text = "Домашний уют" //mock
+            cell.detailTextLabel?.text = "test" //mock
         case 1 :
             cell.textLabel?.text = "Расписание"
         default:
@@ -288,7 +435,6 @@ extension NewHabbitViewController: UITableViewDelegate {
             tableView.deselectRow(at: indexPath, animated: true)
         default:
             tableView.deselectRow(at: indexPath, animated: true)
-            
         }
     }
 }

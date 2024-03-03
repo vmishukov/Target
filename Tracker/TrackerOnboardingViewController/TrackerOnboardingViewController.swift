@@ -36,9 +36,6 @@ final class TrackerOnboardingViewController: UIViewController {
         constraitsonboardingTitle()
         constraitsOnboardingBackgroundPic()
         super.viewDidLoad()
-        
-    
-        
     }
 // MARK: - public
     func initialize(setBackgroundPic pic: UIImage, setTitle title: String ) {

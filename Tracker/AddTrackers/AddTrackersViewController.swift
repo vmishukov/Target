@@ -100,7 +100,7 @@ final class AddTrackersViewController: UIViewController {
         present(view, animated: true)
     }
 }
-
+//MARK: - AddTrackersViewControllerDelegate
 extension AddTrackersViewController: AddTrackersViewControllerDelegate {
     func addNewTracker(tracker: Tracker, categoryTitle: String) {
         trackerViewdelegate?.addNewTracker(tracker: tracker, categoryTitle: categoryTitle)

@@ -50,8 +50,7 @@ final class AddTrackersViewController: UIViewController {
         self.addIrregularEventButton = addIrregularEventButton
         return addIrregularEventButton
     }()
-    //MARK: - public variable
-    var category: [TrackerCategory]?
+
     //MARK: - view func
     override func viewDidLoad() {
         view.backgroundColor = .ypWhite

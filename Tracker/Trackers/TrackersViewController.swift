@@ -112,6 +112,7 @@ final class TrackersViewController: UIViewController {
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
+        self.collectionView.isHidden = viewModel.stubStatus
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -152,8 +153,7 @@ final class TrackersViewController: UIViewController {
         
         viewModel.stubStatusBinding = { [weak self] _ in
             guard let self = self else { return }
-            self.trackerErrImage.isHidden = viewModel.stubStatus
-            self.trackerErrImage.isHidden = viewModel.stubStatus
+            self.collectionView.isHidden = viewModel.stubStatus
         }
     }
     

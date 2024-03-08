@@ -20,7 +20,7 @@ final class OnboardingPageController: UIPageViewController  {
     
         let second = TrackerOnboardingViewController()
         let secondPic = UIImage(named: "OnboardingBackground2")
-        let secondTitle = "Даже если это не литры воды и йога"
+        let secondTitle = "Даже если это \n не литры воды и йога"
         second.initialize(setBackgroundPic: secondPic ?? UIImage(), setTitle: secondTitle)
         
         return [first, second]
@@ -95,7 +95,7 @@ final class OnboardingPageController: UIPageViewController  {
         }
         window.rootViewController = TabBarViewController()
         let options: UIView.AnimationOptions = .transitionCrossDissolve
-        let duration: TimeInterval = 0.3
+        let duration: TimeInterval = 0.1
         UIView.transition(with: window, duration: duration, options: options, animations: {}, completion:
         { completed in
         

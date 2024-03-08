@@ -60,7 +60,7 @@ final class TrackerOnboardingViewController: UIViewController {
         NSLayoutConstraint.activate([
             onboardingTitle.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             onboardingTitle.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            onboardingTitle.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
+            onboardingTitle.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor,constant: 50),
         ])
     }
 }

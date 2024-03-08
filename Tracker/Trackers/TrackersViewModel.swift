@@ -103,7 +103,6 @@ final class TrackersViewModel {
             dataProvider?.addNewTrackerCategory(mockCategory)
         }
     }
-    
 }
 
 // MARK: - TrackerDataProviderDelegate

@@ -410,7 +410,7 @@ extension NewHabbitViewController: UITableViewDataSource {
         switch indexPath.row {
         case 0 :
             cell.textLabel?.text = "Категория"
-            cell.detailTextLabel?.text = "test" //mock
+            cell.detailTextLabel?.text = "test" //cock
         case 1 :
             cell.textLabel?.text = "Расписание"
         default:
@@ -425,7 +425,8 @@ extension NewHabbitViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.row {
         case 0 :
-            // TODO
+            let view = NewCategoryViewController()
+            present(view,animated: true)
             tableView.deselectRow(at: indexPath, animated: true)
         case 1 :
             let view = ScheduleViewController()
@@ -438,7 +439,7 @@ extension NewHabbitViewController: UITableViewDelegate {
         }
     }
 }
-
+// MARK: - ScheduleViewControllerDelegate
 extension NewHabbitViewController: ScheduleViewControllerDelegate {
     func getSelectedDays(schedule: [Weekday]) {
         self.schedule = schedule

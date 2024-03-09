@@ -15,26 +15,23 @@ final class OnboardingPageController: UIPageViewController  {
         let first = TrackerOnboardingViewController()
         let firstPic = UIImage(named: "OnboardingBackground1")
         let firstTitle = "Отслеживайте только то, что хотите"
-        first.initialize(setBackgroundPic: firstPic ?? UIImage(), setTitle: firstTitle)
-        
+        first.initialize(setBackgroundPic: firstPic ?? UIImage(), setTitle: firstTitle)        
     
         let second = TrackerOnboardingViewController()
         let secondPic = UIImage(named: "OnboardingBackground2")
-        let secondTitle = "Даже если это не литры воды и йога"
+        let secondTitle = "Даже если это \n не литры воды и йога"
         second.initialize(setBackgroundPic: secondPic ?? UIImage(), setTitle: secondTitle)
         
         return [first, second]
     }()
-    
-    
     
     lazy var pageControl: UIPageControl = {
         let pageControl = UIPageControl()
         pageControl.numberOfPages = pages.count
         pageControl.currentPage = 0
         
-        pageControl.currentPageIndicatorTintColor = .ypGray
-        pageControl.pageIndicatorTintColor = .ypBlack
+        pageControl.currentPageIndicatorTintColor = .ypBlack
+        pageControl.pageIndicatorTintColor = .ypGray
         
         pageControl.translatesAutoresizingMaskIntoConstraints = false
     
@@ -90,12 +87,13 @@ final class OnboardingPageController: UIPageViewController  {
     
 //MARK: - OBJC
     @objc private func didTapOnboardingButton(_ sender: UIButton) {
+        UserSettingsStorage.shared.notNewUser()
         guard let window = UIApplication.shared.keyWindow else {
             return
         }
         window.rootViewController = TabBarViewController()
         let options: UIView.AnimationOptions = .transitionCrossDissolve
-        let duration: TimeInterval = 0.3
+        let duration: TimeInterval = 0.1
         UIView.transition(with: window, duration: duration, options: options, animations: {}, completion:
         { completed in
         

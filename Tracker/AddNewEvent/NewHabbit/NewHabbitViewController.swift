@@ -176,7 +176,11 @@ final class NewHabbitViewController: UIViewController {
     }
     
     private func updateButtonStatus() {
-        if newHabbitTextField.text?.count ?? 0 > 0 && schedule?.count ?? 0 > 0 && selectedColor != nil && selectedEmoji != nil {
+        
+        let indexPath = IndexPath(row: 0, section: 0)
+        let cell = newHabbitSettingsTableView.cellForRow(at: indexPath)
+        
+        if newHabbitTextField.text?.count ?? 0 > 0 && schedule?.count ?? 0 > 0 && selectedColor != nil && selectedEmoji != nil && cell?.detailTextLabel?.text != nil {
             newHabbitCreateButton.isEnabled = true
             newHabbitCreateButton.backgroundColor = .ypBlack
         } else {
@@ -286,6 +290,7 @@ final class NewHabbitViewController: UIViewController {
     @objc func createButtonClicked() {
         let indexPath = IndexPath(row: 0, section: 0)
         let cell = newHabbitSettingsTableView.cellForRow(at: indexPath)
+        
         guard let categoryTitle = cell?.detailTextLabel?.text , let caption = newHabbitTextField.text, let schedule = self.schedule, let selectedColor = self.selectedColor, let selectedEmoji = self.selectedEmoji  else { return }
 
         let tracker = Tracker(id: UUID(), title: caption, color: selectedColor, emoji: selectedEmoji, isHabbit: true, schedule: schedule)
@@ -410,7 +415,6 @@ extension NewHabbitViewController: UITableViewDataSource {
         switch indexPath.row {
         case 0 :
             cell.textLabel?.text = "Категория"
-            cell.detailTextLabel?.text = "test" //mock
         case 1 :
             cell.textLabel?.text = "Расписание"
         default:
@@ -425,7 +429,11 @@ extension NewHabbitViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.row {
         case 0 :
-            // TODO
+            let view = CategoryViewController()
+            view.delegate = self
+            let cell = newHabbitSettingsTableView.cellForRow(at: indexPath)
+            view.selectedCategory = cell?.detailTextLabel?.text
+            present(view,animated: true)
             tableView.deselectRow(at: indexPath, animated: true)
         case 1 :
             let view = ScheduleViewController()
@@ -438,7 +446,7 @@ extension NewHabbitViewController: UITableViewDelegate {
         }
     }
 }
-
+// MARK: - ScheduleViewControllerDelegate
 extension NewHabbitViewController: ScheduleViewControllerDelegate {
     func getSelectedDays(schedule: [Weekday]) {
         self.schedule = schedule
@@ -460,5 +468,15 @@ extension NewHabbitViewController: ScheduleViewControllerDelegate {
         }
         updateButtonStatus()
         newHabbitSettingsTableView.reloadData()
+    }
+}
+
+// MARK: - CategoryViewControllerDelegate
+extension NewHabbitViewController: CategoryViewControllerDelegate {
+    func setSelectedCategory(categoryName: String?) {
+        let indexPath = IndexPath(row: 0, section: 0)
+        let cell = newHabbitSettingsTableView.cellForRow(at: indexPath)
+        cell?.detailTextLabel?.text = categoryName
+        updateButtonStatus()
     }
 }

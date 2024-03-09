@@ -272,7 +272,10 @@ final class NewIrregularEventViewController: UIViewController {
     }
     // MARK: - private func
     private func updateButtonStatus() {
-        if newIrregularEventTextField.text?.count ?? 0 > 0 && selectedColor != nil && selectedEmoji != nil  {
+        let indexPath = IndexPath(row: 0, section: 0)
+        let cell = newIrregularEventSettingsTableView.cellForRow(at: indexPath)
+        
+        if newIrregularEventTextField.text?.count ?? 0 > 0 && selectedColor != nil && selectedEmoji != nil && cell?.detailTextLabel?.text != nil {
             newIrregularEventCreateButton.isEnabled = true
             newIrregularEventCreateButton.backgroundColor = .ypBlack
         } else {
@@ -325,7 +328,6 @@ extension NewIrregularEventViewController: UICollectionViewDelegate {
         }
         updateButtonStatus()
     }
-    
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
@@ -392,14 +394,11 @@ extension NewIrregularEventViewController: UITextFieldDelegate {
         newIrregularEventLabel.isHidden = true
         return true
     }
-    
    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.newIrregularEventTextField.resignFirstResponder()
         return true
     }
-    
-     
 }
 // MARK: - UITableViewDataSource
 extension NewIrregularEventViewController: UITableViewDataSource {
@@ -415,7 +414,6 @@ extension NewIrregularEventViewController: UITableViewDataSource {
         switch indexPath.row {
         case 0 :
             cell.textLabel?.text = "Категория"
-            cell.detailTextLabel?.text = "test" //MOCK
         default:
             ""
         }
@@ -425,5 +423,27 @@ extension NewIrregularEventViewController: UITableViewDataSource {
 }
 // MARK: - UITableViewDelegate
 extension NewIrregularEventViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch indexPath.row {
+        case 0 :
+            let view = CategoryViewController()
+            view.delegate = self
+            let cell = newIrregularEventSettingsTableView.cellForRow(at: indexPath)
+            view.selectedCategory = cell?.detailTextLabel?.text
+            present(view,animated: true)
+            tableView.deselectRow(at: indexPath, animated: true)
+        default:
+            tableView.deselectRow(at: indexPath, animated: true)
+        }
+    }
+}
     
+// MARK: - CategoryViewControllerDelegate
+extension NewIrregularEventViewController: CategoryViewControllerDelegate {
+    func setSelectedCategory(categoryName: String?) {
+        let indexPath = IndexPath(row: 0, section: 0)
+        let cell = newIrregularEventSettingsTableView.cellForRow(at: indexPath)
+        cell?.detailTextLabel?.text = categoryName
+        updateButtonStatus()
+    }
 }

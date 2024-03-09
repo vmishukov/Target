@@ -29,24 +29,9 @@ final class TrackerCategoryStore {
         self.context = context
     }
     
-//MARK: - ADD CATEGORIES
-    func addNewTrackerCategory(_ trackerCategory: TrackerCategory) throws {
-        let trackerCategoryCoreData = TrackerCategoryCoreData(context: context)
-        updateTrackerCategory(trackerCategoryCoreData, with: trackerCategory)
-        try context.save()
-    }
-    
-    func updateTrackerCategory(_ trackerCategoryCoreData: TrackerCategoryCoreData, with trackerCategory: TrackerCategory) {
-        trackerCategoryCoreData.title = trackerCategory.title
-    }
-//MARK: - FETCH CATEGORIES
-    func fetchTrackerCategories() throws -> [TrackerCategory]? {
-        let fetchRequest = TrackerCategoryCoreData.fetchRequest()
-        let trackerCategoryFromCoreData = try context.fetch(fetchRequest)
-        return try trackerCategoryFromCoreData.map{ try self.trackerCategory(from: $0)}
-    }
-    
-    func trackerCategory(from trackerCategoryCoreData: TrackerCategoryCoreData) throws -> TrackerCategory {
+    //MARK: - FETCH CATEGORIES
+
+    private func trackerCategory(from trackerCategoryCoreData: TrackerCategoryCoreData) throws -> TrackerCategory {
         guard let title = trackerCategoryCoreData.title else {
             throw TrackerCategoryStoreError.decodingErrorInvalidTitle
         }
@@ -55,7 +40,7 @@ final class TrackerCategoryStore {
         return TrackerCategory(title: title, trackers: trackers ?? [])
     }
     
-    func fetchTrackersCoreDataFromTrackerCategory(title: String)throws -> [Tracker]? {
+    private func fetchTrackersCoreDataFromTrackerCategory(title: String)throws -> [Tracker]? {
         let request = TrackerCoreData.fetchRequest()
         request.returnsObjectsAsFaults = false
         
@@ -69,7 +54,7 @@ final class TrackerCategoryStore {
         return try trackersCoreData.map{ try self.tracker(trackerCoreData: $0) }
     }
     
-    func tracker(trackerCoreData: TrackerCoreData) throws -> Tracker {
+    private func tracker(trackerCoreData: TrackerCoreData) throws -> Tracker {
         guard let tracker_id = trackerCoreData.tracker_id else {
             throw TrackerCategoryStoreError.decodingErrorInvalidTracker
         }
@@ -92,28 +77,43 @@ final class TrackerCategoryStore {
         return Tracker(id: tracker_id, title: title, color: color, emoji: emoji, isHabbit: isHabbit, schedule: schedule)
     }
     
+    
+}
+
+//MARK: - TrackerCategoryStoreProtocol
+extension TrackerCategoryStore: TrackerCategoryStoreProtocol {
+    
+    func fetchTrackerCategories() throws -> [TrackerCategory]? {
+        let fetchRequest = TrackerCategoryCoreData.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "title", ascending: false)]
+        let trackerCategoryFromCoreData = try context.fetch(fetchRequest)
+        return try trackerCategoryFromCoreData.map{ try self.trackerCategory(from: $0)}
+    }
+    
     func deleteRequest() {
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "TrackerCategoryCoreData")
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-
         do {
             try context.execute(deleteRequest)
         } catch let error as NSError {
             print(error)
         }
     }
-    
-    func destroyPersistentStore() {
-        guard let firstStoreURL = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.persistentStoreCoordinator.persistentStores.first?.url else {
-            print("Missing first store URL - could not destroy")
-            return
-        }
 
-        do {
-            try (UIApplication.shared.delegate as! AppDelegate).persistentContainer.persistentStoreCoordinator.destroyPersistentStore(at: firstStoreURL, ofType: "TrackerDataModel", options: nil)
-        } catch  {
-            print("Unable to destroy persistent store: \(error) - \(error.localizedDescription)")
-       }
+}
+
+//MARK: - TrackerCategoryDataProviderProtocol
+extension TrackerCategoryStore: TrackerCategoryDataProviderProtocol {
+    func fetchCategoryNames() throws -> [String]  {
+        let fetchRequest = TrackerCategoryCoreData.fetchRequest()
+        let trackerCategoryFromCoreData = try context.fetch(fetchRequest)
+        let categoryNames: [String]? = trackerCategoryFromCoreData.map { $0.title ?? "ErrorTitle"}
+        return categoryNames ?? []
+    }
+    
+    func addNewTrackerCategory(_ categoryTitle: String) throws {
+        let trackerCategoryCoreData = TrackerCategoryCoreData(context: context)
+        trackerCategoryCoreData.title = categoryTitle
+        try context.save()
     }
 }
-//

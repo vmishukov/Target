@@ -23,7 +23,7 @@ final class TrackerOnboardingViewController: UIViewController {
         label.font = .systemFont(ofSize: 32, weight: .bold)
         label.textColor = .ypBlack
         label.textAlignment = .center
-        
+        label.numberOfLines = 2
         label.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(label)
         return label
@@ -33,12 +33,14 @@ final class TrackerOnboardingViewController: UIViewController {
     
 // MARK: - lifecycle
     override func viewDidLoad() {
+       // constraitsonboardingTitle()
+      //  constraitsOnboardingBackgroundPic()
+        super.viewDidLoad()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
         constraitsonboardingTitle()
         constraitsOnboardingBackgroundPic()
-        super.viewDidLoad()
-        
-    
-        
     }
 // MARK: - public
     func initialize(setBackgroundPic pic: UIImage, setTitle title: String ) {
@@ -48,17 +50,17 @@ final class TrackerOnboardingViewController: UIViewController {
 // MARK: - constraits
     private func constraitsOnboardingBackgroundPic() {
         NSLayoutConstraint.activate([
-            onboardingBackgroundPic.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            onboardingBackgroundPic.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            onboardingBackgroundPic.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            onboardingBackgroundPic.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+            onboardingBackgroundPic.topAnchor.constraint(equalTo: view.topAnchor),
+            onboardingBackgroundPic.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            onboardingBackgroundPic.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            onboardingBackgroundPic.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
     private func constraitsonboardingTitle() {
         NSLayoutConstraint.activate([
             onboardingTitle.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             onboardingTitle.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            onboardingTitle.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
+            onboardingTitle.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor,constant: 50),
         ])
     }
 }

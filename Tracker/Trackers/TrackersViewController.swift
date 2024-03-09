@@ -83,6 +83,7 @@ final class TrackersViewController: UIViewController {
     private let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
   
     private var viewModel: TrackersViewModel!
+    
     // MARK: - lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -90,7 +91,7 @@ final class TrackersViewController: UIViewController {
         
         navBarItem()
         viewModel = TrackersViewModel(date: trackerDatePicker.date)
-        Binding()
+        bind()
         
         cancelKeyboardGestureSetup()
         collectionView.dataSource = self
@@ -145,7 +146,7 @@ final class TrackersViewController: UIViewController {
         navigationItem.rightBarButtonItem = rightButton
     }
 
-    private func Binding() {
+    private func bind() {
         viewModel.visibleCategoriesBinding = { [weak self] _ in
             guard let self = self else { return }
             self.collectionView.reloadData()
@@ -256,7 +257,7 @@ extension TrackersViewController: UICollectionViewDataSource {
                           completeDays: completeDays,
                           isCompleted: isCompleted,
                           indexPath: indexPath)
-        cell.delegate = viewModel
+        cell.delegate = self
         return cell
     }
     
@@ -284,5 +285,11 @@ extension TrackersViewController : UISearchBarDelegate {
     
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         self.trackerSearchBar.endEditing(true)
+    }
+}
+// MARK: - TrackersCollectionViewCellDelegate
+extension TrackersViewController: TrackersCollectionViewCellDelegate {
+    func addCompleteDay(id: UUID, indexPath: IndexPath) {
+        viewModel.addCompleteDay(id: id)
     }
 }

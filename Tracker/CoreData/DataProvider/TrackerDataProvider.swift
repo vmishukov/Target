@@ -19,7 +19,7 @@ final class TrackerDataProvider: NSObject {
     weak var delegate: TrackerDataProviderDelegate?
     //MARK: - STORES
     private let trackerStore: TrackerStore?
-    private let trackerCategoryStore: TrackerCategoryStore?
+    private let trackerCategoryStore: TrackerCategoryStoreProtocol?
     private let trackerRecordStore: TrackerRecordStore?
     //MARK: - PRIVATE
     private let context: NSManagedObjectContext
@@ -33,14 +33,15 @@ final class TrackerDataProvider: NSObject {
         self.trackerStore = TrackerStore()
         self.trackerCategoryStore = TrackerCategoryStore()
         self.trackerRecordStore = TrackerRecordStore()
-
         super.init()
         FetchedResultsControllerSetup()
+      //  destroyPersistentStore()
         self.delegate = delegate
     }
     
     private func FetchedResultsControllerSetup() {
         let fetchRequest = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
+        
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "title", ascending: false)]
         let context = self.context
         
@@ -50,6 +51,7 @@ final class TrackerDataProvider: NSObject {
         self.trackerCategoryFetchedResultsController = fetchedResultController
     }
 }
+
 // MARK: - TrackerDataProviderProtocol
 extension TrackerDataProvider:TrackerDataProviderProtocol {
     func addNewTracker(_ tracker: Tracker, trackerCategoryName: String) {
@@ -60,11 +62,15 @@ extension TrackerDataProvider:TrackerDataProviderProtocol {
         }
     }
     
-    func addNewTrackerCategory(_ trackerCategory: TrackerCategory) {
+    func destroyPersistentStore() {
+        guard let firstStoreURL = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.persistentStoreCoordinator.persistentStores.first?.url else {
+            print("Missing first store URL - could not destroy")
+            return
+        }
         do {
-            try trackerCategoryStore?.addNewTrackerCategory(trackerCategory)
-        } catch {
-            assertionFailure("\(error)")
+            try (UIApplication.shared.delegate as! AppDelegate).persistentContainer.persistentStoreCoordinator.destroyPersistentStore(at: firstStoreURL, ofType: "TrackerDataModel", options: nil)
+        } catch  {
+            print("Unable to destroy persistent store: \(error) - \(error.localizedDescription)")
         }
     }
     

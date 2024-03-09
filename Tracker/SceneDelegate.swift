@@ -15,8 +15,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
-        if Core.shared.isNewUser() {
-            Core.shared.notNewUser()
+        if UserSettingsStorage.shared.isNewUser() {
             window?.rootViewController = OnboardingPageController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
         } else {
             window?.rootViewController = TabBarViewController()

@@ -63,6 +63,8 @@ final class NewCategoryViewController: UIViewController {
         view.addSubview(button)
         return button
     }()
+    //MARK: - delegate
+    weak var delegate: NewCategoryViewControllerDelegate?
     //MARK: - LIFECYCLE
     
     override func viewDidLoad() {
@@ -71,7 +73,8 @@ final class NewCategoryViewController: UIViewController {
         constraitsCategoryLabel()
         constraitsCategoryButton()
         constraitNewHabbitTextField()
-        //cancelKeyboardGestureSetup()
+        cancelKeyboardGestureSetup()
+        updateButtonStatus()
     }
     
     //MARK: - PRIVATE
@@ -82,6 +85,16 @@ final class NewCategoryViewController: UIViewController {
         self.view.addGestureRecognizer(tapGesture)
     }
     
+    private func updateButtonStatus() {
+        if newCategoryTextField.text?.count ?? 0 > 0  {
+            newCategoryButton.isEnabled = true
+            newCategoryButton.backgroundColor = .ypBlack
+        } else {
+            newCategoryButton.isEnabled = false
+            newCategoryButton.backgroundColor = .ypGray
+        }
+    }
+
     //MARK: - CONSTRAITS
     private func constraitsCategoryLabel() {
         NSLayoutConstraint.activate([
@@ -117,11 +130,14 @@ final class NewCategoryViewController: UIViewController {
     }
     //MARK: - OBJC
     @objc func textFieldDidChange(_ textField: UITextField) {
-        
+        updateButtonStatus()
     }
     
     @objc func didTapNewCategoryButton(_ sender: UIButton) {
-        
+        if let newCategoryName = newCategoryTextField.text {
+            delegate?.addNewCategory(categoryName: newCategoryName)
+        }
+        self.dismiss(animated: true)
     }
     
     @objc func hideKeyboard() {

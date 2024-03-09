@@ -38,7 +38,6 @@ final class TrackersViewModel {
         self.datePickerDate = date
         self.dataProvider = TrackerDataProvider(delegate: self)
         
-        checkMockCategory()
         reloadTrackerRecords()
         setCategoriesFromDataProvider()
     }
@@ -53,6 +52,22 @@ final class TrackersViewModel {
         self.datePickerDate = filterDate
         reloadVisibleTrackers()
     }
+    
+    func addCompleteDay(id: UUID) {
+        let trackerCompleteDAY = TrackerRecord(Id: id, date: datePickerDate)
+        if completedTrackers.contains(where: {record in record.id == trackerCompleteDAY.id && record.date.onlyDate == trackerCompleteDAY.date.onlyDate
+        }) {
+            if let index = completedTrackers.firstIndex(where: {record in record.id == trackerCompleteDAY.id && record.date.onlyDate == trackerCompleteDAY.date.onlyDate
+            }) {
+                self.dataProvider?.removeRecord(completedTrackers[index].id, date: completedTrackers[index].date)
+            }
+        }
+        else if(Date().onlyDate >= datePickerDate.onlyDate) {
+            self.dataProvider?.addNewTrackerRecord(trackerCompleteDAY.date, trackerCompleteDAY.id)
+        }
+        reloadTrackerRecords()
+    }
+    
     
     // MARK: - private func
     private func getCategoriesFromDataProvider() -> [TrackerCategory]? {
@@ -69,19 +84,14 @@ final class TrackersViewModel {
         }
     }
     
-    private func stubSetting() {
-        if visibleCategories.count == 0 {
-            stubStatus = true
-        }
-        else {
-            stubStatus = false
-        }
+    private func isStubVisible() {
+        stubStatus = visibleCategories.count == 0
     }
     
     private func reloadVisibleTrackers() {
          
          self.visibleCategories = model.reloadVisibleTrackers(categories: self.categories, datePickerDate: datePickerDate, filterText: self.filterText, completedTrackers: self.completedTrackers)
-         stubSetting()
+         isStubVisible()
      }
     
     private func reloadTrackerRecords() {
@@ -90,45 +100,12 @@ final class TrackersViewModel {
         }
         self.completedTrackers = newTrackerRecords
     }
-    
-    private func checkMockCategory() {
-        guard let category = dataProvider?.fetchTrackerCategories() else {
-            let mockCategory = TrackerCategory(title: "test", trackers: [])
-            dataProvider?.addNewTrackerCategory(mockCategory)
-            return
-        }
-        
-        if category.isEmpty {
-            let mockCategory = TrackerCategory(title: "test", trackers: [])
-            dataProvider?.addNewTrackerCategory(mockCategory)
-        }
-    }
 }
 
 // MARK: - TrackerDataProviderDelegate
 extension TrackersViewModel: TrackerDataProviderDelegate {
     func trackerStoreDidChange() {
         setCategoriesFromDataProvider()
-    }
-}
-
-// MARK: - TrackersCollectionViewCellDelegate
-extension TrackersViewModel: TrackersCollectionViewCellDelegate {
-    func addCompleteDay(id: UUID, indexPath: IndexPath) {
-        
-        let trackerCompleteDAY = TrackerRecord(Id: id, date: datePickerDate)
-        
-        if completedTrackers.contains(where: {record in record.id == trackerCompleteDAY.id && record.date.onlyDate == trackerCompleteDAY.date.onlyDate
-        }) {
-            if let index = completedTrackers.firstIndex(where: {record in record.id == trackerCompleteDAY.id && record.date.onlyDate == trackerCompleteDAY.date.onlyDate
-            }) {
-                self.dataProvider?.removeRecord(completedTrackers[index].id, date: completedTrackers[index].date)
-            }
-        }
-        else if(Date().onlyDate >= datePickerDate.onlyDate) {
-            self.dataProvider?.addNewTrackerRecord(trackerCompleteDAY.date, trackerCompleteDAY.id)
-        }
-        reloadTrackerRecords()
     }
 }
 

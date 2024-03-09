@@ -15,8 +15,7 @@ final class OnboardingPageController: UIPageViewController  {
         let first = TrackerOnboardingViewController()
         let firstPic = UIImage(named: "OnboardingBackground1")
         let firstTitle = "Отслеживайте только то, что хотите"
-        first.initialize(setBackgroundPic: firstPic ?? UIImage(), setTitle: firstTitle)
-        
+        first.initialize(setBackgroundPic: firstPic ?? UIImage(), setTitle: firstTitle)        
     
         let second = TrackerOnboardingViewController()
         let secondPic = UIImage(named: "OnboardingBackground2")
@@ -26,15 +25,13 @@ final class OnboardingPageController: UIPageViewController  {
         return [first, second]
     }()
     
-    
-    
     lazy var pageControl: UIPageControl = {
         let pageControl = UIPageControl()
         pageControl.numberOfPages = pages.count
         pageControl.currentPage = 0
         
-        pageControl.currentPageIndicatorTintColor = .ypGray
-        pageControl.pageIndicatorTintColor = .ypBlack
+        pageControl.currentPageIndicatorTintColor = .ypBlack
+        pageControl.pageIndicatorTintColor = .ypGray
         
         pageControl.translatesAutoresizingMaskIntoConstraints = false
     
@@ -90,6 +87,7 @@ final class OnboardingPageController: UIPageViewController  {
     
 //MARK: - OBJC
     @objc private func didTapOnboardingButton(_ sender: UIButton) {
+        UserSettingsStorage.shared.notNewUser()
         guard let window = UIApplication.shared.keyWindow else {
             return
         }

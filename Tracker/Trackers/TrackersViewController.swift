@@ -22,15 +22,6 @@ final class TrackersViewController: UIViewController {
         return button
     }()
     
-    private lazy var trackerLabel : UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.boldSystemFont(ofSize: 34)
-        label.text = "Трекеры"
-        view.addSubview(label)
-        return label
-    }()
-    
     private lazy var trackerDatePicker : UIDatePicker = {
         let picker = UIDatePicker()
         picker.datePickerMode = .date
@@ -49,7 +40,7 @@ final class TrackersViewController: UIViewController {
     
     private lazy var trackerSearchBar : UISearchBar = {
         let trackerSearchBar = UISearchBar()
-        trackerSearchBar.placeholder = "Поиск"
+        trackerSearchBar.placeholder = NSLocalizedString( "trackers.searchbar.placeholder", comment: "")
         trackerSearchBar.translatesAutoresizingMaskIntoConstraints = false
         trackerSearchBar.searchBarStyle = .minimal
         trackerSearchBar.delegate = self
@@ -74,8 +65,9 @@ final class TrackersViewController: UIViewController {
         trackerErrLabel.textAlignment = .center
         var paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineHeightMultiple = 1.26
-     
-        trackerErrLabel.attributedText = NSMutableAttributedString(string: "Что будем отслеживать?", attributes: [NSAttributedString.Key.paragraphStyle: paragraphStyle])
+       
+        trackerErrLabel.attributedText = NSMutableAttributedString(string:  NSLocalizedString( "trackers.null.title", comment: ""), attributes: [NSAttributedString.Key.paragraphStyle: paragraphStyle])
+        
         view.addSubview(trackerErrLabel)
         return trackerErrLabel
     }()
@@ -129,7 +121,7 @@ final class TrackersViewController: UIViewController {
     
     private func navBarItem() {
         guard let navigationBar = self.navigationController?.navigationBar else { return }
-        navigationBar.topItem?.title = "Трекеры"
+        navigationBar.topItem?.title = NSLocalizedString("trackers.title", comment: "")
         navigationBar.prefersLargeTitles = true
         navigationBar.topItem?.largeTitleDisplayMode = .always
         

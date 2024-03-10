@@ -107,7 +107,14 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         self.rectView.backgroundColor = color
         self.emojiLabel.text = emoji
         
-        self.trackersDaysCountLabel.text = "\(completeDays)" + " " + "\(daysCaption(dayNumber: completeDays))"
+        let localizedDayString = String.localizedStringWithFormat(
+            NSLocalizedString(
+                "numberOfDays",
+                comment: "Number of remaining days"),
+            completeDays
+        )
+        
+        self.trackersDaysCountLabel.text = localizedDayString
         //self.trackerCompleteButton.isEnabled = isCompleted ? false : true
         self.trackerCompleteButton.backgroundColor = rectView.backgroundColor
         let plusImage = UIImage(named: "button_add_tracker")
@@ -117,16 +124,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         self.indexPath = indexPath
     }
     
-    // MARK: - private func
-    private func daysCaption(dayNumber: Int) -> String {
-        if dayNumber == 0 {
-            return "дней"
-        } else if  dayNumber > 0 && ( dayNumber % 10 == 2 || dayNumber % 10 == 3 || dayNumber % 10 == 4){
-            return "дня"
-        } else {
-            return "дней"
-        }
-    }
+
     // MARK: - OBJC
     @objc private func didTaptrackerCompleteButton() {
         guard let id = self.uuid, let indexPath = self.indexPath else {

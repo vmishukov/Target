@@ -23,7 +23,7 @@ final class NewHabbitViewController: UIViewController {
     
     private lazy var newHabbitTitle : UILabel = {
         let titleLabel = UILabel()
-        titleLabel.text = "Новая привычка"
+        titleLabel.text = NSLocalizedString("event.title", comment: "")
         titleLabel.textColor = UIColor(hex: "1A1B22")
         titleLabel.font = .systemFont(ofSize: 16, weight: .medium)
         view.addSubview(titleLabel)
@@ -63,7 +63,7 @@ final class NewHabbitViewController: UIViewController {
        
         NewHabbitTextField.layer.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 0.3).cgColor
         NewHabbitTextField.translatesAutoresizingMaskIntoConstraints = false
-        NewHabbitTextField.placeholder = "Введите название трекера"
+        NewHabbitTextField.placeholder = NSLocalizedString("event.placeholder", comment: "")
         NewHabbitTextField.layer.cornerRadius = 16
         NewHabbitTextField.clearButtonMode = .always
         NewHabbitTextField.addTarget(self, action: #selector(textFieldDidChange(_:)),
@@ -77,7 +77,7 @@ final class NewHabbitViewController: UIViewController {
     
     private lazy var newHabbitErrLabel : UILabel = {
         let errLabel = UILabel()
-        errLabel.text = "Ограничение 38 символов"
+        errLabel.text = NSLocalizedString("placeholder.restrict.label", comment: "")
         errLabel.font = .systemFont(ofSize: 17)
         errLabel.textColor = .ypRed
         errLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -106,7 +106,7 @@ final class NewHabbitViewController: UIViewController {
     
     private lazy var newHabbittCancelButton: UIButton = {
         let cancelButton = UIButton(type: .system)
-        cancelButton.setTitle("Отменить", for: .normal)
+        cancelButton.setTitle(NSLocalizedString("cancel.button", comment: ""), for: .normal)
         cancelButton.backgroundColor = .ypWhite
         cancelButton.tintColor = .ypRed
         cancelButton.layer.borderWidth = 1
@@ -123,7 +123,7 @@ final class NewHabbitViewController: UIViewController {
     
     private lazy var newHabbitCreateButton: UIButton = {
         let createButton = UIButton(type: .system)
-        createButton.setTitle("Создать", for: .normal)
+        createButton.setTitle(NSLocalizedString("create.button", comment: ""), for: .normal)
         createButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         createButton.backgroundColor = .ypGray
         createButton.tintColor = .ypWhite
@@ -374,7 +374,7 @@ extension NewHabbitViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: SettingCollectionHeader.identifier, for: indexPath) as! SettingCollectionHeader
-        indexPath.section == 0 ? view.settingHeaderSetup(titleText: "Emoji") :  view.settingHeaderSetup(titleText: "Цвет")
+        indexPath.section == 0 ? view.settingHeaderSetup(titleText: NSLocalizedString("emoji.customization.label", comment: "")) :  view.settingHeaderSetup(titleText: NSLocalizedString("color.customization.label", comment: ""))
         return view
     }
 }
@@ -414,9 +414,9 @@ extension NewHabbitViewController: UITableViewDataSource {
         }
         switch indexPath.row {
         case 0 :
-            cell.textLabel?.text = "Категория"
+            cell.textLabel?.text = NSLocalizedString("category.customization", comment: "")
         case 1 :
-            cell.textLabel?.text = "Расписание"
+            cell.textLabel?.text = NSLocalizedString("schedule.customization", comment: "")
         default:
             ""
         }

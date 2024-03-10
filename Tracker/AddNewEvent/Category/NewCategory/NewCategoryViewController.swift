@@ -13,7 +13,7 @@ final class NewCategoryViewController: UIViewController {
 //MARK: - UI
     private lazy var NewCategoryLabel : UILabel = {
         let label = UILabel()
-        label.text = "Новая категория"
+        label.text = NSLocalizedString("new.category.label", comment: "")
         label.textColor = .ypBlack
         label.font = .systemFont(ofSize: 16, weight: .medium)
         view.addSubview(label)
@@ -29,7 +29,7 @@ final class NewCategoryViewController: UIViewController {
         
         newCategoryTextField.layer.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 0.3).cgColor
         newCategoryTextField.translatesAutoresizingMaskIntoConstraints = false
-        newCategoryTextField.placeholder = "Введите название категории"
+        newCategoryTextField.placeholder = NSLocalizedString("new.category.placeholder", comment: "")
         newCategoryTextField.layer.cornerRadius = 16
         newCategoryTextField.clearButtonMode = .always
         newCategoryTextField.addTarget(self, action: #selector(textFieldDidChange(_:)),
@@ -42,7 +42,7 @@ final class NewCategoryViewController: UIViewController {
     
     private lazy var newCategoryErrLabel : UILabel = {
         let errLabel = UILabel()
-        errLabel.text = "Ограничение 38 символов"
+        errLabel.text = NSLocalizedString("placeholder.restrict.label", comment: "")
         errLabel.font = .systemFont(ofSize: 17)
         errLabel.textColor = .ypRed
         errLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -54,7 +54,7 @@ final class NewCategoryViewController: UIViewController {
     private lazy var newCategoryButton: UIButton = {
         let button = UIButton(type: .system) as UIButton
         button.backgroundColor = .ypBlack
-        button.setTitle("Добавить категорию", for: .normal)
+        button.setTitle(NSLocalizedString("new.category.button", comment: ""), for: .normal)
         button.setTitleColor(UIColor(hex: "FFFFFF"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = 16

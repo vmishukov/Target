@@ -12,7 +12,7 @@ final class CategoryViewController: UIViewController{
     //MARK: - UI ELEMENTS
     private lazy var categoryLabel : UILabel = {
         let label = UILabel()
-        label.text = "Категория"
+        label.text = NSLocalizedString("category.label", comment: "")
         label.textColor = .ypBlack
         label.font = .systemFont(ofSize: 16, weight: .medium)
         view.addSubview(label)
@@ -38,7 +38,7 @@ final class CategoryViewController: UIViewController{
         paragraphStyle.lineHeightMultiple = 1.26
         paragraphStyle.alignment = .center
         label.numberOfLines = 2
-        label.attributedText = NSMutableAttributedString(string: "Привычки и события можно \n объединить по смыслу", attributes: [NSAttributedString.Key.paragraphStyle: paragraphStyle])
+        label.attributedText = NSMutableAttributedString(string: NSLocalizedString("category.null.title", comment: ""), attributes: [NSAttributedString.Key.paragraphStyle: paragraphStyle])
         view.addSubview(label)
         return label
     }()
@@ -46,7 +46,7 @@ final class CategoryViewController: UIViewController{
     private lazy var categoryButton: UIButton = {
         let button = UIButton(type: .system) as UIButton
         button.backgroundColor = .ypBlack
-        button.setTitle("Добавить категорию", for: .normal)
+        button.setTitle(NSLocalizedString("category.add.button", comment: ""), for: .normal)
         button.setTitleColor(UIColor(hex: "FFFFFF"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = 16

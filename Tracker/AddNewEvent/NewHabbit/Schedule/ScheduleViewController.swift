@@ -13,7 +13,7 @@ final class ScheduleViewController : UIViewController {
     // MARK: - UI ELEMENTS
     private lazy var scheduleTitle: UILabel = {
         let scheduleTitle = UILabel()
-        scheduleTitle.text = "Расписание"
+        scheduleTitle.text = NSLocalizedString("schedule.setting.title", comment: "")
         scheduleTitle.textColor = .ypBlack
         scheduleTitle.font = .systemFont(ofSize: 16, weight: .medium)
         
@@ -26,7 +26,7 @@ final class ScheduleViewController : UIViewController {
     private lazy var doneButton: UIButton = {
         let doneButton = UIButton(type: .system) as UIButton
         doneButton.backgroundColor = .ypBlack
-        doneButton.setTitle("Готово", for: .normal)
+        doneButton.setTitle(NSLocalizedString("schedule.done.button", comment: ""), for: .normal)
         doneButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         doneButton.setTitleColor(.ypWhite, for: .normal)
         doneButton.translatesAutoresizingMaskIntoConstraints = false

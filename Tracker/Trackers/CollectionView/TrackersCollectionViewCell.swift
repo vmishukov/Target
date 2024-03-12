@@ -26,7 +26,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         return emojiLabel
     }()
     
-   private lazy var rectView : UIView = {
+    lazy var rectView : UIView = {
         let rectView = UIView()
         rectView.translatesAutoresizingMaskIntoConstraints = false
         rectView.backgroundColor = .ypColorSelection6

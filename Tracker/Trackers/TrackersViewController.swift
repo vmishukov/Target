@@ -199,6 +199,49 @@ final class TrackersViewController: UIViewController {
 // MARK: - UICollectionViewDelegate
 extension TrackersViewController: UICollectionViewDelegate {
     
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        configureContextMenu()
+     }
+    
+    func configureContextMenu() -> UIContextMenuConfiguration{
+        let context = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { (action) -> UIMenu? in
+            
+            let pin = UIAction(title: NSLocalizedString( "trackers.tracker.pin", comment: "") ) { (_) in
+                print("edit button clicked")
+                
+            }
+            
+            let edit = UIAction(title: NSLocalizedString( "trackers.tracker.edit", comment: "") ) { (_) in
+                print("edit button clicked")
+                
+            }
+
+            
+            let delete = UIAction(title: NSLocalizedString( "trackers.tracker.delete", comment: ""),attributes: .destructive) { (_) in
+                print("delete button clicked")
+                //add tasks...
+            }
+            
+            return UIMenu( children: [pin,edit,delete])
+        }
+        return context
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
+        guard let indexPath = configuration.identifier as? IndexPath else {
+            print(configuration.identifier)
+            print(configuration.identifier as? IndexPath )
+            return nil}
+        
+        guard let cell = collectionView.cellForItem(at: indexPath) as? TrackersCollectionViewCell else {
+            return nil
+        }
+        
+        let previewView = cell.emojiLabel
+        let targetedPreview = UITargetedPreview(view: previewView)
+        return targetedPreview
+    }
+    
 }
 // MARK: - UICollectionViewDelegateFlowLayout
 extension TrackersViewController: UICollectionViewDelegateFlowLayout {

@@ -12,6 +12,10 @@
 "trackers.title" = "Trackers";
 "trackers.null.title" = "What will we track?";
 "trackers.searchbar.placeholder" = "Search";
+"trackers.tracker.pin" = "Pin";
+"trackers.tracker.edit" = "Edit";
+"trackers.tracker.delete" = "Delete";
+
 
 "add.trackers.label" = "Create Tracker";
 "add.trackers.habbit.button" = "Habbit";

@@ -12,6 +12,10 @@
 "trackers.title" = "Трекеры";
 "trackers.null.title" = "Что будем отслеживать?";
 "trackers.searchbar.placeholder" = "Поиск";
+"trackers.tracker.pin" = "Закрепить";
+"trackers.tracker.edit" = "Редактировать";
+"trackers.tracker.delete" = "Удалить";
+
 
 "add.trackers.label" = "Создание трекера";
 "add.trackers.habbit.button" = "Привычка";

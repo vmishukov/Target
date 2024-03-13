@@ -10,12 +10,9 @@ import Foundation
 
 final class EditHabbitViewController: UIViewController {
     // MARK: - public variable
-    var schedule: [Weekday]?
+    var trackerId: UUID?
     // MARK: - private
-    private let emojiArray = Constants.emojiArray
-    private let sectionColors = Constants.sectionColors
-    private var selectedEmoji: String?
-    private var selectedColor: UIColor?
+    private var viewModel: EditHabbitViewModelProtocol?
     //MARK: - UI
     private let editHabbitCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     
@@ -74,7 +71,9 @@ final class EditHabbitViewController: UIViewController {
         let paddingViewLeft: UIView = UIView.init(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
         editHabbitTextField.leftView = paddingViewLeft
         editHabbitTextField.leftViewMode = .always
-       
+        if let title = viewModel?.selectedTitle {
+            editHabbitTextField.text = title
+        }
         editHabbitTextField.layer.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 0.3).cgColor
         editHabbitTextField.translatesAutoresizingMaskIntoConstraints = false
         editHabbitTextField.placeholder = NSLocalizedString("event.placeholder", comment: "")
@@ -167,6 +166,9 @@ final class EditHabbitViewController: UIViewController {
 //MARK: - LIFECYCLE
     override func viewDidLoad() {
         view.backgroundColor = .ypWhite
+        
+        viewModel = EditHabbitViewModel(trackerId: trackerId!)
+        
         constraiteditHabbitTitle()
         constraitEditHabbitDaysCountLabel()
         constraiteditHabbitScrollView()
@@ -196,7 +198,7 @@ final class EditHabbitViewController: UIViewController {
             containerView.widthAnchor.constraint(equalTo: editHabbitScrollView.widthAnchor),
             containerView.trailingAnchor.constraint(equalTo: editHabbitScrollView.trailingAnchor),
             containerView.bottomAnchor.constraint(equalTo: editHabbitScrollView.bottomAnchor),
-            containerView.heightAnchor.constraint(equalTo: editHabbitScrollView.heightAnchor,constant: 170)
+            containerView.heightAnchor.constraint(equalTo: editHabbitScrollView.heightAnchor,constant: 250)
         ])
     }
     private func constraiteditHabbitScrollView() {
@@ -269,9 +271,8 @@ final class EditHabbitViewController: UIViewController {
     private func updateButtonStatus() {
         
         let indexPath = IndexPath(row: 0, section: 0)
-        let cell = editHabbitSettingsTableView.cellForRow(at: indexPath)
         
-        if editHabbitTextField.text?.count ?? 0 > 0 && schedule?.count ?? 0 > 0 && selectedColor != nil && selectedEmoji != nil && cell?.detailTextLabel?.text != nil {
+        if editHabbitTextField.text?.count ?? 0 > 0 && viewModel?.schedule?.count ?? 0 > 0 && viewModel?.selectedColor != nil && viewModel?.selectedEmoji != nil && viewModel?.categoryName != nil {
             editHabbitCreateButton.isEnabled = true
             editHabbitCreateButton.backgroundColor = .ypBlack
         } else {
@@ -308,7 +309,8 @@ final class EditHabbitViewController: UIViewController {
     }
     
     @objc func createButtonClicked() {
-        // le code
+        viewModel?.edtiTracker()
+        self.dismiss(animated: true)
     }
     @objc func textFieldDidChange(_ textField: UITextField) {
         updateButtonStatus()
@@ -323,22 +325,23 @@ extension EditHabbitViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.section == 0 {
-            self.selectedEmoji = emojiArray[indexPath.row]
+            let emoji = viewModel?.emojiArray[indexPath.row]
+            viewModel?.selectedEmoji = emoji
         } else {
-            self.selectedColor = sectionColors[indexPath.row]
+            let color = viewModel?.sectionColors[indexPath.row]
+            viewModel?.selectedColor = color
         }
         updateButtonStatus()
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         if indexPath.section == 0 {
-            self.selectedEmoji = nil
+            viewModel?.selectedEmoji = nil
         } else {
-            self.selectedColor = nil
+            viewModel?.selectedColor = nil
         }
         updateButtonStatus()
     }
-    
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
@@ -368,18 +371,30 @@ extension EditHabbitViewController: UICollectionViewDelegateFlowLayout {
 // MARK: - UICollectionViewDataSource
 extension EditHabbitViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let numberOfItemsInSection = section == 0 ? emojiArray.count : sectionColors.count
+        let numberOfItemsInSection = section == 0 ? viewModel?.emojiArray.count ?? 0 : viewModel?.sectionColors.count ?? 0
         return numberOfItemsInSection
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.section == 0 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SettingEmojiCell.cellIdentifier, for: indexPath) as? SettingEmojiCell else {return UICollectionViewCell()}
-            cell.settingEmojiCell(emoji: emojiArray[indexPath.row])
+            
+            if let emoji = viewModel?.emojiArray[indexPath.row] {
+                if emoji == viewModel?.selectedEmoji {
+                    collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
+                }
+                cell.settingEmojiCell(emoji: emoji)
+                return cell
+            }
             return cell
         } else {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SettingColorCell.cellIdentifier, for: indexPath) as? SettingColorCell else {return UICollectionViewCell()}
-            cell.settingColorCell(color: sectionColors[indexPath.row])
+            if let color = viewModel?.sectionColors[indexPath.row] {
+                if color == viewModel?.selectedColor {
+                    collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
+                }
+                cell.settingColorCell(color: color)
+            }
             return cell
         }
     }
@@ -404,8 +419,22 @@ extension EditHabbitViewController: UITableViewDataSource {
         switch indexPath.row {
         case 0 :
             cell.textLabel?.text = NSLocalizedString("category.customization", comment: "")
+            if let categoryName = viewModel?.categoryName {
+                cell.detailTextLabel?.text = categoryName
+            }
         case 1 :
             cell.textLabel?.text = NSLocalizedString("schedule.customization", comment: "")
+            var text: String = ""
+            if let schedule = viewModel?.schedule {
+                for (idx, element) in schedule.enumerated() {
+                    if idx == schedule.endIndex-1 {
+                        text += element.shortDayName
+                    } else {
+                        text += element.shortDayName + ", "
+                    }
+                }
+            }
+            cell.detailTextLabel?.text = text
         default:
             ""
         }
@@ -428,7 +457,7 @@ extension EditHabbitViewController: UITableViewDelegate {
         case 1 :
             let view = ScheduleViewController()
             view.delegate = self
-            view.selectedDays = self.schedule
+            view.selectedDays = self.viewModel?.schedule
             present(view,animated: true)
             tableView.deselectRow(at: indexPath, animated: true)
         default:
@@ -460,7 +489,7 @@ extension EditHabbitViewController: UITextFieldDelegate {
 // MARK: - ScheduleViewControllerDelegate
 extension EditHabbitViewController: ScheduleViewControllerDelegate {
     func getSelectedDays(schedule: [Weekday]) {
-        self.schedule = schedule
+        self.viewModel?.schedule = schedule
         let indexPath = IndexPath(row: 1, section: 0)
         let cell = editHabbitSettingsTableView.cellForRow(at: indexPath)
         

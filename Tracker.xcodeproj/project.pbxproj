@@ -29,6 +29,8 @@
 		913001022BA0B686004C371A /* EditHabbitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913001012BA0B686004C371A /* EditHabbitViewController.swift */; };
 		913001052BA1DC39004C371A /* TrackerStoreDataProviderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913001042BA1DC39004C371A /* TrackerStoreDataProviderProtocol.swift */; };
 		913001072BA1DC54004C371A /* TrackerStoreProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913001062BA1DC54004C371A /* TrackerStoreProtocol.swift */; };
+		913001092BA1E75E004C371A /* EditHabbitViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913001082BA1E75E004C371A /* EditHabbitViewModel.swift */; };
+		9130010B2BA1E776004C371A /* EditHabbitViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9130010A2BA1E776004C371A /* EditHabbitViewModelProtocol.swift */; };
 		9141EB682B787B0000777A62 /* SettingCollectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9141EB672B787B0000777A62 /* SettingCollectionHeader.swift */; };
 		9141EB6A2B78947400777A62 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9141EB692B78947400777A62 /* Constants.swift */; };
 		9141EB972B7CF13100777A62 /* TrackerDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9141EB952B7CF13100777A62 /* TrackerDataModel.xcdatamodeld */; };
@@ -94,6 +96,8 @@
 		913001012BA0B686004C371A /* EditHabbitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditHabbitViewController.swift; sourceTree = "<group>"; };
 		913001042BA1DC39004C371A /* TrackerStoreDataProviderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStoreDataProviderProtocol.swift; sourceTree = "<group>"; };
 		913001062BA1DC54004C371A /* TrackerStoreProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStoreProtocol.swift; sourceTree = "<group>"; };
+		913001082BA1E75E004C371A /* EditHabbitViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditHabbitViewModel.swift; sourceTree = "<group>"; };
+		9130010A2BA1E776004C371A /* EditHabbitViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditHabbitViewModelProtocol.swift; sourceTree = "<group>"; };
 		9141EB672B787B0000777A62 /* SettingCollectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCollectionHeader.swift; sourceTree = "<group>"; };
 		9141EB692B78947400777A62 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		9141EB962B7CF13100777A62 /* TrackerDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TrackerDataModel.xcdatamodel; sourceTree = "<group>"; };
@@ -228,6 +232,8 @@
 			isa = PBXGroup;
 			children = (
 				913001012BA0B686004C371A /* EditHabbitViewController.swift */,
+				913001082BA1E75E004C371A /* EditHabbitViewModel.swift */,
+				9130010A2BA1E776004C371A /* EditHabbitViewModelProtocol.swift */,
 			);
 			path = EditHabbit;
 			sourceTree = "<group>";
@@ -491,6 +497,7 @@
 				914A86F52B779F8700F2523B /* SettingColorCell.swift in Sources */,
 				9150508E2B550639001E9DF1 /* UIView+Extensions.swift in Sources */,
 				915050F62B63AEC1001E9DF1 /* ScheduleViewController.swift in Sources */,
+				9130010B2BA1E776004C371A /* EditHabbitViewModelProtocol.swift in Sources */,
 				912083172B80F15C000263D9 /* TrackerCategoryStore.swift in Sources */,
 				91056BF32B9C5031002C0CEF /* CategoryViewModelProtocol.swift in Sources */,
 				91E91FAE2B8B24FC00FCC0D9 /* TrackerDataProvider.swift in Sources */,
@@ -514,6 +521,7 @@
 				915050EA2B60D08B001E9DF1 /* TrackersCollectionHeader.swift in Sources */,
 				91056BDE2B9ABFEB002C0CEF /* TrackersViewModel.swift in Sources */,
 				91056BB62B94A6B8002C0CEF /* TrackerOnboardingPageController.swift in Sources */,
+				913001092BA1E75E004C371A /* EditHabbitViewModel.swift in Sources */,
 				913001052BA1DC39004C371A /* TrackerStoreDataProviderProtocol.swift in Sources */,
 				913001022BA0B686004C371A /* EditHabbitViewController.swift in Sources */,
 				91056BF12B9C4EEE002C0CEF /* TrackerCategoryStoreProtocol.swift in Sources */,

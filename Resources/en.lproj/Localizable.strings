@@ -64,7 +64,7 @@
 "weekday.saturday" = "Saturday";
 "weekday.sunday" = "Sunday";
 
-"weekday.sunday.short" = "Mon";
+"weekday.monday.short" = "Mon";
 "weekday.tuesday.short" = "Tue";
 "weekday.wednesday.short" = "Wed";
 "weekday.thursday.short" = "Thu";

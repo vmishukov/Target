@@ -213,6 +213,11 @@ extension TrackersViewController: UICollectionViewDelegate {
             
             let edit = UIAction(title: NSLocalizedString( "trackers.context.edit", comment: "") ) { (_) in
                 let view = EditHabbitViewController()
+                guard let cell = self.collectionView.cellForItem(at: indexPath) as? TrackersCollectionViewCell else {
+                    return
+                }
+                guard let uuid = cell.getUiid() else { return }
+                view.trackerId = uuid
                 self.present(view,animated: true)
             }
 

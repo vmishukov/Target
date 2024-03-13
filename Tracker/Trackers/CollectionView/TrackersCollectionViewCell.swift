@@ -95,6 +95,9 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: - public func
+    public func getUiid() -> UUID? {
+        return self.uuid
+    }
     public func cellSetting(uuid: UUID,
                             caption: String,
                             color: UIColor,

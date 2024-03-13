@@ -75,7 +75,7 @@ extension TrackerStore: TrackerStoreDataProviderProtocol {
     
     func edtiTracker(_ tracker: Tracker, categoryName: String) throws {
         let fetchTrackersCoreData = TrackerCoreData.fetchRequest()
-        fetchTrackersCoreData.predicate = NSPredicate(format: "id == %@",
+        fetchTrackersCoreData.predicate = NSPredicate(format: "tracker_id == %@",
                                                       tracker.id as CVarArg)
         guard let trackerCD = try? context.fetch(fetchTrackersCoreData).first else { return }
         
@@ -91,12 +91,13 @@ extension TrackerStore: TrackerStoreDataProviderProtocol {
         trackerCD.schedule = tracker.schedule as NSObject
         trackerCD.title = tracker.title
         trackerCD.isHabbit = tracker.isHabbit
+        
         try context.save()
     }
     
     func fetchTrackersCategoryName(uuid: UUID) throws -> String? {
         let fetchTrackersCoreData = TrackerCoreData.fetchRequest()
-        fetchTrackersCoreData.predicate = NSPredicate(format: "id == %@", uuid as CVarArg)
+        fetchTrackersCoreData.predicate = NSPredicate(format: "tracker_id == %@", uuid as CVarArg)
         guard let tracker = try? context.fetch(fetchTrackersCoreData).first else { return nil}
         return tracker.category?.title
     }
@@ -104,7 +105,7 @@ extension TrackerStore: TrackerStoreDataProviderProtocol {
     func fetchTracker(uuid: UUID) throws -> Tracker? {
         let fetchTrackersCoreData = TrackerCoreData.fetchRequest()
         
-        fetchTrackersCoreData.predicate = NSPredicate(format: "id == %@", uuid as CVarArg)
+        fetchTrackersCoreData.predicate = NSPredicate(format: "tracker_id == %@", uuid as CVarArg)
         
         guard let trackerCD = try? context.fetch(fetchTrackersCoreData).first else { return nil}
         

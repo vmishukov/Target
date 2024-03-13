@@ -12,10 +12,13 @@
 "trackers.title" = "Trackers";
 "trackers.null.title" = "What will we track?";
 "trackers.searchbar.placeholder" = "Search";
-"trackers.tracker.pin" = "Pin";
-"trackers.tracker.edit" = "Edit";
-"trackers.tracker.delete" = "Delete";
+"trackers.context.pin" = "Pin";
+"trackers.context.edit" = "Edit";
+"trackers.context.delete" = "Delete";
 
+"trackers.context.delete.alert.title" = "Are you sure you want to delete the tracker?";
+"trackers.context.delete.alert.delete" = "Delete";
+"trackers.context.delete.alert.cancel" = "Cancel";
 
 "add.trackers.label" = "Create Tracker";
 "add.trackers.habbit.button" = "Habbit";
@@ -43,6 +46,8 @@
 
 "event.title" = "New habbit";
 "event.placeholder" = "Enter tracker name";
+
+"edit.habbit.title" = "Edit tracker";
 
 "schedule.setting.title" = "Schedule";
 "schedule.done.button" = "Done";

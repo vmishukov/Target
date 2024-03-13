@@ -200,30 +200,40 @@ final class TrackersViewController: UIViewController {
 extension TrackersViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-        configureContextMenu()
+        configureContextMenu(indexPath: indexPath)
      }
     
-    func configureContextMenu() -> UIContextMenuConfiguration{
-        let context = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { (action) -> UIMenu? in
+    func configureContextMenu(indexPath: IndexPath) -> UIContextMenuConfiguration{
+        let context = UIContextMenuConfiguration(identifier: indexPath as NSCopying, previewProvider: nil) { (action) -> UIMenu? in
             
-            let pin = UIAction(title: NSLocalizedString( "trackers.tracker.pin", comment: "") ) { (_) in
+            let pin = UIAction(title: NSLocalizedString( "trackers.context.pin", comment: "") ) { (_) in
                 print("edit button clicked")
                 
             }
             
-            let edit = UIAction(title: NSLocalizedString( "trackers.tracker.edit", comment: "") ) { (_) in
-                print("edit button clicked")
-                
+            let edit = UIAction(title: NSLocalizedString( "trackers.context.edit", comment: "") ) { (_) in
+                let view = EditHabbitViewController()
+                self.present(view,animated: true)
             }
 
-            
-            let delete = UIAction(title: NSLocalizedString( "trackers.tracker.delete", comment: ""),attributes: .destructive) { (_) in
-                print("delete button clicked")
-                //add tasks...
+            let deleteAction = UIAction(title: NSLocalizedString("trackers.context.delete.alert.delete", comment: ""), attributes: .destructive) { _ in
+                
+                let deleteAction = UIAlertAction(title: NSLocalizedString("trackers.context.delete.alert.delete", comment: ""), style: .destructive) { _ in
+                //код удаления
+                }
+                
+                let cancelAction = UIAlertAction(title: NSLocalizedString("trackers.context.delete.alert.cancel", comment: ""), style: .cancel)
+                
+                let alert = UIAlertController(title: NSLocalizedString("trackers.context.delete.alert.title", comment: ""), message: nil, preferredStyle: .actionSheet)
+                
+                alert.addAction(deleteAction)
+                alert.addAction(cancelAction)
+                self.present(alert, animated: true)
             }
-            
-            return UIMenu( children: [pin,edit,delete])
+
+            return UIMenu( children: [pin,edit, deleteAction])
         }
+        
         return context
     }
     
@@ -237,7 +247,7 @@ extension TrackersViewController: UICollectionViewDelegate {
             return nil
         }
         
-        let previewView = cell.emojiLabel
+        let previewView = cell.rectView
         let targetedPreview = UITargetedPreview(view: previewView)
         return targetedPreview
     }

@@ -12,10 +12,13 @@
 "trackers.title" = "Трекеры";
 "trackers.null.title" = "Что будем отслеживать?";
 "trackers.searchbar.placeholder" = "Поиск";
-"trackers.tracker.pin" = "Закрепить";
-"trackers.tracker.edit" = "Редактировать";
-"trackers.tracker.delete" = "Удалить";
+"trackers.context.pin" = "Закрепить";
+"trackers.context.edit" = "Редактировать";
+"trackers.context.delete" = "Удалить";
 
+"trackers.context.delete.alert.title" = "Вы уверены что хотите удалить трекер?";
+"trackers.context.delete.alert.delete" = "Удалить";
+"trackers.context.delete.alert.cancel" = "Отменить";
 
 "add.trackers.label" = "Создание трекера";
 "add.trackers.habbit.button" = "Привычка";
@@ -43,6 +46,8 @@
 
 "event.title" = "Новая привычка";
 "event.placeholder" = "Введите название трекера";
+
+"edit.habbit.title" = "Редактирование привычки";
 
 "schedule.setting.title" = "Расписание";
 "schedule.done.button" = "Готово";

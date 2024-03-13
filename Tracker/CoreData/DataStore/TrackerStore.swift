@@ -10,7 +10,7 @@ import CoreData
 import UIKit
 
 
-final class TrackerStore {
+final class TrackerStore: TrackerStoreProtocol {
     private let context: NSManagedObjectContext
     // MARK: - INIT
     convenience init() {
@@ -69,4 +69,50 @@ final class TrackerStore {
             assertionFailure("\(error)")
         }
     }
+}
+//MARK: -
+extension TrackerStore: TrackerStoreDataProviderProtocol {
+    
+    func edtiTracker(_ tracker: Tracker, categoryName: String) throws {
+        let fetchTrackersCoreData = TrackerCoreData.fetchRequest()
+        fetchTrackersCoreData.predicate = NSPredicate(format: "id == %@",
+                                                      tracker.id as CVarArg)
+        guard let trackerCD = try? context.fetch(fetchTrackersCoreData).first else { return }
+        
+        let fetchCategoriesCoreData = TrackerCategoryCoreData.fetchRequest()
+        fetchCategoriesCoreData.predicate = NSPredicate(format: "title == %@",
+                                                        categoryName )
+        
+        guard let categoryCD = try? context.fetch(fetchCategoriesCoreData).first else { return }
+        
+        trackerCD.category = categoryCD
+        trackerCD.emoji = tracker.emoji
+        trackerCD.color = tracker.color
+        trackerCD.schedule = tracker.schedule as NSObject
+        trackerCD.title = tracker.title
+        trackerCD.isHabbit = tracker.isHabbit
+        try context.save()
+    }
+    
+    func fetchTrackersCategoryName(uuid: UUID) throws -> String? {
+        let fetchTrackersCoreData = TrackerCoreData.fetchRequest()
+        fetchTrackersCoreData.predicate = NSPredicate(format: "id == %@", uuid as CVarArg)
+        guard let tracker = try? context.fetch(fetchTrackersCoreData).first else { return nil}
+        return tracker.category?.title
+    }
+    
+    func fetchTracker(uuid: UUID) throws -> Tracker? {
+        let fetchTrackersCoreData = TrackerCoreData.fetchRequest()
+        
+        fetchTrackersCoreData.predicate = NSPredicate(format: "id == %@", uuid as CVarArg)
+        
+        guard let trackerCD = try? context.fetch(fetchTrackersCoreData).first else { return nil}
+        
+        guard let id = trackerCD.tracker_id, let title = trackerCD.title, let color = trackerCD.color as? UIColor, let emoji = trackerCD.emoji, let schedule = trackerCD.schedule as? [Weekday] else { return nil}
+        
+        let tracker = Tracker(id: id, title: title, color: color, emoji: emoji, isHabbit: trackerCD.isHabbit, schedule: schedule)
+        return tracker
+        
+    }
+    
 }

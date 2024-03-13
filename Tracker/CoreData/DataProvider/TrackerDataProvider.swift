@@ -18,7 +18,7 @@ final class TrackerDataProvider: NSObject {
     //MARK: - DELEGATE
     weak var delegate: TrackerDataProviderDelegate?
     //MARK: - STORES
-    private let trackerStore: TrackerStore?
+    private let trackerStore: TrackerStoreProtocol?
     private let trackerCategoryStore: TrackerCategoryStoreProtocol?
     private let trackerRecordStore: TrackerRecordStore?
     //MARK: - PRIVATE

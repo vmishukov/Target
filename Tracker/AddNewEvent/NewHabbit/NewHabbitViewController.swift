@@ -290,7 +290,7 @@ final class NewHabbitViewController: UIViewController {
         
         guard let categoryTitle = cell?.detailTextLabel?.text , let caption = newHabbitTextField.text, let schedule = self.schedule, let selectedColor = self.selectedColor, let selectedEmoji = self.selectedEmoji  else { return }
 
-        let tracker = Tracker(id: UUID(), title: caption, color: selectedColor, emoji: selectedEmoji, isHabbit: true, schedule: schedule)
+        let tracker = Tracker(id: UUID(), title: caption, color: selectedColor, emoji: selectedEmoji, isHabbit: true, isPinned: false, schedule: schedule)
         
         self.addTrackerDelegate?.addNewTracker(tracker: tracker, categoryTitle: categoryTitle)
         self.view.window?.rootViewController?.dismiss(animated: true)

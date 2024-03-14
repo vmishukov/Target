@@ -18,5 +18,6 @@ protocol TrackerDataProviderProtocol {
     func addNewTrackerRecord(_ date: Date, _ trackerUUID: UUID)
     func removeRecord(_ trackerId: UUID, date: Date)
     func fetchTrackerRecord() -> [TrackerRecord]?
+    func changePinStatus(trackerId: UUID)
     
 }

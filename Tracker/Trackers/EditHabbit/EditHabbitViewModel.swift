@@ -27,7 +27,7 @@ final class EditHabbitViewModel: EditHabbitViewModelProtocol {
     private var dataProvider: TrackerStoreDataProviderProtocol?
     private var isHabbit: Bool = true
     private let trackerId: UUID
-   
+    private var isPinned: Bool = false
     
     init(trackerId: UUID) {
         self.trackerId = trackerId
@@ -39,7 +39,7 @@ final class EditHabbitViewModel: EditHabbitViewModelProtocol {
     func edtiTracker() {
         guard  let title = selectedTitle, let color = selectedColor, let emoji = selectedEmoji, let schedule = schedule, let categoryName = categoryName else { return }
         
-        let tracker = Tracker(id: trackerId, title: title, color: color, emoji: emoji, isHabbit: isHabbit, schedule: schedule)
+        let tracker = Tracker(id: trackerId, title: title, color: color, emoji: emoji, isHabbit: isHabbit, isPinned: isPinned, schedule: schedule)
         do {
             try dataProvider?.edtiTracker(tracker, categoryName: categoryName)
         }
@@ -57,6 +57,7 @@ final class EditHabbitViewModel: EditHabbitViewModelProtocol {
             selectedEmoji = tracker?.emoji
             selectedColor = tracker?.color
             selectedTitle = tracker?.title
+            isPinned = ((tracker?.isPinned) != nil)
             schedule = tracker?.schedule
             isHabbit = ((tracker?.isHabbit) != nil)
             let categoryName = try dataProvider?.fetchTrackersCategoryName(uuid: trackerId)

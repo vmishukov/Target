@@ -205,17 +205,23 @@ extension TrackersViewController: UICollectionViewDelegate {
     
     func configureContextMenu(indexPath: IndexPath) -> UIContextMenuConfiguration{
         let context = UIContextMenuConfiguration(identifier: indexPath as NSCopying, previewProvider: nil) { (action) -> UIMenu? in
-            
-            let pin = UIAction(title: NSLocalizedString( "trackers.context.pin", comment: "") ) { (_) in
-                print("edit button clicked")
-                
+            guard let cell = self.collectionView.cellForItem(at: indexPath) as? TrackersCollectionViewCell else {
+                return nil
+            }
+            var pinTitle: String = ""
+            if cell.getPinnedStatus() {
+                pinTitle =  NSLocalizedString( "trackers.context.unpin", comment: "")
+            } else {
+                pinTitle =  NSLocalizedString( "trackers.context.pin", comment: "")
+            }
+            let pin = UIAction(title: pinTitle ) { (_) in
+                guard let uuid = cell.getUiid() else { return }
+                self.viewModel.changePinStatus(trackerId: uuid)
             }
             
             let edit = UIAction(title: NSLocalizedString( "trackers.context.edit", comment: "") ) { (_) in
                 let view = EditHabbitViewController()
-                guard let cell = self.collectionView.cellForItem(at: indexPath) as? TrackersCollectionViewCell else {
-                    return
-                }
+            
                 guard let uuid = cell.getUiid(), let completeDays = cell.getDaysCount() else { return }
                 view.trackerId = uuid
                 view.completeDays = completeDays
@@ -300,14 +306,15 @@ extension TrackersViewController: UICollectionViewDataSource {
         
         let isCompleted = viewModel.completedTrackers.contains { record in
             record.id == tracker.id && record.date.onlyDate == trackerDatePicker.date.onlyDate }
-   
+        
         cell.cellSetting(uuid: tracker.id,
-                          caption: tracker.title,
-                          color: tracker.color,
-                          emoji: tracker.emoji,
-                          completeDays: completeDays,
-                          isCompleted: isCompleted,
-                          indexPath: indexPath)
+                         caption: tracker.title,
+                         color: tracker.color,
+                         emoji: tracker.emoji,
+                         completeDays: completeDays,
+                         isCompleted: isCompleted,
+                         isPinned: tracker.isPinned,
+                         indexPath: indexPath)
         cell.delegate = self
         return cell
     }

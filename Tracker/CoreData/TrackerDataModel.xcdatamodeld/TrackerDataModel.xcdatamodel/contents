@@ -8,6 +8,7 @@
         <attribute name="color" optional="YES" attributeType="Transformable" valueTransformerName=""/>
         <attribute name="emoji" attributeType="String"/>
         <attribute name="isHabbit" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="isPinned" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="schedule" attributeType="Transformable" valueTransformerName="DaysValueTransformer"/>
         <attribute name="title" attributeType="String"/>
         <attribute name="tracker_id" attributeType="UUID" usesScalarValueType="NO"/>

@@ -261,7 +261,7 @@ final class NewIrregularEventViewController: UIViewController {
 
         let schedule = [Weekday.Monday, Weekday.Tuesday, Weekday.Wednesday, Weekday.Thursday, Weekday.Friday, Weekday.Saturday, Weekday.Sunday]
         
-        let tracker = Tracker(id: UUID(), title: caption, color: selectedColor, emoji: selectedEmoji, isHabbit: false, schedule: schedule)
+        let tracker = Tracker(id: UUID(), title: caption, color: selectedColor, emoji: selectedEmoji, isHabbit: false, isPinned: false, schedule: schedule)
         
         self.addTrackerDelegate?.addNewTracker(tracker: tracker, categoryTitle: categoryTitle)
         self.view.window?.rootViewController?.dismiss(animated: true)

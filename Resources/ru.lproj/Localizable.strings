@@ -13,6 +13,7 @@
 "trackers.null.title" = "Что будем отслеживать?";
 "trackers.searchbar.placeholder" = "Поиск";
 "trackers.context.pin" = "Закрепить";
+"trackers.context.unpin" = "Открепить";
 "trackers.context.edit" = "Редактировать";
 "trackers.context.delete" = "Удалить";
 

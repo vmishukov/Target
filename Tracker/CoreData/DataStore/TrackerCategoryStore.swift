@@ -65,7 +65,7 @@ final class TrackerCategoryStore {
             throw TrackerCategoryStoreError.decodingErrorInvalidTracker
         }
         let isHabbit = trackerCoreData.isHabbit
-        
+        let isPinned = trackerCoreData.isPinned
         print(trackerCoreData.color as Any)
         guard let color = trackerCoreData.color as? UIColor else {
             throw TrackerCategoryStoreError.decodingErrorInvalidTrackerColor
@@ -74,7 +74,7 @@ final class TrackerCategoryStore {
             throw TrackerCategoryStoreError.decodingErrorInvalidTrackerSchedule
         }
         
-        return Tracker(id: tracker_id, title: title, color: color, emoji: emoji, isHabbit: isHabbit, schedule: schedule)
+        return Tracker(id: tracker_id, title: title, color: color, emoji: emoji, isHabbit: isHabbit, isPinned: isPinned, schedule: schedule)
     }
     
     

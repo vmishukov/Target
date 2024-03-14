@@ -54,6 +54,14 @@ final class TrackerDataProvider: NSObject {
 
 // MARK: - TrackerDataProviderProtocol
 extension TrackerDataProvider:TrackerDataProviderProtocol {
+    func changePinStatus(trackerId: UUID) {
+        do {
+            try trackerStore?.changePinStatus(trackerId: trackerId)
+        } catch {
+            assertionFailure("\(error)")
+        }
+    }
+    
     func addNewTracker(_ tracker: Tracker, trackerCategoryName: String) {
         do {
             try trackerStore?.addNewTracker(tracker, trackerCategoryName: trackerCategoryName)

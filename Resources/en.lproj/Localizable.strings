@@ -13,6 +13,7 @@
 "trackers.null.title" = "What will we track?";
 "trackers.searchbar.placeholder" = "Search";
 "trackers.context.pin" = "Pin";
+"trackers.context.unpin" = "Unpin";
 "trackers.context.edit" = "Edit";
 "trackers.context.delete" = "Delete";
 

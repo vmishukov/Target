@@ -26,6 +26,16 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         return emojiLabel
     }()
     
+    private lazy var pinImageView : UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleToFill
+        let image = UIImage(named: "pin.square")
+        imageView.image = image
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        rectView.addSubview(imageView)
+        return imageView
+    }()
+    
     lazy var rectView : UIView = {
         let rectView = UIView()
         rectView.translatesAutoresizingMaskIntoConstraints = false
@@ -83,6 +93,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     private var isCompleted: Bool = false
     private var indexPath: IndexPath?
     private var completeDays: Int = 0
+    private var isPinned: Bool = true
     
     // MARK: - INIT
     override init(frame: CGRect) {
@@ -92,6 +103,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         layoutTrackerCaptionLabel()
         layoutTrackerCompleteButton() 
         layoutTrackersDaysCountLabel()
+        layoutpinImageView()
     }
     
     // MARK: - public func
@@ -101,13 +113,20 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     public func getDaysCount() -> Int? {
         return self.completeDays
     }
+    public func getPinnedStatus() -> Bool {
+        return self.isPinned
+    }
     public func cellSetting(uuid: UUID,
                             caption: String,
                             color: UIColor,
                             emoji: String,
                             completeDays: Int,
                             isCompleted: Bool,
-                            indexPath: IndexPath) {
+                            isPinned: Bool,
+                            indexPath: IndexPath
+    ) {
+        pinImageView.isHidden = !isPinned
+        self.isPinned = isPinned
         self.uuid = uuid
         self.completeDays = completeDays
         self.trackerCaptionLabel.text = caption
@@ -141,6 +160,14 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: - LAYOUT
+    
+    private func layoutpinImageView() {
+        NSLayoutConstraint.activate([
+            pinImageView.trailingAnchor.constraint(equalTo: rectView.trailingAnchor, constant: -12),
+            pinImageView.topAnchor.constraint(equalTo: rectView.topAnchor, constant: 18)
+        ])
+    }
+    
     private func layoutRectView() {
         NSLayoutConstraint.activate([
             rectView.widthAnchor.constraint(equalToConstant: 167),

@@ -39,6 +39,7 @@
 
 "cancel.button" = "Отменить";
 "create.button" = "Создать";
+"save.button" = "Сохранить";
 "color.customization.label" = "Цвет";
 "emoji.customization.label" = "Emoji";
 "category.customization" = "Категория";

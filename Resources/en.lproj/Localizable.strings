@@ -39,6 +39,7 @@
 
 "cancel.button" = "Cancel";
 "create.button" = "Create";
+"save.button" = "Save";
 "color.customization.label" = "Color";
 "emoji.customization.label" = "Emoji";
 "category.customization" = "Category";

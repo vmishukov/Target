@@ -82,7 +82,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     private var uuid: UUID? = nil
     private var isCompleted: Bool = false
     private var indexPath: IndexPath?
-    
+    private var completeDays: Int = 0
     
     // MARK: - INIT
     override init(frame: CGRect) {
@@ -98,6 +98,9 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     public func getUiid() -> UUID? {
         return self.uuid
     }
+    public func getDaysCount() -> Int? {
+        return self.completeDays
+    }
     public func cellSetting(uuid: UUID,
                             caption: String,
                             color: UIColor,
@@ -106,6 +109,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
                             isCompleted: Bool,
                             indexPath: IndexPath) {
         self.uuid = uuid
+        self.completeDays = completeDays
         self.trackerCaptionLabel.text = caption
         self.rectView.backgroundColor = color
         self.emojiLabel.text = emoji

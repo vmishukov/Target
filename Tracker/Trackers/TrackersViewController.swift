@@ -216,8 +216,9 @@ extension TrackersViewController: UICollectionViewDelegate {
                 guard let cell = self.collectionView.cellForItem(at: indexPath) as? TrackersCollectionViewCell else {
                     return
                 }
-                guard let uuid = cell.getUiid() else { return }
+                guard let uuid = cell.getUiid(), let completeDays = cell.getDaysCount() else { return }
                 view.trackerId = uuid
+                view.completeDays = completeDays
                 self.present(view,animated: true)
             }
 

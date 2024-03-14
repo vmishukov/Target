@@ -11,6 +11,7 @@ import Foundation
 final class EditHabbitViewController: UIViewController {
     // MARK: - public variable
     var trackerId: UUID?
+    var completeDays: Int?
     // MARK: - private
     private var viewModel: EditHabbitViewModelProtocol?
     //MARK: - UI
@@ -30,13 +31,6 @@ final class EditHabbitViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         
-        let localizedDayString = String.localizedStringWithFormat(
-            NSLocalizedString(
-                "numberOfDays",
-                comment: "Number of remaining days"),
-            1
-        )
-        label.text = localizedDayString
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
         containerView.addSubview(label)
@@ -136,7 +130,7 @@ final class EditHabbitViewController: UIViewController {
     
     private lazy var editHabbitCreateButton: UIButton = {
         let createButton = UIButton(type: .system)
-        createButton.setTitle(NSLocalizedString("create.button", comment: ""), for: .normal)
+        createButton.setTitle(NSLocalizedString("save.button", comment: ""), for: .normal)
         createButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         createButton.backgroundColor = .ypGray
         createButton.tintColor = .ypWhite
@@ -167,6 +161,14 @@ final class EditHabbitViewController: UIViewController {
     override func viewDidLoad() {
         view.backgroundColor = .ypWhite
         
+        
+        let localizedDayString = String.localizedStringWithFormat(
+            NSLocalizedString(
+                "numberOfDays",
+                comment: "Number of remaining days"),
+            self.completeDays ?? 0
+        )
+        editHabbitDaysCountLabel.text = localizedDayString
         viewModel = EditHabbitViewModel(trackerId: trackerId!)
         
         constraiteditHabbitTitle()
@@ -314,6 +316,7 @@ final class EditHabbitViewController: UIViewController {
     }
     @objc func textFieldDidChange(_ textField: UITextField) {
         updateButtonStatus()
+        viewModel?.selectedTitle = textField.text
     }
 }
 // MARK: - UICollectionViewDelegate
@@ -515,6 +518,7 @@ extension EditHabbitViewController: CategoryViewControllerDelegate {
     func setSelectedCategory(categoryName: String?) {
         let indexPath = IndexPath(row: 0, section: 0)
         let cell = editHabbitSettingsTableView.cellForRow(at: indexPath)
+        viewModel?.categoryName = categoryName
         cell?.detailTextLabel?.text = categoryName
         updateButtonStatus()
     }

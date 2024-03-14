@@ -27,7 +27,7 @@ final class EditHabbitViewModel: EditHabbitViewModelProtocol {
     private var dataProvider: TrackerStoreDataProviderProtocol?
     private var isHabbit: Bool = true
     private let trackerId: UUID
-
+   
     
     init(trackerId: UUID) {
         self.trackerId = trackerId
@@ -47,11 +47,13 @@ final class EditHabbitViewModel: EditHabbitViewModelProtocol {
             assertionFailure("\(error)")
         }
     }
+    
     //MARK: - PRIVATE FUNC
     private func fetchTracker(trackerId: UUID) {
         do {
             let tracker = try dataProvider?.fetchTracker(uuid: trackerId)
        
+        
             selectedEmoji = tracker?.emoji
             selectedColor = tracker?.color
             selectedTitle = tracker?.title

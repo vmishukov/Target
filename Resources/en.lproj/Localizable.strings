@@ -17,6 +17,7 @@
 "trackers.pinned.category" = "Pinned";
 "trackers.context.edit" = "Edit";
 "trackers.context.delete" = "Delete";
+"trackers.filter" = "Filters";
 
 "trackers.context.delete.alert.title" = "Are you sure you want to delete the tracker?";
 "trackers.context.delete.alert.delete" = "Delete";

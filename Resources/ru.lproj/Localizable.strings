@@ -17,6 +17,7 @@
 "trackers.pinned.category" = "Закрепленные";
 "trackers.context.edit" = "Редактировать";
 "trackers.context.delete" = "Удалить";
+"trackers.filter" = "Фильтры";
 
 "trackers.context.delete.alert.title" = "Вы уверены что хотите удалить трекер?";
 "trackers.context.delete.alert.delete" = "Удалить";

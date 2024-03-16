@@ -22,6 +22,21 @@ final class TrackersViewController: UIViewController {
         return button
     }()
     
+    private lazy var filterButton : UIButton = {
+        let button = UIButton(type: .system)
+        button.backgroundColor = .systemBlue
+        button.addTarget(self, action: #selector(didTapFilterButton), for: .touchDown)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+        button.setTitle(NSLocalizedString( "trackers.filter", comment: ""), for: .normal)
+        button.setTitleColor(.ypWhite, for: .normal)
+        button.layer.cornerRadius = 16
+        button.tintColor = .ypBlack
+        button.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(button)
+        self.filterButton = button
+        return button
+    }()
+    
     private lazy var trackerDatePicker : UIDatePicker = {
         let picker = UIDatePicker()
         picker.datePickerMode = .date
@@ -93,8 +108,7 @@ final class TrackersViewController: UIViewController {
         
         collectionView.register(TrackersCollectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        
-        
+
         layoutSearchBar()
         layoutErrImage()
         layoutErrLabel()
@@ -105,7 +119,9 @@ final class TrackersViewController: UIViewController {
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
+        layoutFilterButton()
         self.collectionView.isHidden = viewModel.stubStatus
+        self.filterButton.isHidden = viewModel.stubStatus
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -147,10 +163,21 @@ final class TrackersViewController: UIViewController {
         viewModel.stubStatusBinding = { [weak self] _ in
             guard let self = self else { return }
             self.collectionView.isHidden = viewModel.stubStatus
+            self.filterButton.isHidden = viewModel.stubStatus
         }
     }
     
     // MARK: - Constraits
+    
+    private func layoutFilterButton() {
+        NSLayoutConstraint.activate([
+            filterButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            filterButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            filterButton.heightAnchor.constraint(equalToConstant: 50),
+            filterButton.widthAnchor.constraint(equalToConstant: 114)
+        ])
+    }
+    
     private func layoutSearchBar() {
         NSLayoutConstraint.activate([
             trackerSearchBar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
@@ -193,6 +220,10 @@ final class TrackersViewController: UIViewController {
     
     @objc private func hideKeyboard() {
         self.trackerSearchBar.endEditing(true)
+    }
+    
+    @objc private func didTapFilterButton(_ sender: UIButton) {
+      //
     }
 }
 

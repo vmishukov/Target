@@ -17,7 +17,12 @@
 "trackers.pinned.category" = "Pinned";
 "trackers.context.edit" = "Edit";
 "trackers.context.delete" = "Delete";
+
 "trackers.filter" = "Filters";
+"trackers.filter.all.trackers" = "All trackers";
+"trackers.filter.today.trackers" = "Trackers for today";
+"trackers.filter.сompleted" = "Completed";
+"trackers.filter.not.сompleted" = "Not completed";
 
 "trackers.context.delete.alert.title" = "Are you sure you want to delete the tracker?";
 "trackers.context.delete.alert.delete" = "Delete";

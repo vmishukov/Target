@@ -222,7 +222,7 @@ extension CategoryViewController: UITableViewDelegate {
         }
     }
 }
-// MARK: - UITableViewDelegate
+// MARK: - NewCategoryViewControllerDelegate
 extension CategoryViewController: NewCategoryViewControllerDelegate {
     func addNewCategory(categoryName: String) {
         viewModel.addCategory(categoryTitle: categoryName)

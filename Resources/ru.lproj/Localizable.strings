@@ -17,12 +17,16 @@
 "trackers.pinned.category" = "Закрепленные";
 "trackers.context.edit" = "Редактировать";
 "trackers.context.delete" = "Удалить";
+
 "trackers.filter" = "Фильтры";
+"trackers.filter.all.trackers" = "Все трекеры";
+"trackers.filter.today.trackers" = "Трекеры на сегодня";
+"trackers.filter.сompleted" = "Завершенные";
+"trackers.filter.not.сompleted" = "Не завершенные";
 
 "trackers.context.delete.alert.title" = "Вы уверены что хотите удалить трекер?";
 "trackers.context.delete.alert.delete" = "Удалить";
 "trackers.context.delete.alert.cancel" = "Отменить";
-
 "add.trackers.label" = "Создание трекера";
 "add.trackers.habbit.button" = "Привычка";
 "add.trackers.irregular.button" = "Нерегулярные событие";

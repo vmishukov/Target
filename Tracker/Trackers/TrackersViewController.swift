@@ -223,7 +223,11 @@ final class TrackersViewController: UIViewController {
     }
     
     @objc private func didTapFilterButton(_ sender: UIButton) {
-      //
+        let view = FilterTrackersViewController()
+      //  print(viewModel.getFilterCondition()?.title)
+        view.selectedFilter = viewModel.getFilterCondition()
+        view.delegate = self
+        present(view, animated: true)
     }
 }
 
@@ -381,5 +385,11 @@ extension TrackersViewController : UISearchBarDelegate {
 extension TrackersViewController: TrackersCollectionViewCellDelegate {
     func addCompleteDay(id: UUID, indexPath: IndexPath) {
         viewModel.addCompleteDay(id: id)
+    }
+}
+
+extension TrackersViewController: FilterViewControllerDelegate {
+    func setFilter(filter: Filter) {
+        viewModel.setFilterCondition(filter: filter)
     }
 }

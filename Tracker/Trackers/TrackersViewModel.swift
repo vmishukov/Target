@@ -26,6 +26,7 @@ final class TrackersViewModel {
             stubStatusBinding?(stubStatus)
         }
     }
+    private var filterCondition: Filter?
     
     private(set) var completedTrackers: [TrackerRecord] = []
     private let model = TrackersModel()
@@ -42,6 +43,13 @@ final class TrackersViewModel {
         setCategoriesFromDataProvider()
     }
     // MARK: - public func
+    func setFilterCondition(filter: Filter) {
+        self.filterCondition = filter
+    }
+    
+    func getFilterCondition() -> Filter? {
+        return self.filterCondition
+    }
     
     func changePinStatus(trackerId: UUID) {
         dataProvider?.changePinStatus(trackerId: trackerId)

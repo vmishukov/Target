@@ -47,6 +47,10 @@ final class TrackersViewModel {
         dataProvider?.changePinStatus(trackerId: trackerId)
     }
     
+    func removeTracker(trackerId: UUID) {
+        dataProvider?.removeTracker(trackerId)
+    }
+    
     func setFilterText(filterString: String?) {
         self.filterText = filterString
         reloadVisibleTrackers()

@@ -107,6 +107,14 @@ extension TrackerDataProvider:TrackerDataProviderProtocol {
         }
     }
     
+    func removeTracker(_ trackerId: UUID) {
+        do {
+            try trackerStore?.removeTracker(trackerId)
+        }catch {
+            assertionFailure("\(error)")
+        }
+    }
+    
     func fetchTrackerRecord() -> [TrackerRecord]? {
         do {
             return try trackerRecordStore?.fetchTrackerRecord()

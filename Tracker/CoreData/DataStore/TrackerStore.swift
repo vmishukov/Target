@@ -70,6 +70,39 @@ final class TrackerStore: TrackerStoreProtocol {
             print("Saving Core Data Failed: \(error)")
         }
     }
+    //MARK: - Remove tracker
+    func removeTracker(_ trackerId: UUID) throws {
+        
+        let RecordRequest = TrackerRecordCoreData.fetchRequest()
+        RecordRequest.predicate = NSPredicate(format: "tracker.tracker_id == %@",
+                                              trackerId as CVarArg)
+        let trackerRecords = try context.fetch(RecordRequest)
+        
+        do {
+            trackerRecords.forEach {
+                record in
+                context.delete(record)
+            }
+            try context.save()
+        } catch let error as NSError {
+            assertionFailure("\(error)")
+        }
+        
+        let request = TrackerCoreData.fetchRequest()
+        let trackers = try context.fetch(request)
+        let filterTracker = trackers.first {
+            $0.tracker_id == trackerId
+        }
+        
+        if let trackerCoreData = filterTracker {
+            do {
+                context.delete(trackerCoreData)
+                try context.save()
+            } catch let error as NSError {
+                assertionFailure("\(error)")
+            }
+        }
+    }
     
     func deleteRequest() {
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "TrackerCoreData")

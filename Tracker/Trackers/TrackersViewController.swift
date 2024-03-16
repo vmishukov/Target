@@ -231,7 +231,8 @@ extension TrackersViewController: UICollectionViewDelegate {
             let deleteAction = UIAction(title: NSLocalizedString("trackers.context.delete.alert.delete", comment: ""), attributes: .destructive) { _ in
                 
                 let deleteAction = UIAlertAction(title: NSLocalizedString("trackers.context.delete.alert.delete", comment: ""), style: .destructive) { _ in
-                //код удаления
+                    guard let uuid = cell.getUiid() else { return }
+                    self.viewModel.removeTracker(trackerId: uuid)
                 }
                 
                 let cancelAction = UIAlertAction(title: NSLocalizedString("trackers.context.delete.alert.cancel", comment: ""), style: .cancel)

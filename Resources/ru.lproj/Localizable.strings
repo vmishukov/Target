@@ -14,6 +14,7 @@
 "trackers.searchbar.placeholder" = "Поиск";
 "trackers.context.pin" = "Закрепить";
 "trackers.context.unpin" = "Открепить";
+"trackers.pinned.category" = "Закрепленные";
 "trackers.context.edit" = "Редактировать";
 "trackers.context.delete" = "Удалить";
 

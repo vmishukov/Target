@@ -15,7 +15,10 @@ final class TrackersModel {
         let filterDay = calendar.component(.weekday, from: datePickerDate)
         let filterText = (filterText ?? "").lowercased()
         
-        let visibleCategories : [TrackerCategory]  = categories.compactMap{ category in
+       
+        var pinniedTrackers: [Tracker] = []
+        
+        var visibleCategories : [TrackerCategory]  = categories.compactMap{ category in
             let trackers = category.trackers.filter {tracker in
                 
                 let dateCondition = tracker.schedule.contains { weekDay in
@@ -41,12 +44,21 @@ final class TrackersModel {
         
                 let textCondition = tracker.title.lowercased().contains(filterText) || filterText.isEmpty
                 
-                return dateCondition && textCondition && irregularEventCondition
+                let pinConditions = !tracker.isPinned
+                if tracker.isPinned {
+                    pinniedTrackers.append(tracker)
+                }
+                
+                return dateCondition && textCondition && irregularEventCondition && pinConditions
             }
             if trackers.isEmpty {
                 return nil
             }
             return TrackerCategory(title: category.title, trackers: trackers)
+        }
+        let pinnedTrackerCategory = TrackerCategory(title: NSLocalizedString( "trackers.pinned.category", comment: ""), trackers: pinniedTrackers)
+        if pinnedTrackerCategory.trackers.count > 0 {
+            visibleCategories.insert(pinnedTrackerCategory, at: 0)
         }
         
         return visibleCategories

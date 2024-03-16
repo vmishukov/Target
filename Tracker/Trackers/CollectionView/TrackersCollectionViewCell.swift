@@ -21,8 +21,8 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         emojiLabel.layer.masksToBounds = true
         emojiLabel.layer.cornerRadius = 14
         emojiLabel.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(emojiLabel)
-        self.emojiLabel = emojiLabel
+        rectView.addSubview(emojiLabel)
+
         return emojiLabel
     }()
     
@@ -58,8 +58,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         caption.numberOfLines = 2
         caption.textAlignment = .left
         caption.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(caption)
-        self.trackerCaptionLabel = caption
+        rectView.addSubview(caption)
         return caption
     }()
     
@@ -99,11 +98,13 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         layoutRectView()
-        layoutEmojiView()
-        layoutTrackerCaptionLabel()
+        
+        
         layoutTrackerCompleteButton() 
         layoutTrackersDaysCountLabel()
         layoutpinImageView()
+        layoutEmojiView()
+        layoutTrackerCaptionLabel()
     }
     
     // MARK: - public func

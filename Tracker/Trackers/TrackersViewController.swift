@@ -79,6 +79,7 @@ final class TrackersViewController: UIViewController {
         let picture = UIImage(named: "nothing_found_image")
         ImageView.image = picture
         ImageView.translatesAutoresizingMaskIntoConstraints = false
+        ImageView.isHidden = true
         view.addSubview(ImageView)
         return ImageView
     }()
@@ -92,7 +93,7 @@ final class TrackersViewController: UIViewController {
         paragraphStyle.lineHeightMultiple = 1.26
         
         trackerErrLabel.attributedText = NSMutableAttributedString(string:  NSLocalizedString( "trackers.nothing.found.title", comment: ""), attributes: [NSAttributedString.Key.paragraphStyle: paragraphStyle])
-        
+        trackerErrLabel.isHidden = true
         view.addSubview(trackerErrLabel)
         return trackerErrLabel
     }()

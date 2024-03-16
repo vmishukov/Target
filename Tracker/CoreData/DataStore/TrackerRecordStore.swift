@@ -112,4 +112,12 @@ final class TrackerRecordStore {
         }
     }
 }
-
+//MARK: - TrackerRecordStoreDataProvider
+extension TrackerRecordStore: TrackerRecordStoreDataProvider{
+    func fetchRecordCount() throws -> Int? {
+        let fetchRequest = TrackerRecordCoreData.fetchRequest()
+        let trackerRecordCoreData = try context.fetch(fetchRequest)
+        return trackerRecordCoreData.count
+    }
+    
+}

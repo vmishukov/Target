@@ -22,6 +22,7 @@ final class TrackersViewController: UIViewController {
         return button
     }()
     
+    
     private lazy var filterButton : UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = .systemBlue
@@ -53,15 +54,15 @@ final class TrackersViewController: UIViewController {
         return picker
     }()
     
-    private lazy var trackerSearchBar : UISearchBar = {
-        let trackerSearchBar = UISearchBar()
-        trackerSearchBar.placeholder = NSLocalizedString( "trackers.searchbar.placeholder", comment: "")
-        trackerSearchBar.translatesAutoresizingMaskIntoConstraints = false
-        trackerSearchBar.searchBarStyle = .minimal
-        trackerSearchBar.delegate = self
+    private lazy var trackerSearchBar : UISearchController = {
+        let trackerSearchBar = UISearchController()
         
-        view.addSubview(trackerSearchBar)
+        trackerSearchBar.searchBar.placeholder = NSLocalizedString( "trackers.searchbar.placeholder", comment: "")
+        trackerSearchBar.searchBar.delegate = self
+        trackerSearchBar.searchBar.searchBarStyle = .minimal
+        trackerSearchBar.searchResultsUpdater = self
         return trackerSearchBar
+
     }()
     
     private lazy var trackerErrImage : UIImageView = {
@@ -118,6 +119,7 @@ final class TrackersViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
        
+        view.backgroundColor = .ypWhite
         
         navBarItem()
         viewModel = TrackersViewModel(date: trackerDatePicker.date)
@@ -132,20 +134,20 @@ final class TrackersViewController: UIViewController {
         collectionView.register(TrackersCollectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
         collectionView.translatesAutoresizingMaskIntoConstraints = false
 
-        layoutSearchBar()
+       // layoutSearchBar()
         layoutErrImage()
         layoutErrLabel()
         layoutTrackerNothingFoundImage()
         layoutЕrackerNothingFoundLabel()
         view.addSubview(collectionView)
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: trackerSearchBar.bottomAnchor),
+            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
+        collectionView.backgroundColor = .ypWhite
         layoutFilterButton()
-        
     
         
         self.collectionView.isHidden = viewModel.stubStatus
@@ -168,7 +170,8 @@ final class TrackersViewController: UIViewController {
         navigationBar.topItem?.title = NSLocalizedString("trackers.title", comment: "")
         navigationBar.prefersLargeTitles = true
         navigationBar.topItem?.largeTitleDisplayMode = .always
-        
+     
+        navigationItem.searchController = trackerSearchBar
         let leftButton = UIBarButtonItem(
             image: UIImage(named: "button_add_tracker"),
             style: .plain,
@@ -218,7 +221,7 @@ final class TrackersViewController: UIViewController {
             filterButton.widthAnchor.constraint(equalToConstant: 114)
         ])
     }
-    
+    /*
     private func layoutSearchBar() {
         NSLayoutConstraint.activate([
             trackerSearchBar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
@@ -227,7 +230,7 @@ final class TrackersViewController: UIViewController {
         ])
         trackerSearchBar.directionalLayoutMargins = .init(top: 0, leading: 16, bottom: 0, trailing: 16)
     }
-    
+    */
     private func layoutErrImage() {
         NSLayoutConstraint.activate([
             trackerErrImage.widthAnchor.constraint(equalToConstant: 80),
@@ -280,7 +283,7 @@ final class TrackersViewController: UIViewController {
     }
     
     @objc private func hideKeyboard() {
-        self.trackerSearchBar.endEditing(true)
+        self.trackerSearchBar.searchBar.endEditing(true)
     }
     
     @objc private func didTapFilterButton(_ sender: UIButton) {
@@ -435,11 +438,11 @@ extension TrackersViewController : UISearchBarDelegate {
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar){
-     self.trackerSearchBar.endEditing(true)
+        self.trackerSearchBar.searchBar.endEditing(true)
      }
     
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        self.trackerSearchBar.endEditing(true)
+        self.trackerSearchBar.searchBar.endEditing(true)
     }
 }
 // MARK: - TrackersCollectionViewCellDelegate
@@ -448,12 +451,20 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
         viewModel.addCompleteDay(id: id)
     }
 }
-
+//MARK: - FilterViewControllerDelegate
 extension TrackersViewController: FilterViewControllerDelegate {
     func setFilter(filter: Filter) {
         if filter == .TrackersForToday {
             trackerDatePicker.date = Calendar.current.startOfDay(for: Date())
         }
         viewModel.setFilterCondition(filter: filter)
+    }
+}
+//MARK: - UISearchResultsUpdating
+extension TrackersViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+       // searchText = searchController.searchBar.text ?? ""
+       // isHiddenFilterButton()
+        viewModel.setFilterText(filterString: trackerSearchBar.searchBar.text)
     }
 }

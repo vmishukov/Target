@@ -47,7 +47,7 @@ final class NewIrregularEventViewController: UIViewController {
     private lazy var NewIrregularEventTitle : UILabel = {
         let titleLabel = UILabel()
         titleLabel.text = NSLocalizedString("irr.event.title", comment: "")
-        titleLabel.textColor = UIColor(hex: "1A1B22")
+      
         titleLabel.font = .systemFont(ofSize: 16, weight: .medium)
         view.addSubview(titleLabel)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -152,7 +152,7 @@ final class NewIrregularEventViewController: UIViewController {
     }()
     // MARK: - lifecycle
     override func viewDidLoad() {
-        view.backgroundColor = .white
+        view.backgroundColor = .ypWhite
         layoutNewIrregularEventTextField()
         layoutNewIrregularEventTitle()
         cancelKeyboardGestureSetup()

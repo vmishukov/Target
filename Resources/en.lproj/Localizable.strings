@@ -65,7 +65,10 @@
 "tabbar.tracker" = "Tracker";
 "tabbar.statistic" = "Statistics";
 
-"statistics.title" = "Statistics";
+"statistic.title" = "Statistics";
+"statistic.complete.tracker.count" = "Trackers complete";
+"statistic.nothing.to.analyze" = "Nothing to analyze yet";
+
 "weekday.monday" =  "Monday";
 "weekday.tuesday" = "Tuesday";
 "weekday.wednesday" = "Wednesday";

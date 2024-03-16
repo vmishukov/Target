@@ -27,7 +27,7 @@ final class AddTrackersViewController: UIViewController {
         let addHabbitButton = UIButton(type: .system) as UIButton
         addHabbitButton.backgroundColor = .ypBlack
         addHabbitButton.setTitle(NSLocalizedString("add.trackers.habbit.button", comment: ""), for: .normal)
-        addHabbitButton.setTitleColor(UIColor(hex: "FFFFFF"), for: .normal)
+        addHabbitButton.setTitleColor(.ypWhite, for: .normal)
         addHabbitButton.translatesAutoresizingMaskIntoConstraints = false
         addHabbitButton.layer.cornerRadius = 16
         addHabbitButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -41,7 +41,7 @@ final class AddTrackersViewController: UIViewController {
         let addIrregularEventButton = UIButton(type: .system) as UIButton
         addIrregularEventButton.backgroundColor = .ypBlack
         addIrregularEventButton.setTitle(NSLocalizedString("add.trackers.irregular.button", comment: ""), for: .normal)
-        addIrregularEventButton.setTitleColor(UIColor(hex: "FFFFFF"), for: .normal)
+        addIrregularEventButton.setTitleColor(.ypWhite, for: .normal)
         addIrregularEventButton.addTarget(self, action: #selector(didTabAddIrregularEventButton), for: .touchUpInside)
         addIrregularEventButton.translatesAutoresizingMaskIntoConstraints = false
         addIrregularEventButton.layer.cornerRadius = 16

@@ -11,6 +11,7 @@
 
 "trackers.title" = "Trackers";
 "trackers.null.title" = "What will we track?";
+"trackers.nothing.found.title" = "Nothing found";
 "trackers.searchbar.placeholder" = "Search";
 "trackers.context.pin" = "Pin";
 "trackers.context.unpin" = "Unpin";

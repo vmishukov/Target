@@ -73,6 +73,29 @@ final class TrackersViewController: UIViewController {
         return trackerErrImage
     }()
     
+    private lazy var trackerNothingFoundImage : UIImageView = {
+        let ImageView = UIImageView()
+        let picture = UIImage(named: "nothing_found_image")
+        ImageView.image = picture
+        ImageView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(ImageView)
+        return ImageView
+    }()
+    
+    private lazy var trackerNothingFoundLabel : UILabel = {
+        let trackerErrLabel = UILabel()
+        trackerErrLabel.translatesAutoresizingMaskIntoConstraints = false
+        trackerErrLabel.font = UIFont.systemFont(ofSize: 12)
+        trackerErrLabel.textAlignment = .center
+        var paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineHeightMultiple = 1.26
+        
+        trackerErrLabel.attributedText = NSMutableAttributedString(string:  NSLocalizedString( "trackers.nothing.found.title", comment: ""), attributes: [NSAttributedString.Key.paragraphStyle: paragraphStyle])
+        
+        view.addSubview(trackerErrLabel)
+        return trackerErrLabel
+    }()
+    
     private lazy var trackerErrLabel : UILabel = {
         let trackerErrLabel = UILabel()
         trackerErrLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -112,6 +135,8 @@ final class TrackersViewController: UIViewController {
         layoutSearchBar()
         layoutErrImage()
         layoutErrLabel()
+        layoutTrackerNothingFoundImage()
+        layoutЕrackerNothingFoundLabel()
         view.addSubview(collectionView)
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: trackerSearchBar.bottomAnchor),
@@ -120,6 +145,9 @@ final class TrackersViewController: UIViewController {
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
         layoutFilterButton()
+        
+    
+        
         self.collectionView.isHidden = viewModel.stubStatus
         self.filterButton.isHidden = viewModel.stubStatus
     }
@@ -163,7 +191,20 @@ final class TrackersViewController: UIViewController {
         viewModel.stubStatusBinding = { [weak self] _ in
             guard let self = self else { return }
             self.collectionView.isHidden = viewModel.stubStatus
-            self.filterButton.isHidden = viewModel.stubStatus
+            
+            if viewModel.getFilterCondition() != .AllTrackers {
+                self.trackerNothingFoundImage.isHidden = false
+                self.trackerNothingFoundLabel.isHidden = false
+                self.trackerErrImage.isHidden = true
+                self.trackerErrLabel.isHidden = true
+                self.filterButton.isHidden = false
+            } else {
+                self.filterButton.isHidden = viewModel.stubStatus
+                self.trackerNothingFoundImage.isHidden = true
+                self.trackerNothingFoundLabel.isHidden = true
+                self.trackerErrImage.isHidden = false
+                self.trackerErrLabel.isHidden = false
+            }
         }
     }
     
@@ -202,7 +243,22 @@ final class TrackersViewController: UIViewController {
             trackerErrLabel.topAnchor.constraint(equalTo: trackerErrImage.bottomAnchor, constant: 8)
         ])
     }
+    
+    private func layoutЕrackerNothingFoundLabel() {
+        NSLayoutConstraint.activate([
+            trackerNothingFoundLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            trackerNothingFoundLabel.topAnchor.constraint(equalTo: trackerErrImage.bottomAnchor, constant: 8)
+        ])
+    }
 
+    private func layoutTrackerNothingFoundImage() {
+        NSLayoutConstraint.activate([
+            trackerNothingFoundImage.widthAnchor.constraint(equalToConstant: 80),
+            trackerNothingFoundImage.heightAnchor.constraint(equalToConstant: 80),
+            trackerNothingFoundImage.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            trackerNothingFoundImage.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor)
+        ])
+    }
     // MARK: - OBJC
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
         let selectedDate = sender.date
@@ -210,6 +266,11 @@ final class TrackersViewController: UIViewController {
         dateFormatter.dateFormat = "dd.MM.yy"
         let formattedDate = dateFormatter.string(from: selectedDate)
         viewModel.setFilterDate(filterDate: trackerDatePicker.date)
+        
+        if viewModel.getFilterCondition() == .TrackersForToday && trackerDatePicker.date != Calendar.current.startOfDay(for: Date()) {
+            viewModel.setFilterCondition(filter: .AllTrackers)
+        }
+        
     }
     
     @objc private func didTapAddTrackerButton(_ sender: UIButton) {
@@ -390,6 +451,9 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
 
 extension TrackersViewController: FilterViewControllerDelegate {
     func setFilter(filter: Filter) {
+        if filter == .TrackersForToday {
+            trackerDatePicker.date = Calendar.current.startOfDay(for: Date())
+        }
         viewModel.setFilterCondition(filter: filter)
     }
 }

@@ -9,7 +9,7 @@ import Foundation
 
 final class TrackersModel {
     
-    func reloadVisibleTrackers( categories: [TrackerCategory], datePickerDate: Date, filterText: String?, completedTrackers: [TrackerRecord])  -> [TrackerCategory] {
+    func reloadVisibleTrackers( categories: [TrackerCategory], datePickerDate: Date, filterText: String?, completedTrackers: [TrackerRecord], filterCondition: Filter)  -> [TrackerCategory] {
         
         let calendar = Calendar.current
         let filterDay = calendar.component(.weekday, from: datePickerDate)
@@ -41,15 +41,41 @@ final class TrackersModel {
                         irregularEventCondition = true
                     }
                 }
-        
-                let textCondition = tracker.title.lowercased().contains(filterText) || filterText.isEmpty
                 
+                let textCondition = tracker.title.lowercased().contains(filterText) || filterText.isEmpty
                 let pinConditions = !tracker.isPinned
+                
+                let completeFilterCondition = 
+                if filterCondition == .CompletedTrackers {
+                    if completedTrackers.contains(where: { completeTracker in
+                        completeTracker.id == tracker.id &&
+                        completeTracker.date.onlyDate == datePickerDate.onlyDate}) {
+                        true
+                    } else {
+                        false
+                    }
+                } else {
+                    true
+                }
+                
+                let notCompleteFilterCondition =
+                if filterCondition == .NotCompletedTrackers {
+                    if completedTrackers.contains(where: { completeTracker in
+                        completeTracker.id != tracker.id &&
+                        completeTracker.date.onlyDate != datePickerDate.onlyDate}) {
+                        true
+                    } else {
+                        false
+                    }
+                } else {
+                    true
+                }
+                
                 if tracker.isPinned {
                     pinniedTrackers.append(tracker)
                 }
                 
-                return dateCondition && textCondition && irregularEventCondition && pinConditions
+                return dateCondition && textCondition && irregularEventCondition && pinConditions && completeFilterCondition && notCompleteFilterCondition
             }
             if trackers.isEmpty {
                 return nil

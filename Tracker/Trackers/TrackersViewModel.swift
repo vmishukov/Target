@@ -26,7 +26,11 @@ final class TrackersViewModel {
             stubStatusBinding?(stubStatus)
         }
     }
-    private var filterCondition: Filter?
+    private var filterCondition: Filter = .AllTrackers {
+        didSet {
+            reloadVisibleTrackers()
+        }
+    }
     
     private(set) var completedTrackers: [TrackerRecord] = []
     private let model = TrackersModel()
@@ -47,7 +51,7 @@ final class TrackersViewModel {
         self.filterCondition = filter
     }
     
-    func getFilterCondition() -> Filter? {
+    func getFilterCondition() -> Filter {
         return self.filterCondition
     }
     
@@ -106,7 +110,7 @@ final class TrackersViewModel {
     
     private func reloadVisibleTrackers() {
          
-         self.visibleCategories = model.reloadVisibleTrackers(categories: self.categories, datePickerDate: datePickerDate, filterText: self.filterText, completedTrackers: self.completedTrackers)
+        self.visibleCategories = model.reloadVisibleTrackers(categories: self.categories, datePickerDate: datePickerDate, filterText: self.filterText, completedTrackers: self.completedTrackers, filterCondition: filterCondition)
          isStubVisible()
      }
     

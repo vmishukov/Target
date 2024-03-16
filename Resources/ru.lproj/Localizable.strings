@@ -11,6 +11,7 @@
 
 "trackers.title" = "Трекеры";
 "trackers.null.title" = "Что будем отслеживать?";
+"trackers.nothing.found.title" = "Ничего не найдено";
 "trackers.searchbar.placeholder" = "Поиск";
 "trackers.context.pin" = "Закрепить";
 "trackers.context.unpin" = "Открепить";

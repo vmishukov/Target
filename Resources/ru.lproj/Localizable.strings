@@ -5,8 +5,8 @@
   Created by Vladislav Mishukov on 10.03.2024.
   
 */
-"onboarding.view.first" = "Отслеживайте только \то, что хотите";
-"onboarding.view.second" = "Даже если это \тне литры воды и йога";
+"onboarding.view.first" = "Отслеживайте только \nто, что хотите";
+"onboarding.view.second" = "Даже если это \nне литры воды и йога";
 "onboarding.button" = "Вот это технологии!";
 
 "trackers.title" = "Трекеры";
@@ -33,7 +33,7 @@
 "add.trackers.irregular.button" = "Нерегулярные событие";
 
 "category.label" = "Категория";
-"category.null.title" = "Привычки и события можно \объединить по смыслу";
+"category.null.title" = "Привычки и события можно \nобъединить по смыслу";
 "category.add.button" = "Добавить категорию";
 
 "new.category.label" = "Новая категория";

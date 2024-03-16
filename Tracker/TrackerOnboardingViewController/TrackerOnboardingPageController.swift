@@ -30,7 +30,7 @@ final class OnboardingPageController: UIPageViewController  {
         pageControl.numberOfPages = pages.count
         pageControl.currentPage = 0
         
-        pageControl.currentPageIndicatorTintColor = .ypBlack
+        pageControl.currentPageIndicatorTintColor = UIColor(hex: "1A1B22")
         pageControl.pageIndicatorTintColor = .ypGray
         
         pageControl.translatesAutoresizingMaskIntoConstraints = false
@@ -42,7 +42,7 @@ final class OnboardingPageController: UIPageViewController  {
     
     private lazy var onboardingButton: UIButton = {
         let button = UIButton(type: .system) as UIButton
-        button.backgroundColor = .ypBlack
+        button.backgroundColor = UIColor(hex: "1A1B22")
         button.setTitle(NSLocalizedString("onboarding.button", comment: ""), for: .normal)
         button.setTitleColor(UIColor(hex: "FFFFFF"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false

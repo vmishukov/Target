@@ -112,7 +112,7 @@ extension ScheduleViewController : UITableViewDataSource {
             return UITableViewCell()
         }
         
-        cell.textLabel?.text = Weekday.allCases[indexPath.row].rawValue
+        cell.textLabel?.text = Weekday.allCases[indexPath.row].title
         cell.day = Weekday.allCases[indexPath.row]
         cell.delegate = self
         if let selectedDays = self.selectedDays {

@@ -354,6 +354,7 @@
 				915050D52B58EEB3001E9DF1 /* Trackers */,
 				915050DF2B5BC7D6001E9DF1 /* AddTrackers */,
 				91056BE32B9C0DD6002C0CEF /* Category */,
+				915050F72B63AFDB001E9DF1 /* Schedule */,
 				915050E22B5D276F001E9DF1 /* AddNewEvent */,
 				913001152BA58D97004C371A /* Statistic */,
 				915050FA2B63BC77001E9DF1 /* Models */,
@@ -440,7 +441,6 @@
 			isa = PBXGroup;
 			children = (
 				915050E32B5D27D8001E9DF1 /* NewHabbitViewController.swift */,
-				915050F72B63AFDB001E9DF1 /* Schedule */,
 			);
 			path = NewHabbit;
 			sourceTree = "<group>";
@@ -519,7 +519,6 @@
 				D03F4094FB34B10C02B1BFC1 /* Pods-TrackerTests.debug.xcconfig */,
 				0E51C9A8BE8873EB40E3AA7E /* Pods-TrackerTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -606,7 +605,7 @@
 			);
 			mainGroup = 915050662B52795F001E9DF1;
 			packageReferences = (
-				91995D922BA5B85E007F51C7 /* XCRemoteSwiftPackageReference "swift-snapshot-testing?tab=coc-ov-file" */,
+				91995D922BA5B85E007F51C7 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
 			);
 			productRefGroup = 915050702B52795F001E9DF1 /* Products */;
 			projectDirPath = "";
@@ -1072,7 +1071,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		91995D922BA5B85E007F51C7 /* XCRemoteSwiftPackageReference "swift-snapshot-testing?tab=coc-ov-file" */ = {
+		91995D922BA5B85E007F51C7 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/pointfreeco/swift-snapshot-testing?tab=coc-ov-file";
 			requirement = {
@@ -1085,12 +1084,12 @@
 /* Begin XCSwiftPackageProductDependency section */
 		91995D932BA5B85E007F51C7 /* InlineSnapshotTesting */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 91995D922BA5B85E007F51C7 /* XCRemoteSwiftPackageReference "swift-snapshot-testing?tab=coc-ov-file" */;
+			package = 91995D922BA5B85E007F51C7 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;
 			productName = InlineSnapshotTesting;
 		};
 		91995D952BA5B85E007F51C7 /* SnapshotTesting */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 91995D922BA5B85E007F51C7 /* XCRemoteSwiftPackageReference "swift-snapshot-testing?tab=coc-ov-file" */;
+			package = 91995D922BA5B85E007F51C7 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;
 			productName = SnapshotTesting;
 		};
 /* End XCSwiftPackageProductDependency section */

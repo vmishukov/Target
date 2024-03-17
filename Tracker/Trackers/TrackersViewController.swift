@@ -163,7 +163,7 @@ final class TrackersViewController: UIViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        yandexMobileMetrica.reportEvent(event: "closed", parameters: ["event": "close", "screen": "Main"])
+        yandexMobileMetrica.reportEvent(event: "close", parameters: ["event": "close", "screen": "Main"])
     }
     // MARK: - private func
     private func cancelKeyboardGestureSetup() {

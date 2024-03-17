@@ -15,7 +15,6 @@ final class TrackersModel {
         let filterDay = calendar.component(.weekday, from: datePickerDate)
         let filterText = (filterText ?? "").lowercased()
         
-       
         var pinniedTrackers: [Tracker] = []
         
         var visibleCategories : [TrackerCategory]  = categories.compactMap{ category in
@@ -71,7 +70,7 @@ final class TrackersModel {
                     true
                 }
                 
-                if tracker.isPinned {
+                if tracker.isPinned && dateCondition && textCondition && irregularEventCondition && completeFilterCondition && notCompleteFilterCondition {
                     pinniedTrackers.append(tracker)
                 }
                 

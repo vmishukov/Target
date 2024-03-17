@@ -62,7 +62,7 @@ final class CategoryViewController: UIViewController{
         tableView.separatorStyle = .singleLine
         tableView.layer.masksToBounds = true
         tableView.isScrollEnabled = true
-
+        tableView.backgroundColor = .ypWhite
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.delegate = self
         tableView.dataSource = self

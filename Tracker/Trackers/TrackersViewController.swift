@@ -158,12 +158,12 @@ final class TrackersViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        yandexMobileMetrica.reportEvent(event: "open", parameters: ["event": "open", "screen": "Main"])
+        yandexMobileMetrica.reportEvent(event: "open", parameters: ["screen": "Main"])
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        yandexMobileMetrica.reportEvent(event: "close", parameters: ["event": "close", "screen": "Main"])
+        yandexMobileMetrica.reportEvent(event: "close", parameters: ["screen": "Main"])
     }
     // MARK: - private func
     private func cancelKeyboardGestureSetup() {
@@ -285,7 +285,7 @@ final class TrackersViewController: UIViewController {
     }
     
     @objc private func didTapAddTrackerButton(_ sender: UIButton) {
-        yandexMobileMetrica.reportEvent(event: "click", parameters: ["event": "click", "screen": "Main", "item": "add_track"])
+        yandexMobileMetrica.reportEvent(event: "click", parameters: ["screen": "Main", "item": "add_track"])
         let view = AddTrackersViewController()
         view.trackerViewdelegate = viewModel
         present(view, animated: true)
@@ -296,7 +296,7 @@ final class TrackersViewController: UIViewController {
     }
     
     @objc private func didTapFilterButton(_ sender: UIButton) {
-        yandexMobileMetrica.reportEvent(event: "click", parameters: ["event": "click", "screen": "Main", "item": "filter"])
+        yandexMobileMetrica.reportEvent(event: "click", parameters: ["screen": "Main", "item": "filter"])
         let view = FilterTrackersViewController()
       //  print(viewModel.getFilterCondition()?.title)
         view.selectedFilter = viewModel.getFilterCondition()
@@ -331,7 +331,7 @@ extension TrackersViewController: UICollectionViewDelegate {
             let edit = UIAction(title: NSLocalizedString( "trackers.context.edit", comment: "") ) { (_) in
                 let view = EditHabbitViewController()
                 
-                self.yandexMobileMetrica.reportEvent(event: "click", parameters: ["event": "click", "screen": "Main", "item": "edit"])
+                self.yandexMobileMetrica.reportEvent(event: "click", parameters: ["screen": "Main", "item": "edit"])
                 
                 guard let uuid = cell.getUiid(), let completeDays = cell.getDaysCount() else { return }
                 view.trackerId = uuid
@@ -340,7 +340,7 @@ extension TrackersViewController: UICollectionViewDelegate {
             }
 
             let deleteAction = UIAction(title: NSLocalizedString("trackers.context.delete.alert.delete", comment: ""), attributes: .destructive) { _ in
-                self.yandexMobileMetrica.reportEvent(event: "click", parameters: ["event": "click", "screen": "Main", "item": "delete"])
+                self.yandexMobileMetrica.reportEvent(event: "click", parameters: ["screen": "Main", "item": "delete"])
                 let deleteAction = UIAlertAction(title: NSLocalizedString("trackers.context.delete.alert.delete", comment: ""), style: .destructive) { _ in
                     guard let uuid = cell.getUiid() else { return }
                     self.viewModel.removeTracker(trackerId: uuid)
@@ -460,7 +460,7 @@ extension TrackersViewController : UISearchBarDelegate {
 // MARK: - TrackersCollectionViewCellDelegate
 extension TrackersViewController: TrackersCollectionViewCellDelegate {
     func addCompleteDay(id: UUID, indexPath: IndexPath) {
-        yandexMobileMetrica.reportEvent(event: "click", parameters: ["event": "click", "screen": "Main", "item": "track"])
+        yandexMobileMetrica.reportEvent(event: "click", parameters: ["screen": "Main", "item": "track"])
         viewModel.addCompleteDay(id: id)
     }
 }

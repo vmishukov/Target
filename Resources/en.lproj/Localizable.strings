@@ -1,0 +1,88 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Vladislav Mishukov on 10.03.2024.
+  
+*/
+"onboarding.view.first" = "Track only what you want";
+"onboarding.view.second" = "Even if it's not liters of water and yoga";
+"onboarding.button" = "This is technology!";
+
+"trackers.title" = "Trackers";
+"trackers.null.title" = "What will we track?";
+"trackers.nothing.found.title" = "Nothing found";
+"trackers.searchbar.placeholder" = "Search";
+"trackers.context.pin" = "Pin";
+"trackers.context.unpin" = "Unpin";
+"trackers.pinned.category" = "Pinned";
+"trackers.context.edit" = "Edit";
+"trackers.context.delete" = "Delete";
+
+"trackers.filter" = "Filters";
+"trackers.filter.all.trackers" = "All trackers";
+"trackers.filter.today.trackers" = "Trackers for today";
+"trackers.filter.сompleted" = "Completed";
+"trackers.filter.not.сompleted" = "Not completed";
+
+"trackers.context.delete.alert.title" = "Are you sure you want to delete the tracker?";
+"trackers.context.delete.alert.delete" = "Delete";
+"trackers.context.delete.alert.cancel" = "Cancel";
+
+"add.trackers.label" = "Create Tracker";
+"add.trackers.habbit.button" = "Habbit";
+"add.trackers.irregular.button" = "Irregular event";
+
+"category.label" = "Category";
+"category.null.title" = "Habits and events can be combined by meaning";
+"category.add.button" = "Add category";
+
+"new.category.label" = "New category";
+"new.category.placeholder" = "Enter category name";
+"new.category.button" = "Done";
+
+"placeholder.restrict.label" = "Limit 38 characters";
+
+"irr.event.title" = "New irregular event";
+"irr.event.placeholder" = "Enter tracker name";
+
+"cancel.button" = "Cancel";
+"create.button" = "Create";
+"save.button" = "Save";
+"color.customization.label" = "Color";
+"emoji.customization.label" = "Emoji";
+"category.customization" = "Category";
+"schedule.customization" = "Schedule";
+
+"event.title" = "New habbit";
+"event.placeholder" = "Enter tracker name";
+
+"edit.habbit.title" = "Edit tracker";
+
+"schedule.setting.title" = "Schedule";
+"schedule.done.button" = "Done";
+
+"tabbar.tracker" = "Tracker";
+"tabbar.statistic" = "Statistics";
+
+"statistic.title" = "Statistics";
+"statistic.complete.tracker.count" = "Trackers complete";
+"statistic.nothing.to.analyze" = "Nothing to analyze yet";
+
+"weekday.monday" =  "Monday";
+"weekday.tuesday" = "Tuesday";
+"weekday.wednesday" = "Wednesday";
+"weekday.thursday" = "Thursday";
+"weekday.friday" = "Friday";
+"weekday.saturday" = "Saturday";
+"weekday.sunday" = "Sunday";
+
+"weekday.monday.short" = "Mon";
+"weekday.tuesday.short" = "Tue";
+"weekday.wednesday.short" = "Wed";
+"weekday.thursday.short" = "Thu";
+"weekday.friday.short" = "Fri";
+"weekday.saturday.short" = "Sat";
+"weekday.sunday.short" = "Sun";
+
+

@@ -18,7 +18,7 @@ final class TrackerDataProvider: NSObject {
     //MARK: - DELEGATE
     weak var delegate: TrackerDataProviderDelegate?
     //MARK: - STORES
-    private let trackerStore: TrackerStore?
+    private let trackerStore: TrackerStoreProtocol?
     private let trackerCategoryStore: TrackerCategoryStoreProtocol?
     private let trackerRecordStore: TrackerRecordStore?
     //MARK: - PRIVATE
@@ -54,6 +54,14 @@ final class TrackerDataProvider: NSObject {
 
 // MARK: - TrackerDataProviderProtocol
 extension TrackerDataProvider:TrackerDataProviderProtocol {
+    func changePinStatus(trackerId: UUID) {
+        do {
+            try trackerStore?.changePinStatus(trackerId: trackerId)
+        } catch {
+            assertionFailure("\(error)")
+        }
+    }
+    
     func addNewTracker(_ tracker: Tracker, trackerCategoryName: String) {
         do {
             try trackerStore?.addNewTracker(tracker, trackerCategoryName: trackerCategoryName)
@@ -94,6 +102,14 @@ extension TrackerDataProvider:TrackerDataProviderProtocol {
     func removeRecord(_ trackerId: UUID, date: Date) {
         do {
             try trackerRecordStore?.removeRecord(trackerId, date: date)
+        }catch {
+            assertionFailure("\(error)")
+        }
+    }
+    
+    func removeTracker(_ trackerId: UUID) {
+        do {
+            try trackerStore?.removeTracker(trackerId)
         }catch {
             assertionFailure("\(error)")
         }

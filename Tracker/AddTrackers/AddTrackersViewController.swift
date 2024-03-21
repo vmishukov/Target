@@ -14,7 +14,7 @@ final class AddTrackersViewController: UIViewController {
     //MARK: - UI ELEMENTS
     private lazy var addTrackerLabel : UILabel = {
         let addTrackerLabel = UILabel()
-        addTrackerLabel.text = "Создание трекера"
+        addTrackerLabel.text = NSLocalizedString("add.trackers.label", comment: "")
         addTrackerLabel.textColor = .ypBlack
         addTrackerLabel.font = .systemFont(ofSize: 16, weight: .medium)
         view.addSubview(addTrackerLabel)
@@ -26,8 +26,8 @@ final class AddTrackersViewController: UIViewController {
     private lazy var addHabbitButton: UIButton = {
         let addHabbitButton = UIButton(type: .system) as UIButton
         addHabbitButton.backgroundColor = .ypBlack
-        addHabbitButton.setTitle("Привычка", for: .normal)
-        addHabbitButton.setTitleColor(UIColor(hex: "FFFFFF"), for: .normal)
+        addHabbitButton.setTitle(NSLocalizedString("add.trackers.habbit.button", comment: ""), for: .normal)
+        addHabbitButton.setTitleColor(.ypWhite, for: .normal)
         addHabbitButton.translatesAutoresizingMaskIntoConstraints = false
         addHabbitButton.layer.cornerRadius = 16
         addHabbitButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -40,8 +40,8 @@ final class AddTrackersViewController: UIViewController {
     private lazy var addIrregularEventButton: UIButton = {
         let addIrregularEventButton = UIButton(type: .system) as UIButton
         addIrregularEventButton.backgroundColor = .ypBlack
-        addIrregularEventButton.setTitle("Нерегулярные событие", for: .normal)
-        addIrregularEventButton.setTitleColor(UIColor(hex: "FFFFFF"), for: .normal)
+        addIrregularEventButton.setTitle(NSLocalizedString("add.trackers.irregular.button", comment: ""), for: .normal)
+        addIrregularEventButton.setTitleColor(.ypWhite, for: .normal)
         addIrregularEventButton.addTarget(self, action: #selector(didTabAddIrregularEventButton), for: .touchUpInside)
         addIrregularEventButton.translatesAutoresizingMaskIntoConstraints = false
         addIrregularEventButton.layer.cornerRadius = 16

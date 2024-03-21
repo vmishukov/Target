@@ -14,12 +14,12 @@ final class OnboardingPageController: UIPageViewController  {
     lazy var pages: [UIViewController] = {
         let first = TrackerOnboardingViewController()
         let firstPic = UIImage(named: "OnboardingBackground1")
-        let firstTitle = "Отслеживайте только то, что хотите"
-        first.initialize(setBackgroundPic: firstPic ?? UIImage(), setTitle: firstTitle)        
+        let firstTitle = NSLocalizedString("onboarding.view.first", comment: "")
+        first.initialize(setBackgroundPic: firstPic ?? UIImage(), setTitle: firstTitle)
     
         let second = TrackerOnboardingViewController()
         let secondPic = UIImage(named: "OnboardingBackground2")
-        let secondTitle = "Даже если это \n не литры воды и йога"
+        let secondTitle = NSLocalizedString("onboarding.view.second", comment: "")
         second.initialize(setBackgroundPic: secondPic ?? UIImage(), setTitle: secondTitle)
         
         return [first, second]
@@ -30,7 +30,7 @@ final class OnboardingPageController: UIPageViewController  {
         pageControl.numberOfPages = pages.count
         pageControl.currentPage = 0
         
-        pageControl.currentPageIndicatorTintColor = .ypBlack
+        pageControl.currentPageIndicatorTintColor = UIColor(hex: "1A1B22")
         pageControl.pageIndicatorTintColor = .ypGray
         
         pageControl.translatesAutoresizingMaskIntoConstraints = false
@@ -42,8 +42,8 @@ final class OnboardingPageController: UIPageViewController  {
     
     private lazy var onboardingButton: UIButton = {
         let button = UIButton(type: .system) as UIButton
-        button.backgroundColor = .ypBlack
-        button.setTitle("Вот это технологии!", for: .normal)
+        button.backgroundColor = UIColor(hex: "1A1B22")
+        button.setTitle(NSLocalizedString("onboarding.button", comment: ""), for: .normal)
         button.setTitleColor(UIColor(hex: "FFFFFF"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = 16

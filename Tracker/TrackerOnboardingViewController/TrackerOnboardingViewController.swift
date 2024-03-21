@@ -21,7 +21,7 @@ final class TrackerOnboardingViewController: UIViewController {
     private lazy var onboardingTitle: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 32, weight: .bold)
-        label.textColor = .ypBlack
+        label.textColor = UIColor(hex: "1A1B22")
         label.textAlignment = .center
         label.numberOfLines = 2
         label.translatesAutoresizingMaskIntoConstraints = false

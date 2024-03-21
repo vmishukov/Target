@@ -13,7 +13,7 @@ final class SettingColorCell: UICollectionViewCell {
     //MARK: - IS SELECTED
     override var isSelected: Bool {
         didSet {
-            self.layer.backgroundColor = isSelected ? colorRect.backgroundColor?.withAlphaComponent(0.4).cgColor : UIColor.ypWhite.cgColor
+            self.backgroundColor = isSelected ? colorRect.backgroundColor?.withAlphaComponent(0.4) : UIColor.ypWhite
         }
     }
     //MARK: - UI ELEMENTS
@@ -30,7 +30,7 @@ final class SettingColorCell: UICollectionViewCell {
         let whiteRect = UIView()
         whiteRect.layer.cornerRadius = 4
         whiteRect.translatesAutoresizingMaskIntoConstraints = false
-        whiteRect.layer.backgroundColor = UIColor.ypWhite.cgColor
+        whiteRect.backgroundColor = UIColor.ypWhite
         contentView.addSubview(whiteRect)
         return whiteRect
     }()

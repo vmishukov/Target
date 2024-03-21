@@ -12,8 +12,7 @@ final class SettingEmojiCell: UICollectionViewCell {
     //MARK: - IS SELECTED
     override var isSelected: Bool {
         didSet {
-            self.layer.backgroundColor = isSelected ? UIColor.ypLightGray.cgColor : UIColor.ypWhite.cgColor
-         
+            self.backgroundColor = isSelected ? UIColor.ypLightGray : UIColor.ypWhite
         }
     }
     //MARK: - Identifier

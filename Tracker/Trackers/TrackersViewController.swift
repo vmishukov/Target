@@ -22,13 +22,20 @@ final class TrackersViewController: UIViewController {
         return button
     }()
     
-    private lazy var trackerLabel : UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.boldSystemFont(ofSize: 34)
-        label.text = "Трекеры"
-        view.addSubview(label)
-        return label
+    
+    private lazy var filterButton : UIButton = {
+        let button = UIButton(type: .system)
+        button.backgroundColor = .systemBlue
+        button.addTarget(self, action: #selector(didTapFilterButton), for: .touchDown)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+        button.setTitle(NSLocalizedString( "trackers.filter", comment: ""), for: .normal)
+        button.setTitleColor(.ypWhite, for: .normal)
+        button.layer.cornerRadius = 16
+        button.tintColor = .ypBlack
+        button.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(button)
+        self.filterButton = button
+        return button
     }()
     
     private lazy var trackerDatePicker : UIDatePicker = {
@@ -47,15 +54,15 @@ final class TrackersViewController: UIViewController {
         return picker
     }()
     
-    private lazy var trackerSearchBar : UISearchBar = {
-        let trackerSearchBar = UISearchBar()
-        trackerSearchBar.placeholder = "Поиск"
-        trackerSearchBar.translatesAutoresizingMaskIntoConstraints = false
-        trackerSearchBar.searchBarStyle = .minimal
-        trackerSearchBar.delegate = self
+    private lazy var trackerSearchBar : UISearchController = {
+        let trackerSearchBar = UISearchController()
         
-        view.addSubview(trackerSearchBar)
+        trackerSearchBar.searchBar.placeholder = NSLocalizedString( "trackers.searchbar.placeholder", comment: "")
+        trackerSearchBar.searchBar.delegate = self
+        trackerSearchBar.searchBar.searchBarStyle = .minimal
+        trackerSearchBar.searchResultsUpdater = self
         return trackerSearchBar
+
     }()
     
     private lazy var trackerErrImage : UIImageView = {
@@ -67,6 +74,30 @@ final class TrackersViewController: UIViewController {
         return trackerErrImage
     }()
     
+    private lazy var trackerNothingFoundImage : UIImageView = {
+        let ImageView = UIImageView()
+        let picture = UIImage(named: "nothing_found_image")
+        ImageView.image = picture
+        ImageView.translatesAutoresizingMaskIntoConstraints = false
+        ImageView.isHidden = true
+        view.addSubview(ImageView)
+        return ImageView
+    }()
+    
+    private lazy var trackerNothingFoundLabel : UILabel = {
+        let trackerErrLabel = UILabel()
+        trackerErrLabel.translatesAutoresizingMaskIntoConstraints = false
+        trackerErrLabel.font = UIFont.systemFont(ofSize: 12)
+        trackerErrLabel.textAlignment = .center
+        var paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineHeightMultiple = 1.26
+        
+        trackerErrLabel.attributedText = NSMutableAttributedString(string:  NSLocalizedString( "trackers.nothing.found.title", comment: ""), attributes: [NSAttributedString.Key.paragraphStyle: paragraphStyle])
+        trackerErrLabel.isHidden = true
+        view.addSubview(trackerErrLabel)
+        return trackerErrLabel
+    }()
+    
     private lazy var trackerErrLabel : UILabel = {
         let trackerErrLabel = UILabel()
         trackerErrLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -74,8 +105,9 @@ final class TrackersViewController: UIViewController {
         trackerErrLabel.textAlignment = .center
         var paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineHeightMultiple = 1.26
-     
-        trackerErrLabel.attributedText = NSMutableAttributedString(string: "Что будем отслеживать?", attributes: [NSAttributedString.Key.paragraphStyle: paragraphStyle])
+       
+        trackerErrLabel.attributedText = NSMutableAttributedString(string:  NSLocalizedString( "trackers.null.title", comment: ""), attributes: [NSAttributedString.Key.paragraphStyle: paragraphStyle])
+        
         view.addSubview(trackerErrLabel)
         return trackerErrLabel
     }()
@@ -83,11 +115,12 @@ final class TrackersViewController: UIViewController {
     private let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
   
     private var viewModel: TrackersViewModel!
-    
+    private let yandexMobileMetrica = Analysis.shared
     // MARK: - lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
        
+        view.backgroundColor = .ypWhite
         
         navBarItem()
         viewModel = TrackersViewModel(date: trackerDatePicker.date)
@@ -101,23 +134,36 @@ final class TrackersViewController: UIViewController {
         
         collectionView.register(TrackersCollectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        
-        
-        layoutSearchBar()
+
+       // layoutSearchBar()
         layoutErrImage()
         layoutErrLabel()
+        layoutTrackerNothingFoundImage()
+        layoutЕrackerNothingFoundLabel()
         view.addSubview(collectionView)
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: trackerSearchBar.bottomAnchor),
+            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
+        collectionView.backgroundColor = .ypWhite
+        layoutFilterButton()
+    
+        
         self.collectionView.isHidden = viewModel.stubStatus
+        self.filterButton.isHidden = viewModel.stubStatus
     }
+    
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        yandexMobileMetrica.reportEvent(event: "open", parameters: ["screen": "Main"])
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        yandexMobileMetrica.reportEvent(event: "close", parameters: ["screen": "Main"])
     }
     // MARK: - private func
     private func cancelKeyboardGestureSetup() {
@@ -129,10 +175,11 @@ final class TrackersViewController: UIViewController {
     
     private func navBarItem() {
         guard let navigationBar = self.navigationController?.navigationBar else { return }
-        navigationBar.topItem?.title = "Трекеры"
+        navigationBar.topItem?.title = NSLocalizedString("trackers.title", comment: "")
         navigationBar.prefersLargeTitles = true
         navigationBar.topItem?.largeTitleDisplayMode = .always
-        
+     
+        navigationItem.searchController = trackerSearchBar
         let leftButton = UIBarButtonItem(
             image: UIImage(named: "button_add_tracker"),
             style: .plain,
@@ -155,10 +202,34 @@ final class TrackersViewController: UIViewController {
         viewModel.stubStatusBinding = { [weak self] _ in
             guard let self = self else { return }
             self.collectionView.isHidden = viewModel.stubStatus
+            
+            if viewModel.getFilterCondition() != .AllTrackers {
+                self.trackerNothingFoundImage.isHidden = false
+                self.trackerNothingFoundLabel.isHidden = false
+                self.trackerErrImage.isHidden = true
+                self.trackerErrLabel.isHidden = true
+                self.filterButton.isHidden = false
+            } else {
+                self.filterButton.isHidden = viewModel.stubStatus
+                self.trackerNothingFoundImage.isHidden = true
+                self.trackerNothingFoundLabel.isHidden = true
+                self.trackerErrImage.isHidden = false
+                self.trackerErrLabel.isHidden = false
+            }
         }
     }
     
     // MARK: - Constraits
+    
+    private func layoutFilterButton() {
+        NSLayoutConstraint.activate([
+            filterButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            filterButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            filterButton.heightAnchor.constraint(equalToConstant: 50),
+            filterButton.widthAnchor.constraint(equalToConstant: 114)
+        ])
+    }
+    /*
     private func layoutSearchBar() {
         NSLayoutConstraint.activate([
             trackerSearchBar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
@@ -167,7 +238,7 @@ final class TrackersViewController: UIViewController {
         ])
         trackerSearchBar.directionalLayoutMargins = .init(top: 0, leading: 16, bottom: 0, trailing: 16)
     }
-    
+    */
     private func layoutErrImage() {
         NSLayoutConstraint.activate([
             trackerErrImage.widthAnchor.constraint(equalToConstant: 80),
@@ -183,7 +254,22 @@ final class TrackersViewController: UIViewController {
             trackerErrLabel.topAnchor.constraint(equalTo: trackerErrImage.bottomAnchor, constant: 8)
         ])
     }
+    
+    private func layoutЕrackerNothingFoundLabel() {
+        NSLayoutConstraint.activate([
+            trackerNothingFoundLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            trackerNothingFoundLabel.topAnchor.constraint(equalTo: trackerErrImage.bottomAnchor, constant: 8)
+        ])
+    }
 
+    private func layoutTrackerNothingFoundImage() {
+        NSLayoutConstraint.activate([
+            trackerNothingFoundImage.widthAnchor.constraint(equalToConstant: 80),
+            trackerNothingFoundImage.heightAnchor.constraint(equalToConstant: 80),
+            trackerNothingFoundImage.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            trackerNothingFoundImage.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor)
+        ])
+    }
     // MARK: - OBJC
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
         let selectedDate = sender.date
@@ -191,21 +277,104 @@ final class TrackersViewController: UIViewController {
         dateFormatter.dateFormat = "dd.MM.yy"
         let formattedDate = dateFormatter.string(from: selectedDate)
         viewModel.setFilterDate(filterDate: trackerDatePicker.date)
+        
+        if viewModel.getFilterCondition() == .TrackersForToday && trackerDatePicker.date != Calendar.current.startOfDay(for: Date()) {
+            viewModel.setFilterCondition(filter: .AllTrackers)
+        }
+        
     }
     
     @objc private func didTapAddTrackerButton(_ sender: UIButton) {
+        yandexMobileMetrica.reportEvent(event: "click", parameters: ["screen": "Main", "item": "add_track"])
         let view = AddTrackersViewController()
         view.trackerViewdelegate = viewModel
         present(view, animated: true)
     }
     
     @objc private func hideKeyboard() {
-        self.trackerSearchBar.endEditing(true)
+        self.trackerSearchBar.searchBar.endEditing(true)
+    }
+    
+    @objc private func didTapFilterButton(_ sender: UIButton) {
+        yandexMobileMetrica.reportEvent(event: "click", parameters: ["screen": "Main", "item": "filter"])
+        let view = FilterTrackersViewController()
+      //  print(viewModel.getFilterCondition()?.title)
+        view.selectedFilter = viewModel.getFilterCondition()
+        view.delegate = self
+        present(view, animated: true)
     }
 }
 
 // MARK: - UICollectionViewDelegate
 extension TrackersViewController: UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        configureContextMenu(indexPath: indexPath)
+     }
+    
+    func configureContextMenu(indexPath: IndexPath) -> UIContextMenuConfiguration{
+        let context = UIContextMenuConfiguration(identifier: indexPath as NSCopying, previewProvider: nil) { (action) -> UIMenu? in
+            guard let cell = self.collectionView.cellForItem(at: indexPath) as? TrackersCollectionViewCell else {
+                return nil
+            }
+            var pinTitle: String = ""
+            if cell.getPinnedStatus() {
+                pinTitle =  NSLocalizedString( "trackers.context.unpin", comment: "")
+            } else {
+                pinTitle =  NSLocalizedString( "trackers.context.pin", comment: "")
+            }
+            let pin = UIAction(title: pinTitle ) { (_) in
+                guard let uuid = cell.getUiid() else { return }
+                self.viewModel.changePinStatus(trackerId: uuid)
+            }
+            
+            let edit = UIAction(title: NSLocalizedString( "trackers.context.edit", comment: "") ) { (_) in
+                let view = EditHabbitViewController()
+                
+                self.yandexMobileMetrica.reportEvent(event: "click", parameters: ["screen": "Main", "item": "edit"])
+                
+                guard let uuid = cell.getUiid(), let completeDays = cell.getDaysCount() else { return }
+                view.trackerId = uuid
+                view.completeDays = completeDays
+                self.present(view,animated: true)
+            }
+
+            let deleteAction = UIAction(title: NSLocalizedString("trackers.context.delete.alert.delete", comment: ""), attributes: .destructive) { _ in
+                self.yandexMobileMetrica.reportEvent(event: "click", parameters: ["screen": "Main", "item": "delete"])
+                let deleteAction = UIAlertAction(title: NSLocalizedString("trackers.context.delete.alert.delete", comment: ""), style: .destructive) { _ in
+                    guard let uuid = cell.getUiid() else { return }
+                    self.viewModel.removeTracker(trackerId: uuid)
+                }
+                
+                let cancelAction = UIAlertAction(title: NSLocalizedString("trackers.context.delete.alert.cancel", comment: ""), style: .cancel)
+                
+                let alert = UIAlertController(title: NSLocalizedString("trackers.context.delete.alert.title", comment: ""), message: nil, preferredStyle: .actionSheet)
+                
+                alert.addAction(deleteAction)
+                alert.addAction(cancelAction)
+                self.present(alert, animated: true)
+            }
+
+            return UIMenu( children: [pin,edit, deleteAction])
+        }
+        
+        return context
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
+        guard let indexPath = configuration.identifier as? IndexPath else {
+            print(configuration.identifier)
+            print(configuration.identifier as? IndexPath )
+            return nil}
+        
+        guard let cell = collectionView.cellForItem(at: indexPath) as? TrackersCollectionViewCell else {
+            return nil
+        }
+        
+        let previewView = cell.rectView
+        let targetedPreview = UITargetedPreview(view: previewView)
+        return targetedPreview
+    }
     
 }
 // MARK: - UICollectionViewDelegateFlowLayout
@@ -249,14 +418,15 @@ extension TrackersViewController: UICollectionViewDataSource {
         
         let isCompleted = viewModel.completedTrackers.contains { record in
             record.id == tracker.id && record.date.onlyDate == trackerDatePicker.date.onlyDate }
-   
+        
         cell.cellSetting(uuid: tracker.id,
-                          caption: tracker.title,
-                          color: tracker.color,
-                          emoji: tracker.emoji,
-                          completeDays: completeDays,
-                          isCompleted: isCompleted,
-                          indexPath: indexPath)
+                         caption: tracker.title,
+                         color: tracker.color,
+                         emoji: tracker.emoji,
+                         completeDays: completeDays,
+                         isCompleted: isCompleted,
+                         isPinned: tracker.isPinned,
+                         indexPath: indexPath)
         cell.delegate = self
         return cell
     }
@@ -280,16 +450,34 @@ extension TrackersViewController : UISearchBarDelegate {
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar){
-     self.trackerSearchBar.endEditing(true)
+        self.trackerSearchBar.searchBar.endEditing(true)
      }
     
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        self.trackerSearchBar.endEditing(true)
+        self.trackerSearchBar.searchBar.endEditing(true)
     }
 }
 // MARK: - TrackersCollectionViewCellDelegate
 extension TrackersViewController: TrackersCollectionViewCellDelegate {
     func addCompleteDay(id: UUID, indexPath: IndexPath) {
+        yandexMobileMetrica.reportEvent(event: "click", parameters: ["screen": "Main", "item": "track"])
         viewModel.addCompleteDay(id: id)
+    }
+}
+//MARK: - FilterViewControllerDelegate
+extension TrackersViewController: FilterViewControllerDelegate {
+    func setFilter(filter: Filter) {
+        if filter == .TrackersForToday {
+            trackerDatePicker.date = Calendar.current.startOfDay(for: Date())
+        }
+        viewModel.setFilterCondition(filter: filter)
+    }
+}
+//MARK: - UISearchResultsUpdating
+extension TrackersViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+       // searchText = searchController.searchBar.text ?? ""
+       // isHiddenFilterButton()
+        viewModel.setFilterText(filterString: trackerSearchBar.searchBar.text)
     }
 }

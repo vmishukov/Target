@@ -46,8 +46,8 @@ final class NewIrregularEventViewController: UIViewController {
     
     private lazy var NewIrregularEventTitle : UILabel = {
         let titleLabel = UILabel()
-        titleLabel.text = "Новое нерегулярное событие"
-        titleLabel.textColor = UIColor(hex: "1A1B22")
+        titleLabel.text = NSLocalizedString("irr.event.title", comment: "")
+      
         titleLabel.font = .systemFont(ofSize: 16, weight: .medium)
         view.addSubview(titleLabel)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -62,7 +62,7 @@ final class NewIrregularEventViewController: UIViewController {
         newIrregularEventTextField.leftViewMode = .always
         newIrregularEventTextField.layer.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 0.3).cgColor
         newIrregularEventTextField.translatesAutoresizingMaskIntoConstraints = false
-        newIrregularEventTextField.placeholder = "Введите название трекера"
+        newIrregularEventTextField.placeholder = NSLocalizedString("irr.event.placeholder", comment: "")
         newIrregularEventTextField.layer.cornerRadius = 16
         
         newIrregularEventTextField.addTarget(self, action: #selector(textFieldDidChange(_:)),
@@ -78,7 +78,7 @@ final class NewIrregularEventViewController: UIViewController {
     
     private lazy var newIrregularEventLabel : UILabel = {
         let errLabel = UILabel()
-        errLabel.text = "Ограничение 38 символов"
+        errLabel.text = NSLocalizedString("placeholder.restrict.label", comment: "")
         errLabel.font = .systemFont(ofSize: 17)
         errLabel.textColor = .ypRed
         errLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -106,7 +106,7 @@ final class NewIrregularEventViewController: UIViewController {
     
     private lazy var newIrregularEventCancelButton: UIButton = {
         let cancelButton = UIButton(type: .system)
-        cancelButton.setTitle("Отменить", for: .normal)
+        cancelButton.setTitle(NSLocalizedString("cancel.button", comment: ""), for: .normal)
         cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         cancelButton.backgroundColor = .ypWhite
         cancelButton.tintColor = .ypRed
@@ -123,7 +123,7 @@ final class NewIrregularEventViewController: UIViewController {
     
     private lazy var newIrregularEventCreateButton: UIButton = {
         let createButton = UIButton(type: .system)
-        createButton.setTitle("Создать", for: .normal)
+        createButton.setTitle(NSLocalizedString("create.button", comment: ""), for: .normal)
         createButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         createButton.backgroundColor = .ypGray
         createButton.tintColor = .ypWhite
@@ -152,7 +152,7 @@ final class NewIrregularEventViewController: UIViewController {
     }()
     // MARK: - lifecycle
     override func viewDidLoad() {
-        view.backgroundColor = .white
+        view.backgroundColor = .ypWhite
         layoutNewIrregularEventTextField()
         layoutNewIrregularEventTitle()
         cancelKeyboardGestureSetup()
@@ -261,7 +261,7 @@ final class NewIrregularEventViewController: UIViewController {
 
         let schedule = [Weekday.Monday, Weekday.Tuesday, Weekday.Wednesday, Weekday.Thursday, Weekday.Friday, Weekday.Saturday, Weekday.Sunday]
         
-        let tracker = Tracker(id: UUID(), title: caption, color: selectedColor, emoji: selectedEmoji, isHabbit: false, schedule: schedule)
+        let tracker = Tracker(id: UUID(), title: caption, color: selectedColor, emoji: selectedEmoji, isHabbit: false, isPinned: false, schedule: schedule)
         
         self.addTrackerDelegate?.addNewTracker(tracker: tracker, categoryTitle: categoryTitle)
         self.view.window?.rootViewController?.dismiss(animated: true)
@@ -375,7 +375,7 @@ extension NewIrregularEventViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: SettingCollectionHeader.identifier, for: indexPath) as! SettingCollectionHeader
-        indexPath.section == 0 ? view.settingHeaderSetup(titleText: "Emoji") :  view.settingHeaderSetup(titleText: "Цвет")
+        indexPath.section == 0 ? view.settingHeaderSetup(titleText: NSLocalizedString("emoji.customization.label", comment: "")) :  view.settingHeaderSetup(titleText: NSLocalizedString("color.customization.label", comment: ""))
         return view
     }
 }
@@ -413,7 +413,7 @@ extension NewIrregularEventViewController: UITableViewDataSource {
         }
         switch indexPath.row {
         case 0 :
-            cell.textLabel?.text = "Категория"
+            cell.textLabel?.text = NSLocalizedString("category.customization", comment: "")
         default:
             ""
         }

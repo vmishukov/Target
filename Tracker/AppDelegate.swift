@@ -7,6 +7,7 @@
 
 import UIKit
 import CoreData
+import YandexMobileMetrica
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,6 +17,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         DaysValueTransformer.register() 
+        
+        guard let configuration = YMMYandexMetricaConfiguration(apiKey: "ba925b99-65d8-49cb-85ba-f4879fcf4ea9") else { // используйте ваш ключ
+            return true
+        }
+        YMMYandexMetrica.activate(with: configuration)
         return true
     }
 

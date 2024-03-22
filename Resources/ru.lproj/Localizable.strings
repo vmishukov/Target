@@ -1,0 +1,86 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Vladislav Mishukov on 10.03.2024.
+  
+*/
+"onboarding.view.first" = "Отслеживайте только \nто, что хотите";
+"onboarding.view.second" = "Даже если это \nне литры воды и йога";
+"onboarding.button" = "Вот это технологии!";
+
+"trackers.title" = "Трекеры";
+"trackers.null.title" = "Что будем отслеживать?";
+"trackers.nothing.found.title" = "Ничего не найдено";
+"trackers.searchbar.placeholder" = "Поиск";
+"trackers.context.pin" = "Закрепить";
+"trackers.context.unpin" = "Открепить";
+"trackers.pinned.category" = "Закрепленные";
+"trackers.context.edit" = "Редактировать";
+"trackers.context.delete" = "Удалить";
+
+"trackers.filter" = "Фильтры";
+"trackers.filter.all.trackers" = "Все трекеры";
+"trackers.filter.today.trackers" = "Трекеры на сегодня";
+"trackers.filter.сompleted" = "Завершенные";
+"trackers.filter.not.сompleted" = "Не завершенные";
+
+"trackers.context.delete.alert.title" = "Вы уверены что хотите удалить трекер?";
+"trackers.context.delete.alert.delete" = "Удалить";
+"trackers.context.delete.alert.cancel" = "Отменить";
+"add.trackers.label" = "Создание трекера";
+"add.trackers.habbit.button" = "Привычка";
+"add.trackers.irregular.button" = "Нерегулярные событие";
+
+"category.label" = "Категория";
+"category.null.title" = "Привычки и события можно \nобъединить по смыслу";
+"category.add.button" = "Добавить категорию";
+
+"new.category.label" = "Новая категория";
+"new.category.placeholder" = "Введите название категории";
+"new.category.button" = "Готово";
+
+"placeholder.restrict.label" = "Ограничение 38 символов";
+
+"irr.event.title" = "Новое нерегулярное событие";
+"irr.event.placeholder" = "Введите название трекера";
+
+"cancel.button" = "Отменить";
+"create.button" = "Создать";
+"save.button" = "Сохранить";
+"color.customization.label" = "Цвет";
+"emoji.customization.label" = "Emoji";
+"category.customization" = "Категория";
+"schedule.customization" = "Расписание";
+
+"event.title" = "Новая привычка";
+"event.placeholder" = "Введите название трекера";
+
+"edit.habbit.title" = "Редактирование привычки";
+
+"schedule.setting.title" = "Расписание";
+"schedule.done.button" = "Готово";
+
+"tabbar.tracker" = "Трекер";
+"tabbar.statistic" = "Статистика";
+
+"statistic.title" = "Статистика";
+"statistic.complete.tracker.count" = "Трекеров завершено";
+"statistic.nothing.to.analyze" = "Анализировать пока нечего";
+"statistics.title" = "Статистика";
+
+"weekday.monday" =  "Понедельник";
+"weekday.tuesday" = "Вторник";
+"weekday.wednesday" = "Среда";
+"weekday.thursday" = "Четверг";
+"weekday.friday" = "Пятница";
+"weekday.saturday" = "Суббота";
+"weekday.sunday" = "Воскресенье";
+
+"weekday.monday.short" = "Пн";
+"weekday.tuesday.short" = "Вт";
+"weekday.wednesday.short" = "Ср";
+"weekday.thursday.short" = "Чт";
+"weekday.friday.short" = "Пт";
+"weekday.saturday.short" = "Сб";
+"weekday.sunday.short" = "Вс";

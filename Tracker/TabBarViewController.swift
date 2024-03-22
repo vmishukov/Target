@@ -16,7 +16,7 @@ final class TabBarViewController: UITabBarController, UITabBarControllerDelegate
     
     func createTrackersViewController() -> UINavigationController {
         let trackersViewController = TrackersViewController()
-        trackersViewController.tabBarItem = UITabBarItem(title: "Трекер",
+        trackersViewController.tabBarItem = UITabBarItem(title: NSLocalizedString("tabbar.tracker" , comment: ""),
                                                          image: UIImage(named: "tab_tracker_logo_active"),
                                                          selectedImage: nil)
         return UINavigationController(rootViewController: trackersViewController)
@@ -24,18 +24,18 @@ final class TabBarViewController: UITabBarController, UITabBarControllerDelegate
     
     func createStaticsticViewController() -> UINavigationController {
         let statisticViewController = StatisticViewController()
-        statisticViewController.tabBarItem = UITabBarItem(title: "Статистика",
+        statisticViewController.tabBarItem = UITabBarItem(title: NSLocalizedString("tabbar.statistic", comment: ""),
                                                           image: UIImage(named: "tab_stat_logo_active"),
                                                           selectedImage: nil)
         return UINavigationController(rootViewController: statisticViewController)
     }
     
     private func configure() {
-        view.backgroundColor = UIColor(hex: "FFFFFF")
+        view.backgroundColor = .ypWhite
         UITabBar.appearance().shadowImage = UIImage()
         UITabBar.appearance().backgroundImage = UIImage()
         let lineView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 1))
-        lineView.backgroundColor = UIColor.init(hex: "AEAFB4")
+        lineView.backgroundColor = .ypTabBarLine
         self.tabBar.addSubview(lineView)
     }
 }

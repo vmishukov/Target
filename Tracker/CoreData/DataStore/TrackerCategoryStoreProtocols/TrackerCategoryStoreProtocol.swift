@@ -8,6 +8,8 @@
 import Foundation
 
 protocol TrackerCategoryStoreProtocol {
+    
     func fetchTrackerCategories() throws -> [TrackerCategory]?
+
     func deleteRequest()
 }

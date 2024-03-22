@@ -9,13 +9,15 @@ import Foundation
 
 final class TrackersModel {
     
-    func reloadVisibleTrackers( categories: [TrackerCategory], datePickerDate: Date, filterText: String?, completedTrackers: [TrackerRecord])  -> [TrackerCategory] {
+    func reloadVisibleTrackers( categories: [TrackerCategory], datePickerDate: Date, filterText: String?, completedTrackers: [TrackerRecord], filterCondition: Filter)  -> [TrackerCategory] {
         
         let calendar = Calendar.current
         let filterDay = calendar.component(.weekday, from: datePickerDate)
         let filterText = (filterText ?? "").lowercased()
         
-        let visibleCategories : [TrackerCategory]  = categories.compactMap{ category in
+        var pinniedTrackers: [Tracker] = []
+        
+        var visibleCategories : [TrackerCategory]  = categories.compactMap{ category in
             let trackers = category.trackers.filter {tracker in
                 
                 let dateCondition = tracker.schedule.contains { weekDay in
@@ -38,15 +40,50 @@ final class TrackersModel {
                         irregularEventCondition = true
                     }
                 }
-        
-                let textCondition = tracker.title.lowercased().contains(filterText) || filterText.isEmpty
                 
-                return dateCondition && textCondition && irregularEventCondition
+                let textCondition = tracker.title.lowercased().contains(filterText) || filterText.isEmpty
+                let pinConditions = !tracker.isPinned
+                
+                let completeFilterCondition = 
+                if filterCondition == .CompletedTrackers {
+                    if completedTrackers.contains(where: { completeTracker in
+                        completeTracker.id == tracker.id &&
+                        completeTracker.date.onlyDate == datePickerDate.onlyDate}) {
+                        true
+                    } else {
+                        false
+                    }
+                } else {
+                    true
+                }
+                
+                let notCompleteFilterCondition =
+                if filterCondition == .NotCompletedTrackers {
+                    if completedTrackers.contains(where: { completeTracker in
+                        completeTracker.id != tracker.id &&
+                        completeTracker.date.onlyDate != datePickerDate.onlyDate}) {
+                        true
+                    } else {
+                        false
+                    }
+                } else {
+                    true
+                }
+                
+                if tracker.isPinned && dateCondition && textCondition && irregularEventCondition && completeFilterCondition && notCompleteFilterCondition {
+                    pinniedTrackers.append(tracker)
+                }
+                
+                return dateCondition && textCondition && irregularEventCondition && pinConditions && completeFilterCondition && notCompleteFilterCondition
             }
             if trackers.isEmpty {
                 return nil
             }
             return TrackerCategory(title: category.title, trackers: trackers)
+        }
+        let pinnedTrackerCategory = TrackerCategory(title: NSLocalizedString( "trackers.pinned.category", comment: ""), trackers: pinniedTrackers)
+        if pinnedTrackerCategory.trackers.count > 0 {
+            visibleCategories.insert(pinnedTrackerCategory, at: 0)
         }
         
         return visibleCategories

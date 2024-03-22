@@ -21,12 +21,22 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         emojiLabel.layer.masksToBounds = true
         emojiLabel.layer.cornerRadius = 14
         emojiLabel.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(emojiLabel)
-        self.emojiLabel = emojiLabel
+        rectView.addSubview(emojiLabel)
+
         return emojiLabel
     }()
     
-   private lazy var rectView : UIView = {
+    private lazy var pinImageView : UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleToFill
+        let image = UIImage(named: "pin.square")
+        imageView.image = image
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        rectView.addSubview(imageView)
+        return imageView
+    }()
+    
+    lazy var rectView : UIView = {
         let rectView = UIView()
         rectView.translatesAutoresizingMaskIntoConstraints = false
         rectView.backgroundColor = .ypColorSelection6
@@ -48,8 +58,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         caption.numberOfLines = 2
         caption.textAlignment = .left
         caption.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(caption)
-        self.trackerCaptionLabel = caption
+        rectView.addSubview(caption)
         return caption
     }()
     
@@ -82,32 +91,57 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     private var uuid: UUID? = nil
     private var isCompleted: Bool = false
     private var indexPath: IndexPath?
-    
+    private var completeDays: Int = 0
+    private var isPinned: Bool = true
     
     // MARK: - INIT
     override init(frame: CGRect) {
         super.init(frame: frame)
         layoutRectView()
-        layoutEmojiView()
-        layoutTrackerCaptionLabel()
+        
+        
         layoutTrackerCompleteButton() 
         layoutTrackersDaysCountLabel()
+        layoutpinImageView()
+        layoutEmojiView()
+        layoutTrackerCaptionLabel()
     }
     
     // MARK: - public func
+    public func getUiid() -> UUID? {
+        return self.uuid
+    }
+    public func getDaysCount() -> Int? {
+        return self.completeDays
+    }
+    public func getPinnedStatus() -> Bool {
+        return self.isPinned
+    }
     public func cellSetting(uuid: UUID,
                             caption: String,
                             color: UIColor,
                             emoji: String,
                             completeDays: Int,
                             isCompleted: Bool,
-                            indexPath: IndexPath) {
+                            isPinned: Bool,
+                            indexPath: IndexPath
+    ) {
+        pinImageView.isHidden = !isPinned
+        self.isPinned = isPinned
         self.uuid = uuid
+        self.completeDays = completeDays
         self.trackerCaptionLabel.text = caption
         self.rectView.backgroundColor = color
         self.emojiLabel.text = emoji
         
-        self.trackersDaysCountLabel.text = "\(completeDays)" + " " + "\(daysCaption(dayNumber: completeDays))"
+        let localizedDayString = String.localizedStringWithFormat(
+            NSLocalizedString(
+                "numberOfDays",
+                comment: "Number of remaining days"),
+            completeDays
+        )
+        
+        self.trackersDaysCountLabel.text = localizedDayString
         //self.trackerCompleteButton.isEnabled = isCompleted ? false : true
         self.trackerCompleteButton.backgroundColor = rectView.backgroundColor
         let plusImage = UIImage(named: "button_add_tracker")
@@ -117,16 +151,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         self.indexPath = indexPath
     }
     
-    // MARK: - private func
-    private func daysCaption(dayNumber: Int) -> String {
-        if dayNumber == 0 {
-            return "дней"
-        } else if  dayNumber > 0 && ( dayNumber % 10 == 2 || dayNumber % 10 == 3 || dayNumber % 10 == 4){
-            return "дня"
-        } else {
-            return "дней"
-        }
-    }
+
     // MARK: - OBJC
     @objc private func didTaptrackerCompleteButton() {
         guard let id = self.uuid, let indexPath = self.indexPath else {
@@ -136,6 +161,14 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: - LAYOUT
+    
+    private func layoutpinImageView() {
+        NSLayoutConstraint.activate([
+            pinImageView.trailingAnchor.constraint(equalTo: rectView.trailingAnchor, constant: -12),
+            pinImageView.topAnchor.constraint(equalTo: rectView.topAnchor, constant: 18)
+        ])
+    }
+    
     private func layoutRectView() {
         NSLayoutConstraint.activate([
             rectView.widthAnchor.constraint(equalToConstant: 167),
